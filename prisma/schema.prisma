@@ -29,6 +29,7 @@ model Picture {
   id          String   @id @default(uuid())
   width       Int?
   height      Int?
+  src         String
   alt         String?
   location    Location @relation(fields: [locationId], references: [id])
   locationId  String

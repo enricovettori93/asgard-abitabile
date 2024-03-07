@@ -2,6 +2,8 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 async function main() {
     const locations = [];
+    const width = 200;
+    const height = 90;
     const {id} = await prisma.user.create({
         data: {
             name: "Mario",
@@ -21,6 +23,22 @@ async function main() {
                     connect: {
                         id
                     }
+                },
+                pictures: {
+                    create: [
+                        {
+                            alt: "test",
+                            height,
+                            width,
+                            src: `https://placehold.co/${width}x${height}?text=picture-${i}-1`
+                        },
+                        {
+                            alt: "test",
+                            height,
+                            width,
+                            src: `https://placehold.co/${width}x${height}?text=picture-${i}-2`
+                        }
+                    ]
                 }
             }
         });

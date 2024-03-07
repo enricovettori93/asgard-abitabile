@@ -1,21 +1,22 @@
-import {AddLocation} from "@/types/location";
+import {AddLocation, LocationWithPictures, LocationWithPicturesAndUser} from "@/types/location";
 import {Location} from "@prisma/client";
 import prisma from "@/prisma/client";
 
 interface LocationInterface {
-    getAll: () => Promise<Location[]>
-    get: (id: Pick<Location, "id">) => Promise<Location>
-    add: (payload: AddLocation) => Promise<Location>
+    getAll: () => Promise<LocationWithPictures[]>
+    get: (id: Pick<Location, "id">) => Promise<LocationWithPicturesAndUser>
+    add: (payload: AddLocation) => Promise<LocationWithPicturesAndUser>
     delete: (id: Pick<Location, "id">) => Promise<void>
-    update: (payload: Location) => Promise<Location>
+    update: (payload: Location) => Promise<LocationWithPicturesAndUser>
 }
 
 class LocationService implements LocationInterface {
-    async add(payload: AddLocation): Promise<Location> {
+    async add(payload: AddLocation): Promise<LocationWithPicturesAndUser> {
         return prisma.location.create({
             data: payload,
             include: {
                 pictures: true,
+                user: true
             }
         });
     }
@@ -28,7 +29,7 @@ class LocationService implements LocationInterface {
         });
     }
 
-    async get(id): Promise<Location> {
+    async get(id): Promise<LocationWithPicturesAndUser> {
         return prisma.location.findUnique({
             where: {
                 id
@@ -40,7 +41,7 @@ class LocationService implements LocationInterface {
         });
     }
 
-    async getAll(): Promise<Location[]> {
+    async getAll(): Promise<LocationWithPictures[]> {
         return prisma.location.findMany({
             include: {
                 pictures: true
@@ -48,7 +49,7 @@ class LocationService implements LocationInterface {
         });
     }
 
-    async update(payload: Location): Promise<Location> {
+    async update(payload: Location): Promise<LocationWithPicturesAndUser> {
         return prisma.location.update({
             where: {
                 id: payload.id
