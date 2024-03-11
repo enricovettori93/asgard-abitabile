@@ -1,17 +1,25 @@
-import LocationService from "@/services/location.service";
+import LocationRepository from "@/repositories/location.repository";
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
-    const id = params.id;
+    const { id } = params;
 
-    if (!id) {
-        throw new Error("Cannot find the location");
-    }
-
-    const data = await LocationService.get(id);
+    const data = await LocationRepository.get(id);
 
     if (!data) {
-        throw new Error("Cannot find the location");
+        return new Response("Location not found", {
+            status: 404,
+        });
     }
 
     return Response.json({ data });
+}
+
+export async function DELETE(request: Request, { params }: { params: { id: string }}) {
+    const { id } = params;
+
+    await LocationRepository.delete(id);
+
+    return new Response("Location deleted", {
+        status: 200
+    });
 }

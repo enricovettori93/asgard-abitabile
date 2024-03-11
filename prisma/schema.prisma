@@ -16,8 +16,8 @@ datasource db {
 model Location {
   id          String   @id @default(uuid())
   title       String   @db.VarChar(255)
-  lat         Int
-  lng         Int
+  lat         Float
+  lng         Float
   description String?
   published   Boolean  @default(false)
   user        User     @relation(fields: [userId], references: [id])
@@ -27,8 +27,8 @@ model Location {
 
 model Picture {
   id          String   @id @default(uuid())
-  width       Int?
-  height      Int?
+  width       Int
+  height      Int
   src         String
   alt         String?
   location    Location @relation(fields: [locationId], references: [id])

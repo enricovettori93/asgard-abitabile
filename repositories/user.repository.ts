@@ -1,6 +1,7 @@
-import {User} from "@/models/user";
+import {User} from "@prisma/client";
 
-interface UserInterface {
+interface RepositoryInterface
+{
     login(payload: User): Promise<boolean>
     logout(): Promise<void>
     register(payload: User): Promise<void>
@@ -9,7 +10,8 @@ interface UserInterface {
 }
 
 // todo: fai tutto
-class UserService implements UserInterface {
+class UserRepository implements RepositoryInterface
+{
     users: User[] = [];
 
     constructor() {
@@ -41,4 +43,4 @@ class UserService implements UserInterface {
 
 }
 
-export default new UserService();
+export default new UserRepository();

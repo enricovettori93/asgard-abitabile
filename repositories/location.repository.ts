@@ -2,7 +2,7 @@ import {AddLocation, LocationWithPictures, LocationWithPicturesAndUser} from "@/
 import {Location} from "@prisma/client";
 import prisma from "@/prisma/client";
 
-interface LocationInterface {
+interface RepositoryInterface {
     getAll: () => Promise<LocationWithPictures[]>
     get: (id: Pick<Location, "id">) => Promise<LocationWithPicturesAndUser>
     add: (payload: AddLocation) => Promise<LocationWithPicturesAndUser>
@@ -10,7 +10,7 @@ interface LocationInterface {
     update: (payload: Location) => Promise<LocationWithPicturesAndUser>
 }
 
-class LocationService implements LocationInterface {
+class LocationRepository implements RepositoryInterface {
     async add(payload: AddLocation): Promise<LocationWithPicturesAndUser> {
         return prisma.location.create({
             data: payload,
@@ -63,4 +63,4 @@ class LocationService implements LocationInterface {
     }
 }
 
-export default new LocationService();
+export default new LocationRepository();

@@ -2,7 +2,6 @@
 import Image from 'next/image'
 import Link from "next/link";
 import {Swiper, SwiperSlide} from 'swiper/react';
-import 'swiper/css';
 import {LocationWithPictures} from "@/types/location";
 
 interface Props {
@@ -39,7 +38,7 @@ export default function CardLocation({ location }: Props) {
                     }
                 </Swiper>
 
-                name: {location.name}
+                name: {location.title}
                 lng: {location.lng}
                 lat: {location.lat}
                 description: {location.description}
