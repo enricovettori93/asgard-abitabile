@@ -1,6 +1,11 @@
 import LocationRepository from "@/repositories/location.repository";
+import {Location} from "@prisma/client";
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+interface Params {
+    params: { id: string }
+}
+
+export async function GET(request: Request, { params }: Params) {
     const { id } = params;
 
     const data = await LocationRepository.get(id);
@@ -14,7 +19,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
     return Response.json({ data });
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string }}) {
+export async function DELETE(request: Request, { params }: Params) {
     const { id } = params;
 
     await LocationRepository.delete(id);

@@ -12,7 +12,7 @@ export default function LocationSearchForm() {
     } = useForm<LocationSearchForm>();
 
     const onSubmit: SubmitHandler<LocationSearchForm> = async (payload) => {
-        const queryParams = new URLSearchParams(payload);
+        const queryParams = new URLSearchParams(payload as unknown as Record<string, string>);
         router.push(`/locations?${queryParams}`);
     }
 
@@ -20,7 +20,7 @@ export default function LocationSearchForm() {
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
             <div className="flex flex-col">
                 <label htmlFor="city">Cittá</label>
-                <input id="city" type="text" {...register("title", {required: true})}/>
+                <input id="city" type="text" {...register("city", {required: true})}/>
             </div>
             <div className="flex">
                 <div className="flex flex-col">

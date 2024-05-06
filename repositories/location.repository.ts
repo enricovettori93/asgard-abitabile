@@ -4,9 +4,10 @@ import prisma from "@/prisma/client";
 
 interface RepositoryInterface {
     getAll: () => Promise<LocationWithPictures[]>
-    get: (id: Pick<Location, "id">) => Promise<LocationWithPicturesAndUser>
+    getAllPublished: () => Promise<LocationWithPictures[]>
+    get: (id: Location["id"]) => Promise<LocationWithPicturesAndUser | null>
     add: (payload: AddLocation) => Promise<LocationWithPicturesAndUser>
-    delete: (id: Pick<Location, "id">) => Promise<void>
+    delete: (id: Location["id"]) => Promise<void>
     update: (payload: Location) => Promise<LocationWithPicturesAndUser>
 }
 
@@ -21,7 +22,7 @@ class LocationRepository implements RepositoryInterface {
         });
     }
 
-    async delete(id): Promise<void> {
+    async delete(id: Location["id"]): Promise<void> {
         await prisma.location.delete({
             where: {
                 id
@@ -29,7 +30,7 @@ class LocationRepository implements RepositoryInterface {
         });
     }
 
-    async get(id): Promise<LocationWithPicturesAndUser> {
+    async get(id: Location["id"]): Promise<LocationWithPicturesAndUser | null> {
         return prisma.location.findUnique({
             where: {
                 id
@@ -45,6 +46,17 @@ class LocationRepository implements RepositoryInterface {
         return prisma.location.findMany({
             include: {
                 pictures: true
+            }
+        });
+    }
+
+    async getAllPublished(): Promise<LocationWithPictures[]> {
+        return prisma.location.findMany({
+            include: {
+                pictures: true
+            },
+            where: {
+                published: true
             }
         });
     }

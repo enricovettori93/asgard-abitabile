@@ -1,3 +1,3 @@
 import {Picture} from "@prisma/client";
 
-export type AddPictureDto = Omit<Picture, "id">
+export type AddPicture = Omit<Picture, "id" | "locationId">

@@ -2,6 +2,7 @@
 
 import {useForm, SubmitHandler} from "react-hook-form";
 import {AddLocationForm} from "@/types/location";
+import useAddLocation from "@/components/location-add-form/hooks/useAddLocation";
 
 export default function LocationAddForm() {
     const {
@@ -9,12 +10,10 @@ export default function LocationAddForm() {
         handleSubmit,
     } = useForm<AddLocationForm>();
 
+    const { addLocation } = useAddLocation();
+
     const onSubmit: SubmitHandler<AddLocationForm> = async (payload) => {
-        await fetch("http://localhost:3000/api/locations", {
-            method: "POST",
-            // todo: rimuovi hardcoded
-            body: JSON.stringify({...payload, userId: "67caec95-0da3-4aa0-953d-e03332c795d5"})
-        });
+        await addLocation(payload);
     };
 
     return (
@@ -22,6 +21,10 @@ export default function LocationAddForm() {
             <div className="flex gap-5">
                 <label htmlFor="title">Titolo</label>
                 <input id="title" type="text" {...register("title", {required: true})}/>
+            </div>
+            <div className="flex gap-5">
+                <label htmlFor="title">Descrizione</label>
+                <input id="title" type="textarea" {...register("description", {required: true})}/>
             </div>
             <div className="flex gap-5">
                 <label htmlFor="lat">Latitudine</label>
@@ -34,6 +37,10 @@ export default function LocationAddForm() {
             <div className="flex gap-5">
                 <label htmlFor="published">Online</label>
                 <input id="published" type="checkbox" {...register("published", {required: true})}/>
+            </div>
+            <div className="flex gap-5">
+                <label htmlFor="pictures">Fotografie</label>
+                <input id="pictures" type="file" accept="image/jpeg" multiple {...register("pictures")}/>
             </div>
             <button type="submit">Inserisci</button>
         </form>
