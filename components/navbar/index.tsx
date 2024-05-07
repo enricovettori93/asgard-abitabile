@@ -8,7 +8,8 @@ export default function NavBar() {
             </h1>
             <nav>
                 <ul className="flex gap-5">
-                    <li><Link href="/locations">Locations</Link></li>
+                    <li><Link href={`/locations?page=1`}>Locations</Link></li>
+                    <li><Link href="/locations/add">Aggiungi una location</Link></li>
                 </ul>
             </nav>
         </header>

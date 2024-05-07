@@ -4,6 +4,6 @@
 
 @layer components {
     .button--primary {
-        @apply rounded-xl bg-orange-400 p-3
+        @apply rounded-2xl bg-orange-400 p-3
     }
 }

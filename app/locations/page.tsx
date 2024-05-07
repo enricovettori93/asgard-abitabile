@@ -1,23 +1,21 @@
-import {Location} from "@prisma/client";
-import CardLocation from "@/components/location-card";
-import Link from "next/link";
+import {LocationWithPictures} from "@/types/location";
+import LocationsGrid from "@/components/locations-grid";
 
-async function getLocations(): Promise<Location[]> {
-    const res = await fetch("http://localhost:3000/api/locations");
+async function getLocations(searchParams: Record<string, string>): Promise<LocationWithPictures[]> {
+    const queryParams = new URLSearchParams(searchParams as unknown as Record<string, string>);
+    // todo: remove hardcoded var
+    const res = await fetch(`http://localhost:3000/api/locations?${queryParams}`);
 
     return (await res.json()).data;
 }
 
-export default async function Page() {
-    const data = await getLocations();
+export default async function Page({ searchParams }: { searchParams: Record<string, string>} ) {
+    const data = await getLocations(searchParams);
 
     return (
         <div>
-            <h1>Tutte le locations</h1>
-            <Link href="/locations/add" className="my-5">Aggiungi una location</Link>
-            <div className="grid grid-cols-3">
-                {data.map(location => <CardLocation location={location}/>)}
-            </div>
+
+            <LocationsGrid data={data} currentPage={+searchParams["page"] || 1} />
         </div>
     )
 }

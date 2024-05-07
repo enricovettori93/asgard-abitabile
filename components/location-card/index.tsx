@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from "next/link";
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {LocationWithPictures} from "@/types/location";
+import Card from "@/components/card";
 
 interface Props {
     location: LocationWithPictures
@@ -10,16 +11,16 @@ interface Props {
 
 export default function CardLocation({ location }: Props) {
     return (
-        <div className="flex flex-col mt-5">
-            <Link href={`/locations/${location.id}`}>
+        <Card className="shadow-md h-[20em] p-0">
+            <Link href={`/locations/${location.id}`} className="flex flex-col h-full w-full">
                 <Swiper
                     slidesPerView={1}
-                    className="w-full"
+                    className="w-full basis-10/12 rounded-tl-lg rounded-tr-lg"
                 >
                     {
                         location.pictures?.length > 0 && (
-                            location.pictures?.map(img => (
-                                <SwiperSlide key={img.src}>
+                            location.pictures?.map((img, idx) => (
+                                <SwiperSlide key={`${idx}_${img.src}`}>
                                     <Image
                                         unoptimized
                                         src={img.src}
@@ -37,13 +38,11 @@ export default function CardLocation({ location }: Props) {
                         )
                     }
                 </Swiper>
-
-                name: {location.title}
-                lng: {location.lng}
-                lat: {location.lat}
-                description: {location.description}
+                <div className="basis-2/12 flex flex-col gap-1 p-5">
+                    <span className="font-bold">{location.title}</span>
+                    <span>{location.description}</span>
+                </div>
             </Link>
-
-        </div>
+        </Card>
     )
 }

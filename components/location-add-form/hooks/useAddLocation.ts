@@ -8,6 +8,7 @@ const useAddLocation = () => {
         if (pictures) {
             await LocationService.addPictures(id, pictures);
         }
+        return id;
     }
 
     return {

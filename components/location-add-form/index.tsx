@@ -3,17 +3,20 @@
 import {useForm, SubmitHandler} from "react-hook-form";
 import {AddLocationForm} from "@/types/location";
 import useAddLocation from "@/components/location-add-form/hooks/useAddLocation";
+import {useRouter} from "next/navigation";
 
 export default function LocationAddForm() {
     const {
         register,
         handleSubmit,
     } = useForm<AddLocationForm>();
+    const router = useRouter();
 
     const { addLocation } = useAddLocation();
 
     const onSubmit: SubmitHandler<AddLocationForm> = async (payload) => {
-        await addLocation(payload);
+        const id = await addLocation(payload);
+        router.push(`/locations/${id}`);
     };
 
     return (

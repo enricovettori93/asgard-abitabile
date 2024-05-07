@@ -12,7 +12,7 @@ export default function LocationSearchForm() {
     } = useForm<LocationSearchForm>();
 
     const onSubmit: SubmitHandler<LocationSearchForm> = async (payload) => {
-        const queryParams = new URLSearchParams(payload as unknown as Record<string, string>);
+        const queryParams = new URLSearchParams({...payload, page: "1"} as unknown as Record<string, string>);
         router.push(`/locations?${queryParams}`);
     }
 
