@@ -13,9 +13,6 @@ export default async function Page({ searchParams }: { searchParams: Record<stri
     const data = await getLocations(searchParams);
 
     return (
-        <div>
-
-            <LocationsGrid data={data} currentPage={+searchParams["page"] || 1} />
-        </div>
+        <LocationsGrid data={data} currentPage={+searchParams["page"] || 1} />
     )
 }

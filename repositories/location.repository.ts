@@ -2,7 +2,7 @@ import {AddLocation, LocationWithPictures, LocationWithPicturesAndUser} from "@/
 import {Location} from "@prisma/client";
 import prisma from "@/prisma/client";
 import {PAGE_SIZE} from "@/utils/constants";
-import {PaginationParams} from "@/utils/models";
+import {PaginationParams} from "@/types/common";
 
 interface RepositoryInterface {
     getAll: (params: PaginationParams) => Promise<LocationWithPictures[]>
