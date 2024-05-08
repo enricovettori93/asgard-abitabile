@@ -5,6 +5,8 @@ import {PAGE_SIZE} from "@/utils/constants";
 import {PaginationParams} from "@/types/common";
 
 interface RepositoryInterface {
+    countAll: () => Promise<number>
+    countAllPublished: () => Promise<number>
     getAll: (params: PaginationParams) => Promise<LocationWithPictures[]>
     getAllPublished: (params: PaginationParams) => Promise<LocationWithPictures[]>
     get: (id: Location["id"]) => Promise<LocationWithPicturesAndUser | null>
@@ -14,6 +16,18 @@ interface RepositoryInterface {
 }
 
 class LocationRepository implements RepositoryInterface {
+    async countAll(): Promise<number> {
+        return prisma.location.count();
+    }
+
+    async countAllPublished(): Promise<number> {
+        return prisma.location.count({
+            where: {
+                published: true
+            }
+        });
+    }
+
     async add(payload: AddLocation): Promise<LocationWithPicturesAndUser> {
         return prisma.location.create({
             data: payload,

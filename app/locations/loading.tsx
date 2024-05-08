@@ -1,5 +1,5 @@
 export default function Loading() {
     return (
-        <h1>Loading locations...</h1>
+        <h2>Loading locations...</h2>
     )
 }

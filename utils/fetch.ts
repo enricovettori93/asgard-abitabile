@@ -1,4 +1,6 @@
-const betterFetch = async<T> (endpoint: string | Request | URL, options: RequestInit = {}): Promise<T> => {
+import {ResponseDTO} from "@/types/common";
+
+const betterFetch = async <T>(endpoint: string | Request | URL, options: RequestInit = {}): Promise<ResponseDTO<T> & {count?: string}> => {
     const res = await fetch(
         endpoint,
         options
@@ -8,7 +10,18 @@ const betterFetch = async<T> (endpoint: string | Request | URL, options: Request
         throw new Error("Fetch error");
     }
 
-    return (await res.json()).data as T;
+    const count = res.headers.get('x-total-count');
+
+    const {
+        message, data, errors
+    } = (await res.json()) as ResponseDTO<T>;
+
+    return {
+        data,
+        message,
+        errors,
+        ...count && {count}
+    }
 }
 
 export default betterFetch;

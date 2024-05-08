@@ -11,7 +11,7 @@ interface Props {
 
 export default function CardLocation({ location }: Props) {
     return (
-        <Card className="shadow-md h-[20em] p-0">
+        <Card className="card-location shadow-md h-[20em] p-0">
             <Link href={`/locations/${location.id}`} className="flex flex-col h-full w-full">
                 <Swiper
                     slidesPerView={1}

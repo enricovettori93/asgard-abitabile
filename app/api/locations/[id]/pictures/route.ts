@@ -2,6 +2,9 @@ import LocationRepository from "@/repositories/location.repository";
 import PictureRepository from "@/repositories/picture.repository";
 import {writeImageToFileSystem} from "@/utils/fs";
 import sharp from "sharp";
+import {NextResponse} from "next/server";
+import {ResponseDTO} from "@/types/common";
+import {LocationWithPicturesAndUser} from "@/types/location";
 
 interface Params {
     params: { id: string }
@@ -13,8 +16,10 @@ export async function PUT(request: Request, { params }: Params) {
     const location = await LocationRepository.get(id);
 
     if (!location) {
-        return new Response("Location not found", {
-            status: 404,
+        return NextResponse.json({
+            message: "Location not found"
+        } satisfies ResponseDTO<never>, {
+            status: 404
         });
     }
 
@@ -30,5 +35,9 @@ export async function PUT(request: Request, { params }: Params) {
         });
     }
 
-    return Response.json(await LocationRepository.get(id));
+    const data = await LocationRepository.get(id) as LocationWithPicturesAndUser;
+
+    return NextResponse.json({
+        data
+    } satisfies ResponseDTO<LocationWithPicturesAndUser>);
 }
