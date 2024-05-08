@@ -1,14 +1,13 @@
 import {AddLocation, LocationWithPictures, LocationWithPicturesAndUser} from "@/types/location";
 import {Location} from "@prisma/client";
 import prisma from "@/prisma/client";
-import {PAGE_SIZE} from "@/utils/constants";
-import {PaginationParams} from "@/types/common";
+import {ADULTS_PER_NIGHT, PAGE_SIZE} from "@/utils/constants";
+import {PaginationParams, LocationFilters} from "@/types/common";
 
 interface RepositoryInterface {
-    countAll: () => Promise<number>
-    countAllPublished: () => Promise<number>
-    getAll: (params: PaginationParams) => Promise<LocationWithPictures[]>
-    getAllPublished: (params: PaginationParams) => Promise<LocationWithPictures[]>
+    getAll: (params: PaginationParams) => Promise<{data: LocationWithPictures[], count: number}>
+    getAllPublished: (params: PaginationParams) => Promise<{data: LocationWithPictures[], count: number}>
+    filter: (params: LocationFilters & PaginationParams) => Promise<{data: LocationWithPictures[], count: number}>
     get: (id: Location["id"]) => Promise<LocationWithPicturesAndUser | null>
     add: (payload: AddLocation) => Promise<LocationWithPicturesAndUser>
     delete: (id: Location["id"]) => Promise<void>
@@ -16,18 +15,6 @@ interface RepositoryInterface {
 }
 
 class LocationRepository implements RepositoryInterface {
-    async countAll(): Promise<number> {
-        return prisma.location.count();
-    }
-
-    async countAllPublished(): Promise<number> {
-        return prisma.location.count({
-            where: {
-                published: true
-            }
-        });
-    }
-
     async add(payload: AddLocation): Promise<LocationWithPicturesAndUser> {
         return prisma.location.create({
             data: payload,
@@ -58,18 +45,32 @@ class LocationRepository implements RepositoryInterface {
         });
     }
 
-    async getAll({skip = 0} = {}): Promise<LocationWithPictures[]> {
-        return prisma.location.findMany({
+    async getAll({skip = 0} = {}): Promise<{data: LocationWithPictures[], count: number}> {
+        const count = await prisma.location.count({
+            where: {
+                published: true
+            }
+        });
+
+        const data = await prisma.location.findMany({
             include: {
                 pictures: true
             },
             skip: skip * PAGE_SIZE,
             take: PAGE_SIZE
         });
+
+        return {count, data};
     }
 
-    async getAllPublished({skip = 0} = {}): Promise<LocationWithPictures[]> {
-        return prisma.location.findMany({
+    async getAllPublished({skip = 0} = {}): Promise<{data: LocationWithPictures[], count: number}> {
+        const count = await prisma.location.count({
+            where: {
+                published: true
+            }
+        });
+
+        const data = await prisma.location.findMany({
             include: {
                 pictures: true
             },
@@ -79,6 +80,35 @@ class LocationRepository implements RepositoryInterface {
             skip: skip * PAGE_SIZE,
             take: PAGE_SIZE
         });
+
+        return {count, data};
+    }
+
+    async filter({skip = 0, maxAdultsForNight = 0} = {}): Promise<{data: LocationWithPictures[], count: number}> {
+        const whereConditions: any = {
+            published: true,
+        }
+
+        if (maxAdultsForNight >= ADULTS_PER_NIGHT.MIN && maxAdultsForNight <= ADULTS_PER_NIGHT.MAX) {
+            whereConditions.maxAdultsForNight = {
+                lt: maxAdultsForNight
+            }
+        }
+
+        const count = await prisma.location.count({
+            where: whereConditions
+        });
+
+        const data = await prisma.location.findMany({
+            include: {
+                pictures: true
+            },
+            where: whereConditions,
+            skip: skip * PAGE_SIZE,
+            take: PAGE_SIZE
+        });
+
+        return {data, count};
     }
 
     async update(payload: Location): Promise<LocationWithPicturesAndUser> {

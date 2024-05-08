@@ -14,32 +14,33 @@ datasource db {
 }
 
 model Location {
-  id          String   @id @default(uuid())
-  title       String   @db.VarChar(255)
-  lat         Float
-  lng         Float
-  description String?
-  published   Boolean  @default(false)
-  user        User     @relation(fields: [userId], references: [id])
-  userId      String
-  pictures    Picture[]
+  id                String    @id @default(uuid())
+  title             String    @db.VarChar(255)
+  lat               Float
+  lng               Float
+  description       String?
+  published         Boolean   @default(false)
+  user              User      @relation(fields: [userId], references: [id])
+  userId            String
+  pictures          Picture[]
+  maxAdultsForNight Int       @default(0)
 }
 
 model Picture {
-  id          String   @id @default(uuid())
-  width       Int
-  height      Int
-  src         String
-  alt         String?
-  location    Location @relation(fields: [locationId], references: [id])
-  locationId  String
+  id         String   @id @default(uuid())
+  width      Int
+  height     Int
+  src        String
+  alt        String?
+  location   Location @relation(fields: [locationId], references: [id])
+  locationId String
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String     @id @default(uuid())
+  email     String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   name      String?
   surname   String?
   profile   String?

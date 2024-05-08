@@ -6,6 +6,7 @@ import {useRouter} from "next/navigation";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {SearchLocationSchema} from "@/utils/validators";
 import FieldWrapper from "@/components/inputs/field-wrapper";
+import {ADULTS_PER_NIGHT} from "@/utils/constants";
 
 export default function LocationSearchForm() {
     const router = useRouter();
@@ -30,6 +31,15 @@ export default function LocationSearchForm() {
                     <input id="city" type="text" {...register("city")}/>
                 </FieldWrapper>
             </div>
+            <div>
+                <div className="flex flex-col">
+                    <FieldWrapper error={errors.maxAdultsForNight}>
+                        <label htmlFor="maxAdultsPerNight">Adulti per notte</label>
+                        <input id="maxAdultsPerNight" min={ADULTS_PER_NIGHT.MIN} max={ADULTS_PER_NIGHT.MAX}
+                               type="number" {...register("maxAdultsForNight", {valueAsNumber: true})}/>
+                    </FieldWrapper>
+                </div>
+            </div>
             <div className="flex">
                 <div className="flex flex-col">
                     <FieldWrapper error={errors.from}>
@@ -44,7 +54,7 @@ export default function LocationSearchForm() {
                     </FieldWrapper>
                 </div>
             </div>
-            <button className="button--primary" type="submit">Cerca</button>
+            <button className="button--primary mt-5" type="submit">Cerca</button>
         </form>
     )
 }

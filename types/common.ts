@@ -1,3 +1,7 @@
+export interface LocationFilters {
+    maxAdultsForNight?: number
+}
+
 export interface PaginationParams {
     skip?: number
 }

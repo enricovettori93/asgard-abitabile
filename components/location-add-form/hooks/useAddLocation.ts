@@ -1,8 +1,10 @@
 import LocationService from "@/services/location.service";
 import {AddLocationForm} from "@/types/location";
 import {useState} from "react";
+import {useRouter} from "next/navigation";
 
 const useAddLocation = () => {
+    const router = useRouter();
     const [loading, setLoading] = useState(false);
     const addLocation = async (payload: AddLocationForm) => {
         setLoading(true);
@@ -12,7 +14,7 @@ const useAddLocation = () => {
             await LocationService.addPictures(id, pictures);
         }
         setLoading(false);
-        return id;
+        router.push(`/locations/${id}`);
     }
 
     return {

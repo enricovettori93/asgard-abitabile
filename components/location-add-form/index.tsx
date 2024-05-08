@@ -3,7 +3,6 @@
 import {useForm, SubmitHandler} from "react-hook-form";
 import {AddLocationForm} from "@/types/location";
 import useAddLocation from "@/components/location-add-form/hooks/useAddLocation";
-import {useRouter} from "next/navigation";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {NewLocationSchema} from "@/utils/validators";
 import FieldWrapper from "@/components/inputs/field-wrapper";
@@ -16,13 +15,12 @@ export default function LocationAddForm() {
     } = useForm<AddLocationForm>({
         resolver: zodResolver(NewLocationSchema)
     });
-    const router = useRouter();
+
 
     const {addLocation, loading} = useAddLocation();
 
     const onSubmit: SubmitHandler<AddLocationForm> = async (payload) => {
-        const id = await addLocation(payload);
-        router.push(`/locations/${id}`);
+        await addLocation(payload);
     };
 
     return (
@@ -49,6 +47,12 @@ export default function LocationAddForm() {
                 <FieldWrapper error={errors.lng}>
                     <label htmlFor="lng">Longitudine</label>
                     <input id="lng" type="number" {...register("lng", {valueAsNumber: true})}/>
+                </FieldWrapper>
+            </div>
+            <div className="flex gap-5">
+                <FieldWrapper error={errors.maxAdultsForNight}>
+                    <label htmlFor="maxAdultsForNight">Numero massimo di adulti per notte</label>
+                    <input id="maxAdultsForNight" type="number" {...register("maxAdultsForNight", {valueAsNumber: true})}/>
                 </FieldWrapper>
             </div>
             <div className="flex gap-5">

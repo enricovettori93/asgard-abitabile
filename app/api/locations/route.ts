@@ -4,25 +4,29 @@ import {NewLocationSchema} from "@/utils/validators";
 import {NextResponse} from "next/server";
 import {ResponseDTO} from "@/types/common";
 import {LocationWithPictures, LocationWithPicturesAndUser} from "@/types/location";
-import {CUSTOM_HEADERS} from "@/utils/constants";
+import {ADULTS_PER_NIGHT, CUSTOM_HEADERS} from "@/utils/constants";
 
 export async function GET(request: NextRequest) {
     const page = Number(request.nextUrl.searchParams.get("page")) ?? 1;
+    const maxAdultsForNight = request.nextUrl.searchParams.get("maxAdultsForNight");
 
-    if (page < 1) {
+    if (page < 1 || maxAdultsForNight !== null && (Number(maxAdultsForNight) < ADULTS_PER_NIGHT.MIN || Number(maxAdultsForNight) > ADULTS_PER_NIGHT.MAX)) {
         return NextResponse.json({
-            message: "Invalid pagination"
+            message: "Invalid request"
         } satisfies ResponseDTO<never>, {
             status: 406
         });
     }
 
-    const queryParams = {
-        skip: page - 1
-    };
+    const filters: any = {};
 
-    const data = await LocationRepository.getAllPublished(queryParams);
-    const count = await LocationRepository.countAllPublished();
+    filters.skip = page - 1;
+
+    if (maxAdultsForNight !== null) {
+        filters.maxAdultsForNight = Number(maxAdultsForNight);
+    }
+
+    const {data, count} = await LocationRepository.filter(filters);
 
     return NextResponse.json({
         data
