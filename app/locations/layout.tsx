@@ -6,6 +6,6 @@ export default function LocationsLayout({
     children: React.ReactNode
 }) {
     return (
-        <section className="p-5">{children}</section>
+        <section className="w-full p-5">{children}</section>
     )
 }

@@ -23,6 +23,6 @@ export default async function Page({searchParams}: { searchParams: Record<string
     const {data, count} = await getLocations(searchParams);
 
     return (
-        <LocationsGrid data={data} totalElements={+count} currentPage={+searchParams["page"] || 1} />
+        <LocationsGrid data={data} totalElements={+count} currentPage={+searchParams["page"] || 1}/>
     )
 }
