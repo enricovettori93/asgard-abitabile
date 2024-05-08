@@ -11,7 +11,7 @@ async function getLocations(searchParams: Record<string, string>): Promise<{
     const {
         data,
         count
-    } = await betterFetch<ResponseDTO<LocationWithPictures[]>>(`http://localhost:3000/api/locations?${queryParams}`);
+    } = await betterFetch<ResponseDTO<LocationWithPictures[]>>(`locations?${queryParams}`);
 
     return {
         data: data as LocationWithPictures[],

@@ -10,7 +10,7 @@ interface LocationServiceInterface {
 
 class LocationService implements LocationServiceInterface {
     async add(payload: AddLocationForm): Promise<Location> {
-        return (await betterFetch<ResponseDTO<Location>>("http://localhost:3000/api/locations", {
+        return (await betterFetch<ResponseDTO<Location>>("locations", {
             method: "POST",
             body: JSON.stringify(payload)
         })).data as Location;
@@ -21,7 +21,7 @@ class LocationService implements LocationServiceInterface {
         for(let file of payload) {
             formData.append(file.name, file);
         }
-        return (await betterFetch<ResponseDTO<Location>>(`http://localhost:3000/api/locations/${locationId}/pictures`, {
+        return (await betterFetch<ResponseDTO<Location>>(`locations/${locationId}/pictures`, {
             method: "PUT",
             body: formData
         })).data as Location;

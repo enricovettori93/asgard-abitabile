@@ -4,6 +4,7 @@ import {NewLocationSchema} from "@/utils/validators";
 import {NextResponse} from "next/server";
 import {ResponseDTO} from "@/types/common";
 import {LocationWithPictures, LocationWithPicturesAndUser} from "@/types/location";
+import {CUSTOM_HEADERS} from "@/utils/constants";
 
 export async function GET(request: NextRequest) {
     const page = Number(request.nextUrl.searchParams.get("page")) ?? 1;
@@ -27,7 +28,7 @@ export async function GET(request: NextRequest) {
         data
     } satisfies ResponseDTO<LocationWithPictures[]>, {
         headers: {
-            "X-Total-Count": `${count}`
+            [CUSTOM_HEADERS.X_TOTAL_COUNT]: `${count}`
         }
     });
 }

@@ -1,8 +1,17 @@
 import {ResponseDTO} from "@/types/common";
+import {CUSTOM_HEADERS} from "@/utils/constants";
 
 const betterFetch = async <T>(endpoint: string | Request | URL, options: RequestInit = {}): Promise<ResponseDTO<T> & {count?: string}> => {
+    const beUri = process.env["NEXT_PUBLIC_BE_URI"];
+
+    if (!beUri) {
+        throw new Error("Missing be URI");
+    }
+
+    const apiPath = "/api/";
+
     const res = await fetch(
-        endpoint,
+        `${beUri}${apiPath}${endpoint}`,
         options
     );
 
@@ -10,7 +19,7 @@ const betterFetch = async <T>(endpoint: string | Request | URL, options: Request
         throw new Error("Fetch error");
     }
 
-    const count = res.headers.get('x-total-count');
+    const count = res.headers.get(CUSTOM_HEADERS.X_TOTAL_COUNT);
 
     const {
         message, data, errors

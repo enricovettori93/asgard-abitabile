@@ -18,7 +18,7 @@ const useFetchLocations = ({data, currentPage}: props) => {
     const handleFetch = async () => {
         setLoading(true);
         const queryParams = new URLSearchParams({page: `${page}`});
-        const {data = []} = await betterFetch<LocationWithPictures[]>(`http://localhost:3000/api/locations?${queryParams}`);
+        const {data = []} = await betterFetch<LocationWithPictures[]>(`locations?${queryParams}`);
 
         setLocations(prev => [...prev, ...data]);
 
