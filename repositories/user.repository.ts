@@ -1,46 +1,31 @@
-import {User} from "@prisma/client";
+import {AddUserForm, SafeUser} from "@/types/user";
+import prisma from "@/prisma/client";
+import bcrypt from "bcrypt";
 
-interface RepositoryInterface
-{
-    login(payload: User): Promise<boolean>
-    logout(): Promise<void>
-    register(payload: User): Promise<void>
-    delete(email: string): Promise<void>
-    update(payload: User): Promise<void>
+interface RepositoryInterface {
+    find(email: string): Promise<SafeUser | null>
+    // login(payload: User): Promise<boolean>
+    // logout(): Promise<void>
+    register(payload: AddUserForm): Promise<SafeUser>
+    // delete(email: string): Promise<void>
+    // update(payload: User): Promise<void>
 }
 
-// todo: fai tutto
-class UserRepository implements RepositoryInterface
-{
-    users: User[] = [];
+class UserRepository implements RepositoryInterface {
+    async register(payload: AddUserForm): Promise<SafeUser> {
+        const hashedPassword = await bcrypt.hash(payload.password, 10);
+        const {password, ...rest} = await prisma.user.create({data: {...payload, password: hashedPassword}});
 
-    constructor() {
-        this.users.push({
-            email: "a@a.it",
-            password: "test"
-        })
+        return rest;
     }
 
-    delete(email: string): Promise<void> {
-        return Promise.resolve(undefined);
+    async find(email: string): Promise<SafeUser | null> {
+        return prisma.user.findUnique({
+            where: {
+                email
+            }
+        });
     }
-
-    login(payload: User): Promise<boolean> {
-        return Promise.resolve(true);
-    }
-
-    logout(): Promise<void> {
-        return Promise.resolve(undefined);
-    }
-
-    register(payload: User): Promise<void> {
-        return Promise.resolve(undefined);
-    }
-
-    update(payload: User): Promise<void> {
-        return Promise.resolve(undefined);
-    }
-
 }
 
 export default new UserRepository();

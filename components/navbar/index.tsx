@@ -10,6 +10,7 @@ export default function NavBar() {
                 <ul className="flex gap-5">
                     <li><Link href={`/locations?page=1`}>Locations</Link></li>
                     <li><Link href="/locations/add">Aggiungi una location</Link></li>
+                    <li><Link href="/signup">Registrati</Link></li>
                 </ul>
             </nav>
         </header>

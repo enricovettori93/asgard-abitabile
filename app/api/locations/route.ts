@@ -55,7 +55,7 @@ export async function POST(request: Request) {
     // todo: take userId from cookies
     const data = await LocationRepository.add({
         ...body,
-        userId: "67caec95-0da3-4aa0-953d-e03332c795d5"
+        userId: "7516b1f6-40dd-4b38-9855-34f7307f63c7"
     });
 
     return NextResponse.json({

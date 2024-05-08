@@ -41,8 +41,9 @@ model User {
   email     String     @unique
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  name      String?
-  surname   String?
-  profile   String?
+  password  String
+  name      String
+  surname   String
+  profile   String     @unique
   locations Location[]
 }

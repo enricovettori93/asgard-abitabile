@@ -1,3 +1,5 @@
 import {User} from "@prisma/client";
 
-export type AddUserDTO = Omit<User, "id">
+export type AddUserForm = Omit<User, "id" | "createdAt" | "updatedAt">
+
+export type SafeUser = Omit<User, "password">

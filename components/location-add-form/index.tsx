@@ -16,7 +16,6 @@ export default function LocationAddForm() {
         resolver: zodResolver(NewLocationSchema)
     });
 
-
     const {addLocation, loading} = useAddLocation();
 
     const onSubmit: SubmitHandler<AddLocationForm> = async (payload) => {

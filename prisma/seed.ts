@@ -9,6 +9,8 @@ async function main() {
             name: "Mario",
             surname: "Rossi",
             email: "mario.rossi@interlogica.it",
+            password: "test",
+            profile: "test"
         }
     });
     for(let i = 0; i < 10; i++) {
@@ -18,12 +20,13 @@ async function main() {
                 lng: i,
                 title: `location ${i}`,
                 description: `description ${i}`,
-                published: false,
+                published: i % 2 === 0,
                 user: {
                     connect: {
                         id
                     }
                 },
+                maxAdultsForNight: i,
                 pictures: {
                     create: [
                         {
