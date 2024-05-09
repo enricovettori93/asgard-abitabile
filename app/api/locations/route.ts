@@ -6,6 +6,7 @@ import {ResponseDTO} from "@/types/common";
 import {LocationWithPictures, LocationWithPicturesAndUser} from "@/types/location";
 import {ADULTS_PER_NIGHT, CUSTOM_HEADERS} from "@/utils/constants";
 import {transformValidationErrors} from "@/utils/functions";
+import {getUserIdFromRequest} from "@/utils/session";
 
 export async function GET(request: NextRequest) {
     const page = Number(request.nextUrl.searchParams.get("page")) ?? 1;
@@ -40,6 +41,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: Request) {
     const body = await request.json();
+    const userId = await getUserIdFromRequest();
     const validationResult = NewLocationSchema.safeParse(body);
 
     if (!validationResult.success) {
@@ -50,10 +52,9 @@ export async function POST(request: Request) {
         });
     }
 
-    // todo: take userId from cookies
     const data = await LocationRepository.add({
         ...body,
-        userId: "7516b1f6-40dd-4b38-9855-34f7307f63c7"
+        userId
     });
 
     return NextResponse.json({

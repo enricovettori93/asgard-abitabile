@@ -51,3 +51,9 @@ export function deleteSession() {
     cookies().delete("session");
     cookies().delete("userId");
 }
+
+export async function getUserIdFromRequest(): Promise<string | unknown> {
+    const cookie = cookies().get('session')?.value;
+    const {userId} = await decrypt(cookie);
+    return userId;
+}

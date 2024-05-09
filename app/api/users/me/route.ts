@@ -2,12 +2,10 @@ import {NextRequest, NextResponse} from "next/server";
 import UserRepository from "@/repositories/user.repository";
 import {ResponseDTO} from "@/types/common";
 import {SafeUser} from "@/types/user";
-import {cookies} from "next/headers";
-import {decrypt} from "@/utils/session";
+import {getUserIdFromRequest} from "@/utils/session";
 
 export async function GET(request: NextRequest) {
-    const cookie = cookies().get('session')?.value;
-    const {userId} = await decrypt(cookie);
+    const userId = await getUserIdFromRequest();
 
     const user = await UserRepository.findById(`${userId}`);
 
