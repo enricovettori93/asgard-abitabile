@@ -5,9 +5,13 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {AddUserForm} from "@/types/user";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {SignupSchema} from "@/utils/validators";
-import useSignUp from "@/components/signup-form/hooks/useSignUp";
+import useSignUp from "@/app/auth/_components/signup-form/hooks/useSignUp";
 
-export default function SignupForm() {
+interface props {
+    handleSignUpFlow: Function
+}
+
+export default function SignupForm({handleSignUpFlow}: props) {
     const {
         register,
         handleSubmit,
@@ -20,6 +24,7 @@ export default function SignupForm() {
 
     const onSubmit: SubmitHandler<AddUserForm & {confirmPassword: string}> = async (payload) => {
         await signUp(payload);
+        handleSignUpFlow();
     }
 
     return (

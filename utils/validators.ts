@@ -42,3 +42,9 @@ export const SignupSchema = z.object({
     message: "Passwords must be equals",
     path: ["confirmPassword"]
 });
+
+
+export const SignInSchema = z.object({
+    email: z.string().email(),
+    password: z.string().min(1)
+});

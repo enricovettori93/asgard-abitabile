@@ -5,6 +5,7 @@ import {NextResponse} from "next/server";
 import {ResponseDTO} from "@/types/common";
 import {LocationWithPictures, LocationWithPicturesAndUser} from "@/types/location";
 import {ADULTS_PER_NIGHT, CUSTOM_HEADERS} from "@/utils/constants";
+import {transformValidationErrors} from "@/utils/functions";
 
 export async function GET(request: NextRequest) {
     const page = Number(request.nextUrl.searchParams.get("page")) ?? 1;
@@ -42,11 +43,8 @@ export async function POST(request: Request) {
     const validationResult = NewLocationSchema.safeParse(body);
 
     if (!validationResult.success) {
-        const errors = Object.fromEntries(
-            validationResult.error?.issues?.map((issue) => [issue.path[0], issue.message]) || []
-        );
         return NextResponse.json({
-            errors
+            errors: transformValidationErrors(validationResult)
         } satisfies ResponseDTO<never>, {
             status: 406
         });

@@ -7,7 +7,7 @@ const useSignUp = () => {
 
     const signUp = async (payload: AddUserForm) => {
         setLoading(true);
-        const user = await userService.signUp(payload);
+        await userService.signUp(payload);
         setLoading(false);
     }
 

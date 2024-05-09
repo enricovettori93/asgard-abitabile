@@ -2,7 +2,7 @@
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Card from "@/components/card";
-import useSlidesPerView from "@/hooks/useSlidesPerView";
+import useSlidesPerView from "@/components/what-can-do/hooks/useSlidesPerView";
 
 export default function WhatCanDo() {
     const { slides } = useSlidesPerView();
