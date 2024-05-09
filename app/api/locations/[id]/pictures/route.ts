@@ -1,10 +1,12 @@
 import LocationRepository from "@/repositories/location.repository";
 import PictureRepository from "@/repositories/picture.repository";
-import {writeImageToFileSystem} from "@/utils/fs";
+import {writeImageBufferToFileSystem} from "@/utils/fs";
 import sharp from "sharp";
 import {NextResponse} from "next/server";
 import {ResponseDTO} from "@/types/common";
 import {LocationWithPicturesAndUser} from "@/types/location";
+import path from "node:path";
+import * as fs from "node:fs";
 
 interface Params {
     params: { id: string }
@@ -15,6 +17,7 @@ export async function PUT(request: Request, { params }: Params) {
     const formData = await request.formData();
     const location = await LocationRepository.get(id);
 
+
     if (!location) {
         return NextResponse.json({
             message: "Location not found"
@@ -24,11 +27,17 @@ export async function PUT(request: Request, { params }: Params) {
     }
 
     for(let [fileName, file] of formData.entries()) {
-        const {fullPath, relativePath} = await writeImageToFileSystem(location.id, file as File);
-        const {width, height} = await sharp(fullPath).metadata();
+        const webpFileName = `${path.parse(fileName).name}__.webp`;
+        const originalBuffer = Buffer.from(await (file as File).arrayBuffer());
+        const {fullPath: fullPathOriginal} = await writeImageBufferToFileSystem(location.id, originalBuffer, fileName);
+        const webpBuffer = await sharp(fullPathOriginal).webp({quality: 50}).toBuffer();
+        const {fullPath: fullPathWebp, relativePath} = await writeImageBufferToFileSystem(location.id, webpBuffer, webpFileName);
+        const {width, height} = await sharp(fullPathWebp).metadata();
+
+        fs.rmSync(fullPathOriginal);
 
         await PictureRepository.add(id, {
-            alt: fileName,
+            alt: webpFileName,
             src: relativePath,
             height: width as number,
             width: height as number

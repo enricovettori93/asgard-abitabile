@@ -8,3 +8,5 @@ export const ADULTS_PER_NIGHT = {
     MIN: 1,
     MAX: 20
 }
+
+export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/jpeg", "image/webp"];

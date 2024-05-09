@@ -40,6 +40,6 @@ next-env.d.ts
 /db
 !/db/.gitkeep
 
-/public/uploads/
 !/public/uploads/.gitkeep
+/public/uploads/
 .vscode

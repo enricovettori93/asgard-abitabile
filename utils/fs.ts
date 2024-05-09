@@ -8,9 +8,8 @@ interface res {
     relativePath: string
 }
 
-export const writeImageToFileSystem = async (locationId: Location["id"], file: File): Promise<res> => {
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const filename = Date.now() + "_" + file.name.replaceAll(" ", "_");
+export const writeImageBufferToFileSystem = async (locationId: Location["id"], buffer: Buffer, fileName: string): Promise<res> => {
+    const filename = Date.now() + "_" + fileName.replaceAll(" ", "_");
 
     try {
         const uploadPath = path.join("uploads/" + locationId);
@@ -36,4 +35,3 @@ export const writeImageToFileSystem = async (locationId: Location["id"], file: F
         throw e;
     }
 }
-

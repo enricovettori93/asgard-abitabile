@@ -1,6 +1,6 @@
 import {z, ZodType} from "zod";
 import {AddLocationForm} from "@/types/location";
-import {ADULTS_PER_NIGHT} from "@/utils/constants";
+import {ACCEPTED_IMAGE_TYPES, ADULTS_PER_NIGHT} from "@/utils/constants";
 
 export const NewLocationSchema: ZodType<AddLocationForm> = z.object({
     title: z.string().min(1).max(50),
@@ -8,7 +8,15 @@ export const NewLocationSchema: ZodType<AddLocationForm> = z.object({
     lat: z.number(),
     lng: z.number(),
     maxAdultsForNight: z.number().min(1).max(20),
-    published: z.boolean()
+    published: z.boolean(),
+    pictures: z.any().refine(
+        (files) => {
+            return Object.values(files as unknown as File).every((file: File) => {
+                return ACCEPTED_IMAGE_TYPES.includes(file.type)
+            });
+        },
+        ".jpg, .jpeg, .png and .webp files are accepted."
+    ).optional(),
 });
 
 export const SearchLocationSchema = z.object({

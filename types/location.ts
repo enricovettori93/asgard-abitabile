@@ -12,7 +12,7 @@ const locationWithPicturesAndUser = Prisma.validator<Prisma.LocationDefaultArgs>
 export type LocationWithPictures = Prisma.LocationGetPayload<typeof locationWithPictures>
 export type LocationWithPicturesAndUser = Prisma.LocationGetPayload<typeof locationWithPicturesAndUser>
 export type AddLocation = Omit<Location, "id">
-export type AddLocationForm = Omit<AddLocation, "userId"> & { pictures?: File []}
+export type AddLocationForm = Omit<AddLocation, "userId"> & {pictures?: File []}
 export interface LocationSearchForm {
     city: string
     from: string

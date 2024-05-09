@@ -13,7 +13,7 @@ async function main() {
             profile: "test"
         }
     });
-    for(let i = 0; i < 10; i++) {
+    for(let i = 0; i < 2; i++) {
         let location = await prisma.location.create({
             data: {
                 lat: i,
