@@ -1,6 +1,7 @@
 import {z, ZodType} from "zod";
-import {AddLocationForm} from "@/types/location";
+import {AddLocationForm, LocationSearchForm} from "@/types/location";
 import {ACCEPTED_IMAGE_TYPES, ADULTS_PER_NIGHT} from "@/utils/constants";
+import {AddUserForm} from "@/types/user";
 
 export const NewLocationSchema: ZodType<AddLocationForm> = z.object({
     title: z.string().min(1).max(50),
@@ -8,6 +9,7 @@ export const NewLocationSchema: ZodType<AddLocationForm> = z.object({
     lat: z.number(),
     lng: z.number(),
     maxAdultsForNight: z.number().min(1).max(20),
+    priceForNight: z.number().min(0),
     published: z.boolean(),
     pictures: z.any().refine(
         (files) => {
@@ -19,17 +21,18 @@ export const NewLocationSchema: ZodType<AddLocationForm> = z.object({
     ).optional(),
 });
 
-export const SearchLocationSchema = z.object({
+export const SearchLocationSchema: ZodType<LocationSearchForm> = z.object({
     city: z.string().min(1).max(100),
     to: z.string(),
-    maxAdultsForNight: z.number().min(ADULTS_PER_NIGHT.MIN).max(ADULTS_PER_NIGHT.MAX),
+    maxAdultsForNight: z.number().min(ADULTS_PER_NIGHT.MIN).max(ADULTS_PER_NIGHT.MAX).optional(),
+    priceForNight: z.number().min(0).optional(),
     from: z.string()
 }).refine((data) => new Date(data.from) < new Date(data.to), {
     message: "End date cannot be earlier than start date.",
     path: ["to"],
 });
 
-export const SignupSchema = z.object({
+export const SignupSchema: ZodType<AddUserForm> = z.object({
     email: z.string().email(),
     name: z.string().min(1).max(20),
     surname: z.string().min(1).max(20),

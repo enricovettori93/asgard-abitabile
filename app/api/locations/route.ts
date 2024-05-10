@@ -3,7 +3,7 @@ import {NextRequest} from "next/server";
 import {NewLocationSchema} from "@/utils/validators";
 import {NextResponse} from "next/server";
 import {ResponseDTO} from "@/types/common";
-import {LocationWithPictures, LocationWithPicturesAndUser} from "@/types/location";
+import {AddLocationForm, LocationWithPictures, LocationWithPicturesAndUser} from "@/types/location";
 import {ADULTS_PER_NIGHT, CUSTOM_HEADERS} from "@/utils/constants";
 import {transformValidationErrors} from "@/utils/functions";
 import {getUserIdFromRequest} from "@/utils/session";
@@ -11,7 +11,9 @@ import {getUserIdFromRequest} from "@/utils/session";
 export async function GET(request: NextRequest) {
     const page = Number(request.nextUrl.searchParams.get("page")) ?? 1;
     const maxAdultsForNight = request.nextUrl.searchParams.get("maxAdultsForNight");
+    const priceForNight = request.nextUrl.searchParams.get("priceForNight");
 
+    // todo: create a zod schema just for this custom validation considering pagination
     if (page < 1 || maxAdultsForNight !== null && (Number(maxAdultsForNight) < ADULTS_PER_NIGHT.MIN || Number(maxAdultsForNight) > ADULTS_PER_NIGHT.MAX)) {
         return NextResponse.json({
             message: "Invalid request"
@@ -20,12 +22,16 @@ export async function GET(request: NextRequest) {
         });
     }
 
-    const filters: any = {};
+    const filters: Record<string, any> = {};
 
     filters.skip = page - 1;
 
     if (maxAdultsForNight !== null) {
         filters.maxAdultsForNight = Number(maxAdultsForNight);
+    }
+
+    if (priceForNight !== null) {
+        filters.priceForNight = Number(priceForNight);
     }
 
     const {data, count} = await LocationRepository.filter(filters);
@@ -40,7 +46,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: Request) {
-    const body = await request.json();
+    const body: AddLocationForm = await request.json();
     const userId = await getUserIdFromRequest();
     const validationResult = NewLocationSchema.safeParse(body);
 

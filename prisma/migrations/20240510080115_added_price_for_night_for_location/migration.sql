@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Location" ADD COLUMN     "priceForNight" DOUBLE PRECISION NOT NULL DEFAULT 0;

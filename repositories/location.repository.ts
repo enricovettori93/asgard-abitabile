@@ -84,7 +84,7 @@ class LocationRepository implements RepositoryInterface {
         return {count, data};
     }
 
-    async filter({skip = 0, maxAdultsForNight = 0} = {}): Promise<{data: LocationWithPictures[], count: number}> {
+    async filter({skip = 0, maxAdultsForNight = 0, priceForNight = 0} = {}): Promise<{data: LocationWithPictures[], count: number}> {
         const whereConditions: any = {
             published: true,
         }
@@ -92,6 +92,12 @@ class LocationRepository implements RepositoryInterface {
         if (maxAdultsForNight >= ADULTS_PER_NIGHT.MIN && maxAdultsForNight <= ADULTS_PER_NIGHT.MAX) {
             whereConditions.maxAdultsForNight = {
                 lt: maxAdultsForNight
+            }
+        }
+
+        if (priceForNight > 0) {
+            whereConditions.priceForNight = {
+                lt: priceForNight
             }
         }
 

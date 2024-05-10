@@ -24,6 +24,7 @@ model Location {
   userId            String
   pictures          Picture[]
   maxAdultsForNight Int       @default(0)
+  priceForNight     Float     @default(0)
 }
 
 model Picture {

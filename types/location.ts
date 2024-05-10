@@ -17,5 +17,6 @@ export interface LocationSearchForm {
     city: string
     from: string
     to: string
-    maxAdultsForNight: number
+    maxAdultsForNight?: number
+    priceForNight?: number
 }

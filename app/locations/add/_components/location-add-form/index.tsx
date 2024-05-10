@@ -51,7 +51,15 @@ export default function LocationAddForm() {
             <div className="flex gap-5">
                 <FieldWrapper error={errors.maxAdultsForNight}>
                     <label htmlFor="maxAdultsForNight">Numero massimo di adulti per notte</label>
-                    <input id="maxAdultsForNight" type="number" {...register("maxAdultsForNight", {valueAsNumber: true})}/>
+                    <input id="maxAdultsForNight"
+                           type="number" {...register("maxAdultsForNight", {valueAsNumber: true})}/>
+                </FieldWrapper>
+            </div>
+            <div className="flex gap-5">
+                <FieldWrapper error={errors.priceForNight}>
+                    <label htmlFor="priceForNight">Prezzo per notte</label>
+                    <input id="priceForNight" step=".01"
+                           type="number" {...register("priceForNight", {valueAsNumber: true})}/>
                 </FieldWrapper>
             </div>
             <div className="flex gap-5">
