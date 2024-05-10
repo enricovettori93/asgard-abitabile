@@ -1,6 +1,7 @@
 import {Location, Picture} from "@prisma/client";
 import prisma from "@/prisma/client";
 import {AddPicture} from "@/types/picture";
+import NotFound from "@/errors/not-found";
 
 interface RepositoryInterface {
     add: (locationId: Location["id"], payload: Picture) => Promise<Picture>
@@ -14,9 +15,9 @@ class PictureRepository implements RepositoryInterface {
                 id: locationId
             }
         });
-        if (!location) {
-            throw new Error("Location not found");
-        }
+
+        if (!location) throw new NotFound();
+
         return prisma.picture.create({
             data: {
                 ...payload,

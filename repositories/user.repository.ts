@@ -4,10 +4,7 @@ import bcrypt from "bcrypt";
 import UserAdapter from "@/adapters/user";
 import {User} from "@prisma/client";
 import NotFound from "@/errors/not-found";
-import NotAllowed from "@/errors/not-allowed";
 import WrongCredential from "@/errors/wrong-credential";
-import {id} from "postcss-selector-parser";
-import {undefined} from "zod";
 
 interface RepositoryInterface {
     findByEmail(email: User["email"]): Promise<SafeUser | null>
