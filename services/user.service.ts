@@ -1,4 +1,4 @@
-import {AddUserForm, SafeUser, UserSignInForm} from "@/types/user";
+import {AddUserForm, EditUserForm, EditUserPasswordForm, SafeUser, UserSignInForm} from "@/types/user";
 import betterFetch from "@/utils/fetch";
 
 interface UserServiceInterface {
@@ -6,6 +6,8 @@ interface UserServiceInterface {
     me(): Promise<SafeUser>
     signIn(payload: AddUserForm): Promise<SafeUser>
     logout(): Promise<void>
+    updateAccount(payload: EditUserForm): Promise<SafeUser>
+    updatePassword(payload: EditUserPasswordForm): Promise<void>
 }
 
 class UserService implements UserServiceInterface {
@@ -29,6 +31,20 @@ class UserService implements UserServiceInterface {
 
     async me(): Promise<SafeUser> {
         return (await betterFetch<SafeUser>("users/me")).data as SafeUser;
+    }
+
+    async updateAccount(payload: EditUserForm): Promise<SafeUser> {
+        return (await betterFetch<SafeUser>("users/me", {
+            method: "PATCH",
+            body: JSON.stringify(payload)
+        })).data as SafeUser;
+    }
+
+    async updatePassword(payload: EditUserPasswordForm): Promise<void> {
+        return (await betterFetch<never>("users/me/password", {
+            method: "PATCH",
+            body: JSON.stringify(payload)
+        })) as unknown as void;
     }
 }
 

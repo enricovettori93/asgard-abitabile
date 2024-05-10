@@ -11,6 +11,7 @@ interface UserContextInterface {
     loading: boolean
     login: (user: SafeUser) => void
     logout: () => void
+    updateUser: (user: SafeUser) => void
 }
 
 interface UserContextProps {
@@ -22,6 +23,8 @@ const initialValues: UserContextInterface = {
     isLogged: false,
     loading: false,
     login: () => {
+    },
+    updateUser: () => {
     },
     logout: () => {
     }
@@ -55,6 +58,10 @@ export default function UserContextProvider({children}: UserContextProps) {
         setUser(user);
     }
 
+    const updateUser = (user: SafeUser) => {
+        setUser(user);
+    }
+
     useEffect(() => {
         if (getCookie("userId")) {
             fetchCurrentUserInfo();
@@ -62,7 +69,7 @@ export default function UserContextProvider({children}: UserContextProps) {
     }, []);
 
     return (
-        <UserContext.Provider value={{user, login, logout, isLogged, loading}}>
+        <UserContext.Provider value={{user, login, logout, updateUser, isLogged, loading}}>
             {children}
         </UserContext.Provider>
     )

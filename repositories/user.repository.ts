@@ -1,16 +1,27 @@
-import {AddUserForm, SafeUser, UserSignInForm} from "@/types/user";
+import {AddUserForm, EditUserForm, EditUserPasswordForm, SafeUser, UserSignInForm} from "@/types/user";
 import prisma from "@/prisma/client";
 import bcrypt from "bcrypt";
 import UserAdapter from "@/adapters/user";
 import {User} from "@prisma/client";
+import NotFound from "@/errors/not-found";
+import NotAllowed from "@/errors/not-allowed";
+import WrongCredential from "@/errors/wrong-credential";
+import {id} from "postcss-selector-parser";
+import {undefined} from "zod";
 
 interface RepositoryInterface {
     findByEmail(email: User["email"]): Promise<SafeUser | null>
+
     findById(id: User["id"]): Promise<SafeUser | null>
+
     login(payload: UserSignInForm): Promise<SafeUser | null>
+
     register(payload: AddUserForm): Promise<SafeUser>
+
     // delete(email: string): Promise<void>
-    // update(payload: User): Promise<void>
+    update(id: User["id"], payload: EditUserForm): Promise<SafeUser>
+
+    updatePassword(id: User["id"], payload: EditUserPasswordForm): Promise<void>
 }
 
 class UserRepository implements RepositoryInterface {
@@ -28,7 +39,7 @@ class UserRepository implements RepositoryInterface {
             }
         });
 
-        if (!user) return null;
+        if (!user) throw new NotFound();
 
         return UserAdapter.fromUserToSafeUser(user);
     }
@@ -40,7 +51,7 @@ class UserRepository implements RepositoryInterface {
             }
         });
 
-        if (!user) return null;
+        if (!user) throw new NotFound();
 
         return UserAdapter.fromUserToSafeUser(user);
     }
@@ -53,13 +64,57 @@ class UserRepository implements RepositoryInterface {
             }
         });
 
-        if (!user) throw new Error("Wrong credential");
+        if (!user) throw new NotFound();
 
         const correctPassword = await bcrypt.compare(password, user.password);
 
-        if (!correctPassword) throw new Error("Wrong credential");
+        if (!correctPassword) throw new WrongCredential();
 
         return UserAdapter.fromUserToSafeUser(user);
+    }
+
+    async update(id: User["id"], payload: EditUserForm): Promise<SafeUser> {
+        const userDB = await prisma.user.findUnique({
+            where: {
+                id
+            }
+        });
+
+        if (!userDB) throw new NotFound();
+
+        const user = await prisma.user.update({
+            where: {
+                id
+            },
+            data: {...payload}
+        });
+
+        return UserAdapter.fromUserToSafeUser(user);
+    }
+
+    async updatePassword(id: User["id"], payload: EditUserPasswordForm): Promise<void> {
+        const userDB = await prisma.user.findUnique({
+            where: {
+                id
+            }
+        });
+
+        if (!userDB) throw new NotFound();
+
+        const correctPassword = await bcrypt.compare(payload.password, userDB.password);
+
+        if (!correctPassword) throw new WrongCredential();
+
+        const hashedPassword = await bcrypt.hash(payload.newPassword, 10);
+
+        await prisma.user.update({
+            where: {
+                id
+            },
+            data: {password: hashedPassword}
+        });
+
+        return;
     }
 }
 

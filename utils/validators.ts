@@ -1,7 +1,7 @@
 import {z, ZodType} from "zod";
 import {AddLocationForm, LocationSearchForm} from "@/types/location";
 import {ACCEPTED_IMAGE_TYPES, ADULTS_PER_NIGHT} from "@/utils/constants";
-import {AddUserForm} from "@/types/user";
+import {AddUserForm, EditUserForm, EditUserPasswordForm} from "@/types/user";
 
 export const NewLocationSchema: ZodType<AddLocationForm> = z.object({
     title: z.string().min(1).max(50),
@@ -32,28 +32,38 @@ export const SearchLocationSchema: ZodType<LocationSearchForm> = z.object({
     path: ["to"],
 });
 
+const passwordPattern = z
+    .string()
+    .min(8, {message: "At least 8 chars long"})
+    .regex(/[0-9]/, { message: 'Contain at least one number' })
+    .regex(/[a-zA-Z]/, { message: 'Contain at least one letter' })
+    .trim();
+
 export const SignupSchema: ZodType<AddUserForm> = z.object({
     email: z.string().email(),
     name: z.string().min(1).max(20),
     surname: z.string().min(1).max(20),
     profile: z.string().min(1).max(20),
-    password: z
-        .string()
-        .min(8, {message: "At least 8 chars long"})
-        .regex(/[0-9]/, { message: 'Contain at least one number' })
-        .regex(/[a-zA-Z]/, { message: 'Contain at least one letter' })
-        .trim(),
-    confirmPassword: z
-        .string()
-        .min(8, {message: "At least 8 chars long"})
-        .regex(/[0-9]/, { message: 'Contain at least one number' })
-        .regex(/[a-zA-Z]/, { message: 'Contain at least one letter' })
-        .trim(),
+    password: passwordPattern,
+    confirmPassword: passwordPattern
 }).refine(data => data.password === data.confirmPassword, {
     message: "Passwords must be equals",
     path: ["confirmPassword"]
 });
 
+export const EditAccountSchema: ZodType<EditUserForm> = z.object({
+    name: z.string().min(1).max(20),
+    surname: z.string().min(1).max(20),
+});
+
+export const UpdatePasswordSchema: ZodType<EditUserPasswordForm> = z.object({
+    password: passwordPattern,
+    newPassword: passwordPattern,
+    repeatNewPassword: passwordPattern
+}).refine(data => data.newPassword === data.repeatNewPassword, {
+    message: "Passwords must be equals",
+    path: ["repeatNewPassword"]
+});
 
 export const SignInSchema = z.object({
     email: z.string().email(),

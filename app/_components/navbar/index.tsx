@@ -25,7 +25,10 @@ export default function NavBar() {
                     <li><Link href="/locations/add">Aggiungi una location</Link></li>
                     {
                         isLogged ? (
-                            <li><Link href="/auth" onClick={handleLogout}>Logout</Link></li>
+                            <>
+                                <li><Link href="/account/me">My account</Link></li>
+                                <li><Link href="/auth" onClick={handleLogout}>Logout</Link></li>
+                            </>
                         ) : (
                             <li><Link href="/auth">Registrati / Login</Link></li>
                         )
