@@ -1,7 +1,7 @@
 import {Location} from "@prisma/client";
-import {LocationDetail} from "@/components/location-detail";
 import betterFetch from "@/utils/fetch";
 import {ResponseDTO} from "@/types/common";
+import {LocationDetail} from "@/app/locations/[id]/_components/location-detail";
 
 async function getLocation(id: string): Promise<Location> {
     const res = await betterFetch<ResponseDTO<Location>>(`locations/${id}`);

@@ -1,8 +1,8 @@
 "use client"
 
 import {LocationWithPictures} from "@/types/location";
-import CardLocation from "@/components/location-card";
-import useFetchLocations from "@/components/locations-grid/hooks/useFetchLocations";
+import useFetchLocations from "@/app/locations/_components/locations-grid/hooks/useFetchLocations";
+import CardLocation from "@/app/locations/_components/location-card";
 
 interface props {
     data: LocationWithPictures[]

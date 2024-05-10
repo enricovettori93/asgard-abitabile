@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
-import HeroBanner from "@/components/hero-banner";
-const WhatCanDo = dynamic(() => import("@/components/what-can-do"), { ssr: false })
+import HeroBanner from "@/app/_components/hero-banner";
+const WhatCanDo = dynamic(() => import("@/app/_components/what-can-do"), { ssr: false })
 
 export default function Home() {
   return (

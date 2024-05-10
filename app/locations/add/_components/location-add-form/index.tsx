@@ -2,10 +2,10 @@
 
 import {useForm, SubmitHandler} from "react-hook-form";
 import {AddLocationForm} from "@/types/location";
-import useAddLocation from "@/components/location-add-form/hooks/useAddLocation";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {NewLocationSchema} from "@/utils/validators";
 import FieldWrapper from "@/components/inputs/field-wrapper";
+import useAddLocation from "@/app/locations/add/_components/location-add-form/hooks/useAddLocation";
 
 export default function LocationAddForm() {
     const {

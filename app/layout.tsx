@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import NavBar from "@/components/navbar";
 import {Toaster} from "react-hot-toast";
 import 'swiper/css';
 import "./globals.css";
-import Footer from "@/components/footer";
 import UserContext from "@/context/user.context";
 import React from "react";
+import Footer from "@/app/_components/footer";
+import NavBar from "@/app/_components/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 

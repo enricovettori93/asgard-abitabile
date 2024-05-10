@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Card from "@/components/card";
-import LocationSearchForm from "@/components/hero-banner/location-search-form";
+import LocationSearchForm from "@/app/_components/hero-banner/location-search-form";
 
 export default function HeroBanner() {
     return (

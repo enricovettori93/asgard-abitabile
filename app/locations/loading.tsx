@@ -1,4 +1,4 @@
-import ListLoader from "@/components/list-loader";
+import ListLoader from "@/app/locations/_components/list-loader";
 
 export default function Loading() {
     return (

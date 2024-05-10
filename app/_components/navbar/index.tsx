@@ -3,10 +3,9 @@
 import Link from "next/link";
 import {useContext} from "react";
 import {UserContext} from "@/context/user.context";
-import useLogout from "@/components/navbar/hooks/useLogout";
+import useLogout from "@/app/_components/navbar/hooks/useLogout";
 
 export default function NavBar() {
-
     const {isLogged} = useContext(UserContext);
     const {logout} = useLogout();
 

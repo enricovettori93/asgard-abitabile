@@ -1,4 +1,4 @@
-import LocationAddForm from "@/components/location-add-form";
+import LocationAddForm from "@/app/locations/add/_components/location-add-form";
 
 export default function Page() {
     return (

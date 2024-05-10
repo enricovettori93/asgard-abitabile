@@ -1,7 +1,7 @@
 import {LocationWithPictures} from "@/types/location";
 import betterFetch from "@/utils/fetch";
 import {ResponseDTO} from "@/types/common";
-import LocationsGrid from "@/components/locations-grid";
+import LocationsGrid from "@/app/locations/_components/locations-grid";
 
 async function getLocations(searchParams: Record<string, string>): Promise<{
     data: LocationWithPictures[],
