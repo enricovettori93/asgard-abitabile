@@ -1,11 +1,10 @@
 import React from 'react';
+import MyLocationsList from "@/app/account/locations/_components/my-locations-list";
 
-const MyLocations = () => {
+const MyLocationsPage = async () => {
     return (
-        <div>
-            my locations
-        </div>
+        <MyLocationsList />
     );
 };
 
-export default MyLocations;
+export default MyLocationsPage;

@@ -4,7 +4,9 @@ import {AddPicture} from "@/types/picture";
 import NotFound from "@/errors/not-found";
 
 interface RepositoryInterface {
+    get: (id: Picture["id"]) => Promise<Picture>
     add: (locationId: Location["id"], payload: Picture) => Promise<Picture>
+    delete: (id: Picture["id"]) => Promise<void>
     addMany: (locationId: Location["id"], payload: Picture[]) => Promise<void>
 }
 
@@ -34,6 +36,26 @@ class PictureRepository implements RepositoryInterface {
         for(let picture of payload) {
             await this.add(locationId, picture);
         }
+    }
+
+    async delete(id: Picture["id"]): Promise<void> {
+        await prisma.picture.delete({
+            where: {
+                id
+            }
+        });
+    }
+
+    async get(id: Picture["id"]): Promise<Picture> {
+        const data = prisma.picture.findUnique({
+            where: {
+                id
+            }
+        });
+
+        if (!data) throw new NotFound();
+
+        return data as unknown as Picture;
     }
 }
 

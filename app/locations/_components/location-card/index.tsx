@@ -23,7 +23,7 @@ export default function CardLocation({ location }: Props) {
                                 <SwiperSlide key={`${idx}_${img.src}`}>
                                     <Image
                                         unoptimized
-                                        src={img.src}
+                                        src={`/${img.src}`}
                                         width={img.width}
                                         height={img.height}
                                         alt={img?.alt || "Description not available"}

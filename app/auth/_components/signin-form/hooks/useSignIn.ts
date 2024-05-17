@@ -10,11 +10,16 @@ const useSignIn = () => {
     const [loading, setLoading] = useState(false);
 
     const signIn = async (payload: UserSignInForm) => {
-        setLoading(true);
-        const user = await userService.signIn(payload);
-        login(user);
-        setLoading(false);
-        router.push("/");
+        try {
+            setLoading(true);
+            const user = await userService.signIn(payload);
+            login(user);
+            router.push("/");
+        } catch (e) {
+            // todo: toast
+        } finally {
+            setLoading(false);
+        }
     }
 
     return {

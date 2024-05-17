@@ -8,16 +8,11 @@ import WrongCredential from "@/errors/wrong-credential";
 
 interface RepositoryInterface {
     findByEmail(email: User["email"]): Promise<SafeUser | null>
-
     findById(id: User["id"]): Promise<SafeUser | null>
-
     login(payload: UserSignInForm): Promise<SafeUser | null>
-
     register(payload: AddUserForm): Promise<SafeUser>
-
     // delete(email: string): Promise<void>
     update(id: User["id"], payload: EditUserForm): Promise<SafeUser>
-
     updatePassword(id: User["id"], payload: EditUserPasswordForm): Promise<void>
 }
 

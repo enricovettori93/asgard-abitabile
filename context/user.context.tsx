@@ -9,6 +9,7 @@ interface UserContextInterface {
     user: SafeUser | null
     isLogged: boolean
     loading: boolean
+    ready: boolean
     login: (user: SafeUser) => void
     logout: () => void
     updateUser: (user: SafeUser) => void
@@ -22,6 +23,7 @@ const initialValues: UserContextInterface = {
     user: null,
     isLogged: false,
     loading: false,
+    ready: false,
     login: () => {
     },
     updateUser: () => {
@@ -34,6 +36,7 @@ export const UserContext = createContext(initialValues);
 
 export default function UserContextProvider({children}: UserContextProps) {
     const [user, setUser] = useState<SafeUser | null>(null);
+    const [ready, setReady] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const isLogged = useMemo(() => !!user, [user]);
@@ -46,6 +49,7 @@ export default function UserContextProvider({children}: UserContextProps) {
         } catch (e) {
             // todo: toast
         } finally {
+            setReady(true);
             setLoading(false);
         }
     }
@@ -65,11 +69,13 @@ export default function UserContextProvider({children}: UserContextProps) {
     useEffect(() => {
         if (getCookie("userId")) {
             fetchCurrentUserInfo();
+        } else {
+            setReady(true);
         }
     }, []);
 
     return (
-        <UserContext.Provider value={{user, login, logout, updateUser, isLogged, loading}}>
+        <UserContext.Provider value={{user, login, logout, updateUser, isLogged, loading, ready}}>
             {children}
         </UserContext.Provider>
     )

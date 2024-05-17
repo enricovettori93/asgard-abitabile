@@ -1,10 +1,12 @@
 import {AddLocation, LocationWithPictures, LocationWithPicturesAndUser} from "@/types/location";
-import {Location} from "@prisma/client";
+import {Location, User} from "@prisma/client";
 import prisma from "@/prisma/client";
 import {ADULTS_PER_NIGHT, PAGE_SIZE} from "@/utils/constants";
 import {PaginationParams, LocationFilters} from "@/types/common";
+import NotFound from "@/errors/not-found";
 
 interface RepositoryInterface {
+    getAllByUser: (userId: User["id"]) => Promise<{data: LocationWithPictures[], count: number}>
     getAll: (params: PaginationParams) => Promise<{data: LocationWithPictures[], count: number}>
     getAllPublished: (params: PaginationParams) => Promise<{data: LocationWithPictures[], count: number}>
     filter: (params: LocationFilters & PaginationParams) => Promise<{data: LocationWithPictures[], count: number}>
@@ -33,8 +35,8 @@ class LocationRepository implements RepositoryInterface {
         });
     }
 
-    async get(id: Location["id"]): Promise<LocationWithPicturesAndUser | null> {
-        return prisma.location.findUnique({
+    async get(id: Location["id"]): Promise<LocationWithPicturesAndUser> {
+        const data = await prisma.location.findUnique({
             where: {
                 id
             },
@@ -43,6 +45,10 @@ class LocationRepository implements RepositoryInterface {
                 user: true,
             }
         });
+
+        if (!data) throw new NotFound();
+
+        return data;
     }
 
     async getAll({skip = 0} = {}): Promise<{data: LocationWithPictures[], count: number}> {
@@ -128,6 +134,25 @@ class LocationRepository implements RepositoryInterface {
                 user: true,
             }
         });
+    }
+
+    async getAllByUser(userId: User["id"]): Promise<{data: LocationWithPictures[], count: number}> {
+        const count = await prisma.location.count({
+            where: {
+                userId
+            }
+        });
+
+        const data = await prisma.location.findMany({
+            include: {
+                pictures: true
+            },
+            where: {
+                userId
+            }
+        });
+
+        return {count, data};
     }
 }
 

@@ -7,9 +7,10 @@ import {ResponseDTO} from "@/types/common";
 import {LocationWithPicturesAndUser} from "@/types/location";
 import path from "node:path";
 import * as fs from "node:fs";
+import {Location} from "@prisma/client";
 
 interface Params {
-    params: { id: string }
+    params: { id: Location["id"] }
 }
 
 export async function PUT(request: Request, { params }: Params) {

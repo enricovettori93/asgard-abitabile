@@ -1,4 +1,4 @@
-import {writeFile, mkdir} from "node:fs/promises";
+import {writeFile, mkdir, rm} from "node:fs/promises";
 import path from "node:path";
 import {Location} from "@prisma/client";
 import {existsSync} from "node:fs";
@@ -32,6 +32,15 @@ export const writeImageBufferToFileSystem = async (locationId: Location["id"], b
         }
     } catch (e) {
         console.error("Error writing image to file system", e);
+        throw e;
+    }
+}
+
+export const removeImageFromFileSystem = async (uploadPath: string) => {
+    try {
+        await rm(path.join("public/" + uploadPath));
+    } catch (e) {
+        console.error("Error deleting image from file system", e);
         throw e;
     }
 }
