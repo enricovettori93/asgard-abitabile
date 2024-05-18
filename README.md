@@ -9,3 +9,5 @@ npm run generate - generate prisma client
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Assets
+icons https://www.flaticon.com/

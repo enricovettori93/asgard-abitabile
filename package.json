@@ -16,9 +16,11 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
+    "@flaticon/flaticon-uicons": "^3.2.1",
     "@hookform/resolvers": "^3.3.4",
     "@prisma/client": "^5.10.2",
     "bcrypt": "^5.1.1",
+    "classnames": "^2.5.1",
     "clsx": "^2.1.0",
     "jose": "^5.2.4",
     "next": "14.1.0",

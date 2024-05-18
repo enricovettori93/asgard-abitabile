@@ -1,38 +1,38 @@
 "use client"
 
 import Link from "next/link";
-import {useContext} from "react";
-import {UserContext} from "@/context/user.context";
-import useLogout from "@/app/_components/navbar/hooks/useLogout";
+import Menu, {MenuItem} from "@/app/_components/navbar/menu";
+import classNames from "classnames";
+import useScrollTop from "@/hooks/useScrollTop";
 
 export default function NavBar() {
-    const {isLogged} = useContext(UserContext);
-    const {logout} = useLogout();
+    const {isOnTop} = useScrollTop();
 
-    const handleLogout = async (e: any) => {
-        e.preventDefault();
-        await logout();
-    }
+    const navClasses = classNames({
+        "flex justify-center transition-all relative": true,
+        "h-4": !isOnTop,
+        "h-12": isOnTop
+    });
+
+    const locationLinksClasses = classNames({
+        "flex transition-all": true
+    });
 
     return (
-        <header className="sticky top-0 z-20 bg-white">
-            <h1 className="text-2xl font-semibold">
-                <Link href="/">Asgard Abitabile</Link>
-            </h1>
-            <nav>
-                <ul className="flex gap-5">
-                    <li><Link href={`/locations?page=1`}>Locations</Link></li>
-                    {
-                        isLogged ? (
-                            <>
-                                <li><Link href="/locations/add">Aggiungi una location</Link></li>
-                                <li><Link href="/account/me">My account</Link></li>
-                                <li><Link href="/auth" onClick={handleLogout}>Logout</Link></li>
-                            </>
-                        ) : (
-                            <li><Link href="/auth">Registrati / Login</Link></li>
-                        )
-                    }
+        <header className="sticky top-0 z-20 bg-white border-b-2 p-3">
+            <div className="flex justify-between">
+                <h1 className="text-2xl font-semibold">
+                    <Link href="/">
+                        <i className="fi fi-ts-rocket-lunch text-4xl"></i>
+                    </Link>
+                </h1>
+                <Menu />
+            </div>
+            <nav className={navClasses}>
+                <ul className={locationLinksClasses}>
+                    <MenuItem iconName={"fi fi-tr-people-roof"}>
+                        <Link href={`/locations?page=1`}>Explore the locations</Link>
+                    </MenuItem>
                 </ul>
             </nav>
         </header>
