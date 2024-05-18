@@ -28,9 +28,9 @@ export async function POST(request: NextRequest) {
         } satisfies ResponseDTO<SafeUser>);
     } catch (e: any) {
         return NextResponse.json({
-            message: e.message
+            message: e.message || "Server error"
         } satisfies ResponseDTO<never>, {
-            status: 406
+            status: e.statusCode || 500
         });
     }
 }

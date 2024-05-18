@@ -1,10 +1,11 @@
 import {Location, Picture} from "@prisma/client";
-import {AddLocationForm, LocationWithPicturesAndUser} from "@/types/location";
+import {AddLocationForm, EditLocationForm, LocationWithPicturesAndUser} from "@/types/location";
 import betterFetch from "@/utils/fetch";
 
 interface LocationServiceInterface {
     getDetail(locationId: Location["id"]): Promise<LocationWithPicturesAndUser>
     add(payload: AddLocationForm): Promise<Location>
+    update(locationId: Location["id"], payload: EditLocationForm): Promise<Location>
     addPictures(locationId: Location["id"], payload: File[]): Promise<Location>
     removePicture(locationId: Location["id"], pictureId: Picture["id"]): Promise<void>
 }
@@ -36,6 +37,13 @@ class LocationService implements LocationServiceInterface {
         await betterFetch(`locations/${locationId}/pictures/${pictureId}`, {
             method: "DELETE"
         });
+    }
+
+    async update(locationId: Location["id"], payload: EditLocationForm): Promise<Location> {
+        return (await betterFetch<Location>(`locations/${locationId}`, {
+            method: "PATCH",
+            body: JSON.stringify(payload)
+        })).data as Location;
     }
 }
 

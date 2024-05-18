@@ -31,9 +31,9 @@ export async function DELETE(request: Request, { params }: Params) {
         } satisfies ResponseDTO<never>);
     } catch (e: any) {
         return NextResponse.json({
-            message: e.message || "Server error",
+            message: e.message || "Server error"
         } satisfies ResponseDTO<never>, {
-            status: 500
+            status: e.statusCode || 500
         });
     }
 }

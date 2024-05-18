@@ -1,6 +1,6 @@
 import LocationRepository from "@/repositories/location.repository";
 import {NextRequest} from "next/server";
-import {NewLocationSchema} from "@/utils/validators";
+import {LocationSchema} from "@/utils/validators";
 import {NextResponse} from "next/server";
 import {ResponseDTO} from "@/types/common";
 import {AddLocationForm, LocationWithPictures, LocationWithPicturesAndUser} from "@/types/location";
@@ -34,21 +34,29 @@ export async function GET(request: NextRequest) {
         filters.priceForNight = Number(priceForNight);
     }
 
-    const {data, count} = await LocationRepository.filter(filters);
+    try {
+        const {data, count} = await LocationRepository.filter(filters);
 
-    return NextResponse.json({
-        data
-    } satisfies ResponseDTO<LocationWithPictures[]>, {
-        headers: {
-            [CUSTOM_HEADERS.X_TOTAL_COUNT]: `${count}`
-        }
-    });
+        return NextResponse.json({
+            data
+        } satisfies ResponseDTO<LocationWithPictures[]>, {
+            headers: {
+                [CUSTOM_HEADERS.X_TOTAL_COUNT]: `${count}`
+            }
+        });
+    } catch (e: any) {
+        return NextResponse.json({
+            message: e.message || "Server error"
+        } satisfies ResponseDTO<never>, {
+            status: e.statusCode || 500
+        });
+    }
 }
 
 export async function POST(request: Request) {
     const body: AddLocationForm = await request.json();
     const userId = await getUserIdFromRequest();
-    const validationResult = NewLocationSchema.safeParse(body);
+    const validationResult = LocationSchema.safeParse(body);
 
     if (!validationResult.success) {
         return NextResponse.json({
@@ -58,12 +66,20 @@ export async function POST(request: Request) {
         });
     }
 
-    const data = await LocationRepository.add({
-        ...body,
-        userId
-    });
+    try {
+        const data = await LocationRepository.add({
+            ...body,
+            userId
+        });
 
-    return NextResponse.json({
-        data
-    } satisfies ResponseDTO<LocationWithPicturesAndUser>);
+        return NextResponse.json({
+            data
+        } satisfies ResponseDTO<LocationWithPicturesAndUser>);
+    } catch (e: any) {
+        return NextResponse.json({
+            message: e.message || "Server error"
+        } satisfies ResponseDTO<never>, {
+            status: e.statusCode || 500
+        });
+    }
 }

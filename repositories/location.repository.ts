@@ -1,4 +1,4 @@
-import {AddLocation, LocationWithPictures, LocationWithPicturesAndUser} from "@/types/location";
+import {AddLocation, EditLocationForm, LocationWithPictures, LocationWithPicturesAndUser} from "@/types/location";
 import {Location, User} from "@prisma/client";
 import prisma from "@/prisma/client";
 import {ADULTS_PER_NIGHT, PAGE_SIZE} from "@/utils/constants";
@@ -13,7 +13,7 @@ interface RepositoryInterface {
     get: (id: Location["id"]) => Promise<LocationWithPicturesAndUser | null>
     add: (payload: AddLocation) => Promise<LocationWithPicturesAndUser>
     delete: (id: Location["id"]) => Promise<void>
-    update: (payload: Location) => Promise<LocationWithPicturesAndUser>
+    update: (id: Location["id"], payload: Omit<EditLocationForm, "pictures">) => Promise<LocationWithPicturesAndUser>
 }
 
 class LocationRepository implements RepositoryInterface {
@@ -123,10 +123,10 @@ class LocationRepository implements RepositoryInterface {
         return {data, count};
     }
 
-    async update(payload: Location): Promise<LocationWithPicturesAndUser> {
+    async update(id: Location["id"], payload: Omit<EditLocationForm, "pictures">): Promise<LocationWithPicturesAndUser> {
         return prisma.location.update({
             where: {
-                id: payload.id
+                id: id
             },
             data: payload,
             include: {

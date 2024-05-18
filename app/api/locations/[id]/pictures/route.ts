@@ -16,38 +16,38 @@ interface Params {
 export async function PUT(request: Request, { params }: Params) {
     const { id } = params;
     const formData = await request.formData();
-    const location = await LocationRepository.get(id);
 
+    try {
+        const location = await LocationRepository.get(id);
 
-    if (!location) {
+        for(let [fileName, file] of formData.entries()) {
+            const webpFileName = `${path.parse(fileName).name}__.webp`;
+            const originalBuffer = Buffer.from(await (file as File).arrayBuffer());
+            const {fullPath: fullPathOriginal} = await writeImageBufferToFileSystem(location.id, originalBuffer, fileName);
+            const webpBuffer = await sharp(fullPathOriginal).webp({quality: 50}).toBuffer();
+            const {fullPath: fullPathWebp, relativePath} = await writeImageBufferToFileSystem(location.id, webpBuffer, webpFileName);
+            const {width, height} = await sharp(fullPathWebp).metadata();
+
+            fs.rmSync(fullPathOriginal);
+
+            await PictureRepository.add(id, {
+                alt: webpFileName,
+                src: relativePath,
+                height: width as number,
+                width: height as number
+            });
+        }
+
+        const data = await LocationRepository.get(id) as LocationWithPicturesAndUser;
+
         return NextResponse.json({
-            message: "Location not found"
+            data
+        } satisfies ResponseDTO<LocationWithPicturesAndUser>);
+    } catch (e: any) {
+        return NextResponse.json({
+            message: e.message || "Server error"
         } satisfies ResponseDTO<never>, {
-            status: 404
+            status: e.statusCode || 500
         });
     }
-
-    for(let [fileName, file] of formData.entries()) {
-        const webpFileName = `${path.parse(fileName).name}__.webp`;
-        const originalBuffer = Buffer.from(await (file as File).arrayBuffer());
-        const {fullPath: fullPathOriginal} = await writeImageBufferToFileSystem(location.id, originalBuffer, fileName);
-        const webpBuffer = await sharp(fullPathOriginal).webp({quality: 50}).toBuffer();
-        const {fullPath: fullPathWebp, relativePath} = await writeImageBufferToFileSystem(location.id, webpBuffer, webpFileName);
-        const {width, height} = await sharp(fullPathWebp).metadata();
-
-        fs.rmSync(fullPathOriginal);
-
-        await PictureRepository.add(id, {
-            alt: webpFileName,
-            src: relativePath,
-            height: width as number,
-            width: height as number
-        });
-    }
-
-    const data = await LocationRepository.get(id) as LocationWithPicturesAndUser;
-
-    return NextResponse.json({
-        data
-    } satisfies ResponseDTO<LocationWithPicturesAndUser>);
 }

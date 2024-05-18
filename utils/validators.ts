@@ -3,7 +3,7 @@ import {AddLocationForm, LocationSearchForm} from "@/types/location";
 import {ACCEPTED_IMAGE_TYPES, ADULTS_PER_NIGHT} from "@/utils/constants";
 import {AddUserForm, EditUserForm, EditUserPasswordForm} from "@/types/user";
 
-export const NewLocationSchema: ZodType<AddLocationForm> = z.object({
+export const LocationSchema: ZodType<AddLocationForm> = z.object({
     title: z.string().min(1).max(50),
     description: z.string().min(1).max(1000),
     lat: z.number(),

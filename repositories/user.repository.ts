@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import UserAdapter from "@/adapters/user";
 import {User} from "@prisma/client";
 import NotFound from "@/errors/not-found";
-import WrongCredential from "@/errors/wrong-credential";
+import BadRequest from "@/errors/bad-request";
 
 interface RepositoryInterface {
     findByEmail(email: User["email"]): Promise<SafeUser | null>
@@ -60,7 +60,7 @@ class UserRepository implements RepositoryInterface {
 
         const correctPassword = await bcrypt.compare(password, user.password);
 
-        if (!correctPassword) throw new WrongCredential();
+        if (!correctPassword) throw new BadRequest();
 
         return UserAdapter.fromUserToSafeUser(user);
     }
@@ -95,7 +95,7 @@ class UserRepository implements RepositoryInterface {
 
         const correctPassword = await bcrypt.compare(payload.password, userDB.password);
 
-        if (!correctPassword) throw new WrongCredential();
+        if (!correctPassword) throw new BadRequest();
 
         const hashedPassword = await bcrypt.hash(payload.newPassword, 10);
 

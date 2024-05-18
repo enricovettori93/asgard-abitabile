@@ -16,11 +16,19 @@ export async function POST(request: NextRequest) {
         });
     }
 
-    const {confirmPassword, ...payload} = body;
+    try {
+        const {confirmPassword, ...payload} = body;
 
-    await UserRepository.register(payload);
+        await UserRepository.register(payload);
 
-    return NextResponse.json({
-        message: "User created"
-    } satisfies ResponseDTO<never>);
+        return NextResponse.json({
+            message: "User created"
+        } satisfies ResponseDTO<never>);
+    } catch (e: any) {
+        return NextResponse.json({
+            message: e.message || "Server error"
+        } satisfies ResponseDTO<never>, {
+            status: e.statusCode || 500
+        });
+    }
 }

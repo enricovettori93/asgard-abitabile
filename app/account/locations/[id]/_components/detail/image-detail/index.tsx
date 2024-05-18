@@ -3,13 +3,13 @@ import Image from "next/image";
 
 interface props {
     image: Picture
-    handleRemovePicture: (id: Picture["id"]) => void
+    onRemovePicture: (id: Picture["id"]) => void
 }
 
-const ImageDetail = ({image, handleRemovePicture}: props) => {
+const ImageDetail = ({image, onRemovePicture}: props) => {
     return (
         <div className="relative">
-            <button className="absolute top-5 right-5 bg-red-500 p-5 rounded-2xl" onClick={() => handleRemovePicture(image.id)}>X</button>
+            <button className="absolute top-5 right-5 bg-red-500 p-5 rounded-2xl" onClick={() => onRemovePicture(image.id)}>X</button>
             <Image
                 src={`/${image.src}`}
                 width={image.width}

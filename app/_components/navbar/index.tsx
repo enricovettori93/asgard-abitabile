@@ -22,10 +22,10 @@ export default function NavBar() {
             <nav>
                 <ul className="flex gap-5">
                     <li><Link href={`/locations?page=1`}>Locations</Link></li>
-                    <li><Link href="/locations/add">Aggiungi una location</Link></li>
                     {
                         isLogged ? (
                             <>
+                                <li><Link href="/locations/add">Aggiungi una location</Link></li>
                                 <li><Link href="/account/me">My account</Link></li>
                                 <li><Link href="/auth" onClick={handleLogout}>Logout</Link></li>
                             </>

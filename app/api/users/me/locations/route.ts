@@ -20,7 +20,9 @@ export async function GET(request: NextRequest) {
         });
     } catch (e: any) {
         return NextResponse.json({
-            message: e.message
-        } satisfies ResponseDTO<never>);
+            message: e.message || "Server error"
+        } satisfies ResponseDTO<never>, {
+            status: e.statusCode || 500
+        });
     }
 }

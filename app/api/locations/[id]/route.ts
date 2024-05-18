@@ -3,6 +3,8 @@ import {NextResponse} from "next/server";
 import {ResponseDTO} from "@/types/common";
 import {LocationWithPicturesAndUser} from "@/types/location";
 import {Location} from "@prisma/client";
+import {LocationSchema} from "@/utils/validators";
+import {transformValidationErrors} from "@/utils/functions";
 
 interface Params {
     params: { id: Location["id"] }
@@ -11,22 +13,23 @@ interface Params {
 export async function GET(request: Request, {params}: Params) {
     const {id} = params;
 
-    const data = await LocationRepository.get(id);
+    try {
+        const data = await LocationRepository.get(id);
 
-    if (!data) {
         return NextResponse.json({
-            message: "Location not found"
+            data
+        } satisfies ResponseDTO<LocationWithPicturesAndUser>);
+    } catch (e: any) {
+        return NextResponse.json({
+            message: e.message || "Server error"
         } satisfies ResponseDTO<never>, {
-            status: 404
+            status: e.statusCode || 500
         });
     }
-
-    return NextResponse.json({
-        data
-    } satisfies ResponseDTO<LocationWithPicturesAndUser>);
 }
 
 export async function DELETE(request: Request, {params}: Params) {
+    // todo: check if user is the owner, remove imgs and then delete the location
     const {id} = params;
 
     await LocationRepository.delete(id);
@@ -34,4 +37,34 @@ export async function DELETE(request: Request, {params}: Params) {
     return NextResponse.json({
         message: "Location deleted"
     } satisfies ResponseDTO<never>);
+}
+
+export async function PATCH(request: Request, {params}: Params) {
+    const {id} = params;
+    const body = await request.json();
+
+    const validationResult = LocationSchema.safeParse(body);
+
+    if (!validationResult) {
+        return NextResponse.json({
+            errors: transformValidationErrors(validationResult)
+        } satisfies ResponseDTO<never>, {
+            status: 406
+        });
+    }
+
+    try {
+        const {pictures, ...rest} = body;
+        const data = await LocationRepository.update(id, rest);
+
+        return NextResponse.json({
+            data
+        } satisfies ResponseDTO<LocationWithPicturesAndUser>);
+    } catch (e: any) {
+        return NextResponse.json({
+            message: e.message || "Server error"
+        } satisfies ResponseDTO<never>, {
+            status: e.statusCode || 500
+        });
+    }
 }

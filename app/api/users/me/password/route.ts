@@ -20,9 +20,17 @@ export async function PATCH(request: NextRequest) {
         });
     }
 
-    await UserRepository.updatePassword(userId, body);
+    try {
+        await UserRepository.updatePassword(userId, body);
 
-    return NextResponse.json({
-        message: "Password updated correctly"
-    } satisfies ResponseDTO<never>);
+        return NextResponse.json({
+            message: "Password updated correctly"
+        } satisfies ResponseDTO<never>);
+    } catch (e: any) {
+        return NextResponse.json({
+            message: e.message || "Server error"
+        } satisfies ResponseDTO<never>, {
+            status: e.statusCode || 500
+        });
+    }
 }
