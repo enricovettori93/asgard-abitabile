@@ -9,6 +9,7 @@ import useRemoveImage from "@/app/account/locations/[id]/_components/detail/hook
 import LocationEditForm from "@/app/account/locations/[id]/_components/detail/location-edit-form";
 import useEditLocation from "@/app/account/locations/[id]/_components/detail/hooks/useEditLocation";
 import {EditLocationForm} from "@/types/location";
+import {Swiper, SwiperSlide} from "swiper/react";
 
 const MyAccountLocationDetail = () => {
     const {id} = useParams<{id: Location["id"]}>();
@@ -40,12 +41,25 @@ const MyAccountLocationDetail = () => {
 
     return (
         <>
-            <div>
-                Immagini presenti
-                {
-                    location?.pictures?.map(img => <ImageDetail key={img.id} image={img} onRemovePicture={handleRemoveImage} />)
-                }
-            </div>
+            {
+                location?.pictures?.length === 0 && (<p>Nessuna immagine presente</p>)
+            }
+            {
+                location?.pictures?.length > 0 && (
+                    <>
+                    Immagini presenti
+                        <Swiper>
+                            {
+                                location?.pictures?.map(img =>
+                                    <SwiperSlide key={img.id}>
+                                        <ImageDetail image={img} onRemovePicture={handleRemoveImage} />
+                                    </SwiperSlide>
+                                )
+                            }
+                        </Swiper>
+                    </>
+                )
+            }
             <LocationEditForm location={location} onEditLocation={handleUpdateLocation} loading={editLocationLoading} />
         </>
     )

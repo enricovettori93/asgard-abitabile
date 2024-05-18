@@ -8,6 +8,8 @@ import {LocationWithPicturesAndUser} from "@/types/location";
 import path from "node:path";
 import * as fs from "node:fs";
 import {Location} from "@prisma/client";
+import {getUserIdFromRequest} from "@/utils/session";
+import NotAllowed from "@/errors/not-allowed";
 
 interface Params {
     params: { id: Location["id"] }
@@ -16,9 +18,14 @@ interface Params {
 export async function PUT(request: Request, { params }: Params) {
     const { id } = params;
     const formData = await request.formData();
+    const userId = await getUserIdFromRequest();
 
     try {
         const location = await LocationRepository.get(id);
+
+        if (location.userId !== userId) {
+            throw new NotAllowed();
+        }
 
         for(let [fileName, file] of formData.entries()) {
             const webpFileName = `${path.parse(fileName).name}__.webp`;

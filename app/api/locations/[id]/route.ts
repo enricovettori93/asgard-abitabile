@@ -5,6 +5,8 @@ import {LocationWithPicturesAndUser} from "@/types/location";
 import {Location} from "@prisma/client";
 import {LocationSchema} from "@/utils/validators";
 import {transformValidationErrors} from "@/utils/functions";
+import NotAllowed from "@/errors/not-allowed";
+import {getUserIdFromRequest} from "@/utils/session";
 
 interface Params {
     params: { id: Location["id"] }
@@ -41,6 +43,7 @@ export async function DELETE(request: Request, {params}: Params) {
 
 export async function PATCH(request: Request, {params}: Params) {
     const {id} = params;
+    const userId = await getUserIdFromRequest();
     const body = await request.json();
 
     const validationResult = LocationSchema.safeParse(body);
@@ -55,6 +58,10 @@ export async function PATCH(request: Request, {params}: Params) {
 
     try {
         const {pictures, ...rest} = body;
+        const location = await LocationRepository.get(id);
+        if (location.userId !== userId) {
+            throw new NotAllowed();
+        }
         const data = await LocationRepository.update(id, rest);
 
         return NextResponse.json({

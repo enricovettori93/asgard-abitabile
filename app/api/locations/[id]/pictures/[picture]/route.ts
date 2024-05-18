@@ -5,6 +5,7 @@ import {getUserIdFromRequest} from "@/utils/session";
 import {NextResponse} from "next/server";
 import {ResponseDTO} from "@/types/common";
 import {removeImageFromFileSystem} from "@/utils/fs";
+import NotAllowed from "@/errors/not-allowed";
 
 interface Params {
     params: { id: Location["id"], picture: Picture["id"] }
@@ -17,11 +18,7 @@ export async function DELETE(request: Request, { params }: Params) {
     try {
         const location = await LocationRepository.get(id);
         if (location.userId !== userId) {
-            return NextResponse.json({
-                message: "User not allowed",
-            } satisfies ResponseDTO<never>, {
-                status: 403
-            });
+            throw new NotAllowed();
         }
         const p = await PictureRepository.get(picture);
         await removeImageFromFileSystem(p.src);
