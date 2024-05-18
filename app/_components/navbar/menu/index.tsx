@@ -1,6 +1,6 @@
 "use client"
 
-import {ReactNode, useContext, useRef, useState} from "react";
+import {ReactNode, useContext, useEffect, useRef, useState} from "react";
 import {UserContext} from "@/context/user.context";
 import Link from "next/link";
 import useLogout from "@/app/_components/navbar/hooks/useLogout";
@@ -8,6 +8,7 @@ import useClickOutside from "@/hooks/useClickOutside";
 import useEscListener from "@/hooks/useEscListener";
 import classNames from "classnames";
 import LineSeparator from "@/components/line-separator";
+import {usePathname} from "next/navigation";
 
 export const MenuItem = ({iconName, children}: {iconName: string, children: ReactNode}) => {
     return (
@@ -19,6 +20,7 @@ export const MenuItem = ({iconName, children}: {iconName: string, children: Reac
 }
 
 const Menu = () => {
+    const pathname = usePathname();
     const ref = useRef(null);
     const {isLogged, user} = useContext(UserContext);
     const {logout} = useLogout();
@@ -30,6 +32,10 @@ const Menu = () => {
 
     useClickOutside(ref, closeMenu);
     useEscListener(closeMenu);
+
+    useEffect(() => {
+        closeMenu();
+    }, [pathname]);
 
     const toggleMenu = () => {
         setIsOpen(prev => !prev);
@@ -54,13 +60,19 @@ const Menu = () => {
     });
 
     return (
-        <div className="rounded-3xl border-2 p-3 relative">
-            <button onClick={toggleMenu} className="mr-3">
-                <i className="fi fi-rr-menu-burger"></i>
-            </button>
-            <span>
-                {userInitialLetters()}
-            </span>
+        <div className="rounded-3xl border-2 px-4 py-2 relative">
+            <div className="flex items-center">
+                <button onClick={toggleMenu}>
+                    <i className="fi fi-rr-menu-burger"></i>
+                </button>
+                {
+                    isLogged && (
+                        <span className="ml-3">
+                        {userInitialLetters()}
+                    </span>
+                    )
+                }
+            </div>
             <nav className={menuClasses} ref={ref}>
                 {
                     isLogged ? (
