@@ -2,7 +2,7 @@
 
 import {SubmitHandler, useForm} from "react-hook-form";
 import {LocationSearchForm} from "@/types/location";
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {SearchLocationSchema} from "@/utils/validators";
 import FieldWrapper from "@/components/inputs/field-wrapper";
@@ -10,12 +10,23 @@ import {ADULTS_PER_NIGHT} from "@/utils/constants";
 
 export default function LocationSearchForm() {
     const router = useRouter();
+    const params = useSearchParams();
+
+    const initialValues: LocationSearchForm = {
+        city: params.get("city") || "",
+        from: params.get("from") || "",
+        to: params.get("to") || "",
+        maxAdultsForNight: Number(params.get("maxAdultsForNight")) || 0,
+        priceForNight: Number(params.get("priceForNight")) || 0
+    };
+
     const {
         register,
         handleSubmit,
         formState: {errors}
     } = useForm<LocationSearchForm>({
-        resolver: zodResolver(SearchLocationSchema)
+        resolver: zodResolver(SearchLocationSchema),
+        defaultValues: initialValues
     });
 
     const onSubmit: SubmitHandler<LocationSearchForm> = async (payload) => {

@@ -2,6 +2,7 @@ import {LocationWithPictures} from "@/types/location";
 import betterFetch from "@/utils/fetch";
 import {ResponseDTO} from "@/types/common";
 import LocationsGrid from "@/app/locations/_components/locations-grid";
+import LocationListFilters from "@/app/locations/_components/list-filters";
 
 async function getLocations(searchParams: Record<string, string>): Promise<{
     data: LocationWithPictures[],
@@ -23,6 +24,9 @@ export default async function Page({searchParams}: { searchParams: Record<string
     const {data, count} = await getLocations(searchParams);
 
     return (
-        <LocationsGrid data={data} totalElements={+count} currentPage={+searchParams["page"] || 1}/>
+        <>
+            <LocationListFilters />
+            <LocationsGrid data={data} totalElements={+count} currentPage={+searchParams["page"] || 1}/>
+        </>
     )
 }
