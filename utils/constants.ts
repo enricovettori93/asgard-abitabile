@@ -9,4 +9,13 @@ export const ADULTS_PER_NIGHT = {
     MAX: 20
 }
 
+export const ROUTES = {
+    HOME: "/",
+    AUTH: "/auth",
+    MY_ACCOUNT: "/account/me",
+    MY_LOCATIONS: "/account/locations",
+    ADD_LOCATION: "/locations/add",
+    LOCATIONS: "/locations"
+}
+
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/jpeg", "image/webp"];

@@ -9,6 +9,7 @@ import useEscListener from "@/hooks/useEscListener";
 import classNames from "classnames";
 import LineSeparator from "@/components/line-separator";
 import {usePathname} from "next/navigation";
+import {ROUTES} from "@/utils/constants";
 
 export const MenuItem = ({iconName, children}: {iconName: string, children: ReactNode}) => {
     return (
@@ -67,9 +68,9 @@ const Menu = () => {
                 </button>
                 {
                     isLogged && (
-                        <span className="ml-3">
-                        {userInitialLetters()}
-                    </span>
+                        <Link href={ROUTES.MY_ACCOUNT} className="ml-3">
+                            {userInitialLetters()}
+                        </Link>
                     )
                 }
             </div>
@@ -78,20 +79,20 @@ const Menu = () => {
                     isLogged ? (
                         <ul className="flex flex-col gap-3">
                             <MenuItem iconName="fi fi-tr-house-chimney-heart">
-                                <Link href="/locations/add">Aggiungi una location</Link>
+                                <Link href={ROUTES.ADD_LOCATION}>Aggiungi una location</Link>
                             </MenuItem>
                             <LineSeparator/>
                             <MenuItem iconName="fi fi-ts-user-pen">
-                                <Link href="/account/me">My account</Link>
+                                <Link href={ROUTES.MY_ACCOUNT}>Il mio account</Link>
                             </MenuItem>
                             <MenuItem iconName="fi fi-ts-sign-out-alt">
-                                <Link href="/auth" onClick={handleLogout}>Logout</Link>
+                                <Link href={ROUTES.AUTH} onClick={handleLogout}>Logout</Link>
                             </MenuItem>
                         </ul>
                     ) : (
                         <ul>
                             <MenuItem iconName="fi fi-tr-sign-in-alt">
-                                <Link href="/auth">Registrati / Login</Link>
+                                <Link href={ROUTES.AUTH}>Registrati / Login</Link>
                             </MenuItem>
                         </ul>
                     )

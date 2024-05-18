@@ -17,7 +17,9 @@ const AccountLayout = ({children}: {children: React.ReactNode}) => {
             {ready && (
                 <>
                     <AccountDetailTabChooser />
-                    {children}
+                    <div className="mt-10">
+                        {children}
+                    </div>
                 </>
             )}
         </section>

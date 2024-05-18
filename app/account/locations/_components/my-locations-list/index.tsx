@@ -5,11 +5,12 @@ import {useEffect} from "react";
 import {LocationWithPictures} from "@/types/location";
 import Link from "next/link";
 import useMyLocations from "@/app/account/locations/_components/my-locations-list/hooks/useMyLocations";
+import {ROUTES} from "@/utils/constants";
 
 const Location = ({location}: { location: LocationWithPictures }) => {
     return (
         <li>
-            <Link href={`/account/locations/${location.id}`} className="flex w-full">
+            <Link href={`${ROUTES.MY_LOCATIONS}/${location.id}`} className="flex w-full">
                 <div className="w-1/3">
                     {
                         location.pictures[0] && (
@@ -46,6 +47,13 @@ const MyLocationsList = () => {
     }, []);
 
     if (loading) return (<p>Loading...</p>);
+
+    if (locations.length === 0) return (
+        <div className="flex">
+            <p>Nessuna locations trovata,&nbsp;</p>
+            <Link className="underline text-orange-400 font-bold" href={ROUTES.ADD_LOCATION}>aggiungine una!</Link>
+        </div>
+    );
 
     return (
         <ul className="flex flex-col gap-10">

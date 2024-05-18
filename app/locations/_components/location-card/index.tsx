@@ -4,6 +4,7 @@ import Link from "next/link";
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {LocationWithPictures} from "@/types/location";
 import Card from "@/components/card";
+import {ROUTES} from "@/utils/constants";
 
 interface Props {
     location: LocationWithPictures
@@ -12,7 +13,7 @@ interface Props {
 export default function CardLocation({ location }: Props) {
     return (
         <Card className="card-location shadow-md h-[20em] p-0">
-            <Link href={`/locations/${location.id}`} className="flex flex-col h-full w-full">
+            <Link href={`${ROUTES.LOCATIONS}/${location.id}`} className="flex flex-col h-full w-full">
                 <Swiper
                     slidesPerView={1}
                     className="w-full basis-10/12 rounded-tl-lg rounded-tr-lg"

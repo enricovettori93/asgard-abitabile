@@ -1,14 +1,17 @@
 import React from 'react';
 import Link from "next/link";
+import ColumnSeparator from '@/components/column-separator';
+import {ROUTES} from "@/utils/constants";
 
 const AccountDetailTabChooser = () => {
     return (
         <div className="flex gap-5">
-            <Link href="/account/me">
-                My account
+            <Link className="text-3xl" href={ROUTES.MY_ACCOUNT}>
+                Il mio account
             </Link>
-            <Link href="/account/locations">
-                My locations
+            <ColumnSeparator />
+            <Link className="text-3xl" href={ROUTES.MY_LOCATIONS}>
+                Le mie locations
             </Link>
         </div>
     );
