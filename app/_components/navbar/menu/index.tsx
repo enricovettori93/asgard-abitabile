@@ -55,7 +55,7 @@ const Menu = () => {
     }
 
     const menuClasses = classNames({
-        "absolute bg-white border-2 rounded-3xl p-5 top-14 right-0 transition-all w-[20rem]": true,
+        "absolute bg-white border-2 rounded-3xl p-5 top-14 right-0 transition-all w-[20rem] shadow-2xl": true,
         "opacity-0 invisible": !isOpen,
         "opacity-100 visible": isOpen
     });

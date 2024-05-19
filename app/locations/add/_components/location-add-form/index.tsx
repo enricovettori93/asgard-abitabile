@@ -11,7 +11,7 @@ export default function LocationAddForm() {
     const {
         register,
         handleSubmit,
-        formState: {errors},
+        formState: {errors}
     } = useForm<AddLocationForm>({
         resolver: zodResolver(LocationSchema)
     });

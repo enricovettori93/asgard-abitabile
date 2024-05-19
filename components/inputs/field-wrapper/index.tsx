@@ -2,16 +2,16 @@ import {FieldError} from "react-hook-form";
 import React from "react";
 
 interface props {
-    error: FieldError | undefined
+    error?: FieldError
     children?: React.ReactNode
     className?: string
 }
 
 const FieldWrapper = ({error, className = "", children}: props) => {
     return (
-        <div className={`flex flex-col ${className}`}>
+        <div className={`field-wrapper flex flex-col ${className} ${error ? "field-wrapper--error" : ""}`}>
             {children}
-            {error && (<small className="text-red-500">{error.message}</small>)}
+            <small className="text-red-500">{error?.message}</small>
         </div>
     )
 }

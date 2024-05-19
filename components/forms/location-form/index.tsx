@@ -25,31 +25,35 @@ const LocationForm = ({register, handleSubmit, errors, children}: props) => {
                     <textarea id="description" {...register("description")}/>
                 </FieldWrapper>
             </div>
-            <div className="flex gap-5">
-                <FieldWrapper error={errors.lat}>
-                    <label htmlFor="lat">Latitudine</label>
-                    <input id="lat" type="number" {...register("lat", {valueAsNumber: true})}/>
-                </FieldWrapper>
+            <div className="flex">
+                <div className="flex gap-5">
+                    <FieldWrapper error={errors.lat}>
+                        <label htmlFor="lat">Latitudine</label>
+                        <input id="lat" type="number" {...register("lat", {valueAsNumber: true})}/>
+                    </FieldWrapper>
+                </div>
+                <div className="flex gap-5">
+                    <FieldWrapper error={errors.lng}>
+                        <label htmlFor="lng">Longitudine</label>
+                        <input id="lng" type="number" {...register("lng", {valueAsNumber: true})}/>
+                    </FieldWrapper>
+                </div>
             </div>
-            <div className="flex gap-5">
-                <FieldWrapper error={errors.lng}>
-                    <label htmlFor="lng">Longitudine</label>
-                    <input id="lng" type="number" {...register("lng", {valueAsNumber: true})}/>
-                </FieldWrapper>
-            </div>
-            <div className="flex gap-5">
-                <FieldWrapper error={errors.maxAdultsForNight}>
-                    <label htmlFor="maxAdultsForNight">Numero massimo di adulti per notte</label>
-                    <input id="maxAdultsForNight"
-                           type="number" {...register("maxAdultsForNight", {valueAsNumber: true})}/>
-                </FieldWrapper>
-            </div>
-            <div className="flex gap-5">
-                <FieldWrapper error={errors.priceForNight}>
-                    <label htmlFor="priceForNight">Prezzo per notte</label>
-                    <input id="priceForNight" step=".01"
-                           type="number" {...register("priceForNight", {valueAsNumber: true})}/>
-                </FieldWrapper>
+            <div className="flex">
+                <div className="flex gap-5">
+                    <FieldWrapper error={errors.maxAdultsForNight}>
+                        <label htmlFor="maxAdultsForNight">Numero massimo di adulti per notte</label>
+                        <input id="maxAdultsForNight"
+                               type="number" {...register("maxAdultsForNight", {valueAsNumber: true})}/>
+                    </FieldWrapper>
+                </div>
+                <div className="flex gap-5">
+                    <FieldWrapper error={errors.priceForNight}>
+                        <label htmlFor="priceForNight">Prezzo per notte</label>
+                        <input id="priceForNight" step=".01"
+                               type="number" {...register("priceForNight", {valueAsNumber: true})}/>
+                    </FieldWrapper>
+                </div>
             </div>
             <div className="flex gap-5">
                 <FieldWrapper error={errors.published}>
@@ -59,7 +63,7 @@ const LocationForm = ({register, handleSubmit, errors, children}: props) => {
             </div>
             <div className="flex gap-5">
                 <label htmlFor="pictures">Fotografie</label>
-                <input id="pictures" type="file" accept="image/jpeg" multiple {...register("pictures")}/>
+                <input id="pictures" type="file" accept="image/*" multiple {...register("pictures")}/>
             </div>
             {children}
         </form>

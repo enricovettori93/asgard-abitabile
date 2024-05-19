@@ -31,17 +31,17 @@ const EditAccountDetailForm = () => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
-            <div className="flex">
-                <FieldWrapper error={errors.name}>
+            <div className="flex flex-col md:flex-row gap-5">
+                <FieldWrapper>
                     <label htmlFor="email">Email (non modificabile)</label>
                     <input id="email" type="email" disabled value={user?.email ?? ""}/>
                 </FieldWrapper>
-                <FieldWrapper error={errors.surname}>
+                <FieldWrapper>
                     <label htmlFor="profile">Username (non modificabile)</label>
                     <input id="profile" type="text" disabled value={user?.profile ?? ""}/>
                 </FieldWrapper>
             </div>
-            <div className="flex">
+            <div className="flex flex-col md:flex-row gap-5">
                 <FieldWrapper error={errors.name}>
                     <label htmlFor="name">Nome</label>
                     <input id="name" type="text" {...register("name")}/>
@@ -51,7 +51,7 @@ const EditAccountDetailForm = () => {
                     <input id="surname" type="text" {...register("surname")}/>
                 </FieldWrapper>
             </div>
-            <button type="submit" className="button--primary" disabled={loading}>Aggiorna le informazioni</button>
+            <button type="submit" className="button--primary ml-auto" disabled={loading}>Aggiorna le informazioni</button>
         </form>
     );
 };

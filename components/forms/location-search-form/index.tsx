@@ -35,36 +35,34 @@ export default function LocationSearchForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full z-10">
             <div className="flex flex-col">
                 <FieldWrapper error={errors.city}>
                     <label htmlFor="city">Cittá</label>
                     <input id="city" type="text" {...register("city")}/>
                 </FieldWrapper>
             </div>
-            <div className="flex flex-col sm:flex-row">
-                <FieldWrapper error={errors.maxAdultsForNight} className="flex-1">
+            <div className="grid grid-cols-2 gap-2">
+                <FieldWrapper error={errors.maxAdultsForNight}>
                     <label htmlFor="maxAdultsForNight">Adulti per notte</label>
                     <input id="maxAdultsForNight" min={ADULTS_PER_NIGHT.MIN} max={ADULTS_PER_NIGHT.MAX}
                            type="number" {...register("maxAdultsForNight", {valueAsNumber: true})}/>
                 </FieldWrapper>
-                <FieldWrapper error={errors.priceForNight} className="flex-1">
+                <FieldWrapper error={errors.priceForNight}>
                     <label htmlFor="priceForNight">Prezzo per notte</label>
                     <input id="priceForNight" min={0}
                            type="number" step=".01" {...register("priceForNight", {valueAsNumber: true})}/>
                 </FieldWrapper>
-            </div>
-            <div className="flex flex-col sm:flex-row">
-                <FieldWrapper error={errors.from} className="flex-1">
+                <FieldWrapper error={errors.from}>
                     <label htmlFor="from">Da</label>
                     <input id="from" type="date" {...register("from")}/>
                 </FieldWrapper>
-                <FieldWrapper error={errors.to} className="flex-1">
+                <FieldWrapper error={errors.to}>
                     <label htmlFor="to">A</label>
                     <input id="to" type="date" {...register("to")}/>
                 </FieldWrapper>
             </div>
-            <button className="button--primary mt-5" type="submit">Cerca</button>
+            <button className="button--primary mt-5 ml-auto px-10" type="submit">Cerca</button>
         </form>
     )
 }

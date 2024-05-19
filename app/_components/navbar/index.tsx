@@ -32,7 +32,7 @@ export default function NavBar() {
             <nav className={navClasses}>
                 <ul className={locationLinksClasses}>
                     <MenuItem iconName={"fi fi-tr-people-roof"}>
-                        <Link href={`${ROUTES.LOCATIONS}?page=1`}>Explore the locations</Link>
+                        <Link href={`${ROUTES.LOCATIONS}?page=1`} className="with-hover-border">Explore the locations</Link>
                     </MenuItem>
                 </ul>
             </nav>

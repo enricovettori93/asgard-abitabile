@@ -23,22 +23,22 @@ const EditAccountPasswordForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex">
-                <FieldWrapper error={errors.password}>
-                    <label htmlFor="password">Password attuale</label>
-                    <input id="password" type="password" {...register("password")}/>
-                </FieldWrapper>
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+            <FieldWrapper error={errors.password}>
+                <label htmlFor="password">Password attuale</label>
+                <input id="password" type="password" placeholder="Inserisci la vecchia password" {...register("password")}/>
+            </FieldWrapper>
+            <div className="flex flex-col md:flex-row gap-5 md:gap-0">
                 <FieldWrapper error={errors.newPassword}>
                     <label htmlFor="confirmPassword">Nuova password</label>
-                    <input id="confirmPassword" type="password" {...register("newPassword")}/>
+                    <input id="confirmPassword" placeholder="Inserisci la nuova password" type="password" {...register("newPassword")}/>
                 </FieldWrapper>
                 <FieldWrapper error={errors.repeatNewPassword}>
                     <label htmlFor="repeatNewPassword">Ripeti la nuova password</label>
-                    <input id="repeatNewPassword" type="password" {...register("repeatNewPassword")}/>
+                    <input id="repeatNewPassword" placeholder="Ripeti la nuova password" type="password" {...register("repeatNewPassword")}/>
                 </FieldWrapper>
             </div>
-            <button type="submit" className="button--primary" disabled={loading}>Cambia la password</button>
+            <button type="submit" className="button--primary ml-auto" disabled={loading}>Cambia la password</button>
         </form>
     );
 };

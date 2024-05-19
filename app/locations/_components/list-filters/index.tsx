@@ -1,7 +1,7 @@
 "use client"
 
 import {useState} from "react";
-import LocationSearchForm from "@/components/location-search-form";
+import LocationSearchForm from "@/components/forms/location-search-form";
 
 const LocationListFilters = () => {
     const [isOpen, setIsOpen] = useState(false);
