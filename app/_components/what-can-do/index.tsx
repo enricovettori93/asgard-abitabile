@@ -8,7 +8,7 @@ export default function WhatCanDo() {
     const { slides } = useSlidesPerView();
 
     return (
-        <section className="w-full bg-orange-400 gap-10 p-16">
+        <section className="w-full bg-orange-400 gap-10 p-16 rounded-2xl">
             <Swiper
                 slidesPerView={slides}
                 spaceBetween={50}

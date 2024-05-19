@@ -20,7 +20,7 @@ export default function NavBar() {
     });
 
     return (
-        <header className="sticky top-0 z-20 bg-white border-b-2 p-3">
+        <header className="sticky top-0 z-20 bg-white border-b-2 p-3 rounded-b-3xl">
             <div className="flex justify-between">
                 <h1 className="text-2xl font-semibold">
                     <Link href={ROUTES.HOME}>

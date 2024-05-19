@@ -8,7 +8,11 @@ import {SearchLocationSchema} from "@/utils/validators";
 import FieldWrapper from "@/components/inputs/field-wrapper";
 import {ADULTS_PER_NIGHT} from "@/utils/constants";
 
-export default function LocationSearchForm() {
+interface props {
+    onSearch?: () => void
+}
+
+export default function LocationSearchForm({onSearch}: props) {
     const router = useRouter();
     const params = useSearchParams();
 
@@ -31,11 +35,12 @@ export default function LocationSearchForm() {
 
     const onSubmit: SubmitHandler<LocationSearchForm> = async (payload) => {
         const queryParams = new URLSearchParams({...payload, page: "1"} as unknown as Record<string, string>);
+        onSearch && onSearch();
         router.push(`/locations?${queryParams}`);
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full z-10">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full z-10 gap-2">
             <div className="flex flex-col">
                 <FieldWrapper error={errors.city}>
                     <label htmlFor="city">Cittá</label>
