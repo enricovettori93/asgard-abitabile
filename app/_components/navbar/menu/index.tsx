@@ -85,6 +85,9 @@ const Menu = () => {
                             <MenuItem iconName="fi fi-ts-user-pen">
                                 <Link href={ROUTES.MY_ACCOUNT}>Il mio account</Link>
                             </MenuItem>
+                            <MenuItem iconName="fi fi-ts-house-chimney">
+                                <Link href={ROUTES.MY_LOCATIONS}>Le mie locations</Link>
+                            </MenuItem>
                             <MenuItem iconName="fi fi-ts-sign-out-alt">
                                 <Link href={ROUTES.AUTH} onClick={handleLogout}>Logout</Link>
                             </MenuItem>

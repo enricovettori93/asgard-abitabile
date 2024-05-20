@@ -1,14 +1,14 @@
 import React from 'react';
 import FieldWrapper from "@/components/inputs/field-wrapper";
-import {DeepMap, DeepPartial, FieldErrors, UseFormRegister} from "react-hook-form";
-import {AddLocation, AddLocationForm, EditLocationForm} from "@/types/location";
+import {DeepMap, DeepPartial, FieldError, FieldErrors, UseFormRegister} from "react-hook-form";
+import {AddLocationForm, EditLocationForm} from "@/types/location";
 import Input from "@/components/inputs/input";
 import TextArea from "@/components/inputs/textarea";
 
 interface props {
-    register: UseFormRegister<AddLocation | AddLocationForm | EditLocationForm>
+    register: UseFormRegister<AddLocationForm | EditLocationForm>
     handleSubmit: any
-    errors: FieldErrors<AddLocation>
+    errors: FieldErrors<AddLocationForm>
     children: React.ReactNode
     touchedFields: DeepMap<DeepPartial<AddLocationForm>, boolean>
 }
@@ -68,7 +68,9 @@ const LocationForm = ({register, handleSubmit, errors, children, touchedFields}:
                 </FieldWrapper>
             </div>
             <div className="flex gap-5">
-                <Input id="pictures" name="pictures" label="Fotografie" type="file" accept="image/*" multiple register={{...register("pictures")}} touched={false}/>
+                <FieldWrapper error={errors.pictures as FieldError}>
+                    <Input id="pictures" name="pictures" label="Fotografie" type="file" accept="image/*" multiple register={{...register("pictures")}} touched={false}/>
+                </FieldWrapper>
             </div>
             {children}
         </form>

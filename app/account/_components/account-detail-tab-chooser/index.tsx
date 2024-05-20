@@ -7,7 +7,7 @@ import {usePathname, useRouter} from "next/navigation";
 const AccountDetailTabChooser = () => {
     const pathname = usePathname();
 
-    const isActive = (href: string) => pathname === href;
+    const isActive = (href: string) => pathname.includes(href);
 
     return (
         <div className="flex gap-5">

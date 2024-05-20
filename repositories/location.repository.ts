@@ -63,7 +63,10 @@ class LocationRepository implements RepositoryInterface {
                 pictures: true
             },
             skip: skip * PAGE_SIZE,
-            take: PAGE_SIZE
+            take: PAGE_SIZE,
+            orderBy: {
+                createdAt: 'desc'
+            }
         });
 
         return {count, data};

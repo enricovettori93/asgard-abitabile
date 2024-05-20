@@ -6,12 +6,13 @@ import {UserSignInForm} from "@/types/user";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {SignInSchema} from "@/utils/validators";
 import useSignIn from "@/app/auth/_components/signin-form/hooks/useSignIn";
+import Input from "@/components/inputs/input";
 
 export default function SignInForm() {
     const {
         handleSubmit,
         register,
-        formState: {errors}
+        formState: {errors, touchedFields}
     } = useForm<UserSignInForm>({
         resolver: zodResolver(SignInSchema)
     });
@@ -26,14 +27,12 @@ export default function SignInForm() {
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
             <div className="flex gap-5">
                 <FieldWrapper error={errors.email}>
-                    <label htmlFor="email">Email</label>
-                    <input id="email" type="email" {...register("email")}/>
+                    <Input id="email" name="email" label="Email" type="email" register={{...register("email")}} touched={touchedFields["email"]}/>
                 </FieldWrapper>
             </div>
             <div className="flex gap-5">
                 <FieldWrapper error={errors.password}>
-                    <label htmlFor="password">Password</label>
-                    <input id="password" type="password" {...register("password")}/>
+                    <Input id="password" name="password" label="Password" type="password" register={{...register("password")}} touched={touchedFields["password"]}/>
                 </FieldWrapper>
             </div>
             <button type="submit" className="button--primary" disabled={loading}>Login</button>
