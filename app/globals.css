@@ -63,4 +63,25 @@
     .field-wrapper:has(input[type="file"]) label{
         @apply top-1 text-sm
     }
+
+    .pagination {
+        @apply flex items-center gap-2 flex-wrap
+    }
+
+    .pagination .disabled {
+        @apply cursor-auto pointer-events-none opacity-20
+    }
+
+    .pagination.pagination--one-page .next,
+    .pagination.pagination--one-page .previous {
+        @apply hidden
+    }
+
+    .pagination li {
+        @apply rounded-full p-3 bg-orange-100 w-10 h-10 flex justify-center items-center transition-all
+    }
+
+    .pagination li.page--active {
+        @apply bg-orange-400
+    }
 }
