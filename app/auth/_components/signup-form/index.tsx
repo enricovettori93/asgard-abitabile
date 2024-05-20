@@ -6,6 +6,7 @@ import {AddUserForm} from "@/types/user";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {SignupSchema} from "@/utils/validators";
 import useSignUp from "@/app/auth/_components/signup-form/hooks/useSignUp";
+import Input from "@/components/inputs/input";
 
 interface props {
     handleSignUpFlow: Function
@@ -15,7 +16,7 @@ export default function SignupForm({handleSignUpFlow}: props) {
     const {
         register,
         handleSubmit,
-        formState: {errors}
+        formState: {errors, touchedFields}
     } = useForm<AddUserForm & {confirmPassword: string}>({
         resolver: zodResolver(SignupSchema)
     });
@@ -31,32 +32,26 @@ export default function SignupForm({handleSignUpFlow}: props) {
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
             <div className="flex gap-5">
                 <FieldWrapper error={errors.email}>
-                    <label htmlFor="email">Indirizzo email</label>
-                    <input type="email" {...register("email")}/>
+                    <Input id="email" name="email" label="Indirizzo email" type="email" register={{...register("email")}} touched={touchedFields["email"]}/>
                 </FieldWrapper>
                 <FieldWrapper error={errors.profile}>
-                    <label htmlFor="profile">Username</label>
-                    <input type="text" {...register("profile")}/>
+                    <Input id="profile" name="profile" label="Username" type="text" register={{...register("profile")}} touched={touchedFields["profile"]}/>
                 </FieldWrapper>
             </div>
             <div className="flex gap-5">
                 <FieldWrapper error={errors.name}>
-                    <label htmlFor="name">Nome</label>
-                    <input type="name" {...register("name")}/>
+                    <Input id="name" name="name" label="Nome" type="text" register={{...register("name")}} touched={touchedFields["name"]}/>
                 </FieldWrapper>
                 <FieldWrapper error={errors.surname}>
-                    <label htmlFor="surname">Cognome</label>
-                    <input type="surname" {...register("surname")}/>
+                    <Input id="surname" name="surname" label="Cognome" type="text" register={{...register("surname")}} touched={touchedFields["surname"]}/>
                 </FieldWrapper>
             </div>
             <div className="flex gap-5">
                 <FieldWrapper error={errors.password}>
-                    <label htmlFor="password">Password</label>
-                    <input type="text" {...register("password")}/>
+                    <Input id="password" name="password" label="Password" type="text" register={{...register("password")}} touched={touchedFields["password"]}/>
                 </FieldWrapper>
                 <FieldWrapper error={errors.confirmPassword}>
-                    <label htmlFor="confirmPassword">Conferma la password</label>
-                    <input type="text" {...register("confirmPassword")}/>
+                    <Input id="confirmPassword" name="confirmPassword" label="Conferma la password" type="text" register={{...register("confirmPassword")}} touched={touchedFields["confirmPassword"]}/>
                 </FieldWrapper>
             </div>
             <button type="submit" className="button--primary" disabled={loading}>Sign up</button>

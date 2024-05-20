@@ -63,7 +63,7 @@ const Menu = () => {
     return (
         <div className="rounded-3xl border-2 px-4 py-2 relative">
             <div className="flex items-center">
-                <button onClick={toggleMenu}>
+                <button className="p-0" onClick={toggleMenu}>
                     <i className="fi fi-rr-menu-burger"></i>
                 </button>
                 {

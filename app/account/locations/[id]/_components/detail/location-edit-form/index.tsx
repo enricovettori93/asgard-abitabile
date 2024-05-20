@@ -14,7 +14,7 @@ const LocationEditForm = ({location, loading, onEditLocation}: props) => {
     const {
         register,
         handleSubmit,
-        formState: {errors}
+        formState: {errors, touchedFields}
     } = useForm<EditLocationForm>({
         resolver: zodResolver(LocationSchema),
         defaultValues: {
@@ -34,7 +34,7 @@ const LocationEditForm = ({location, loading, onEditLocation}: props) => {
 
     return (
         <>
-            <LocationForm handleSubmit={handleSubmit(onSubmit)} register={register} errors={errors}>
+            <LocationForm handleSubmit={handleSubmit(onSubmit)} register={register} errors={errors} touchedFields={touchedFields}>
                 <button disabled={loading} className="button--primary mx-auto mt-5" type="submit">Modifica</button>
             </LocationForm>
         </>

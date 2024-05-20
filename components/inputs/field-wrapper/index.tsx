@@ -9,9 +9,9 @@ interface props {
 
 const FieldWrapper = ({error, className = "", children}: props) => {
     return (
-        <div className={`field-wrapper flex flex-col ${className} ${error ? "field-wrapper--error" : ""}`}>
+        <div className={`field-wrapper ${className} ${error ? "field-wrapper--error" : ""}`}>
             {children}
-            <small className="text-red-500">{error?.message}</small>
+            <small className="text-xs text-red-500 h-4">{error?.message}</small>
         </div>
     )
 }

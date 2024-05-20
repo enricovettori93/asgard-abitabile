@@ -8,13 +8,14 @@ import {EditUserForm} from "@/types/user";
 import FieldWrapper from "@/components/inputs/field-wrapper";
 import {useContext} from "react";
 import {UserContext} from "@/context/user.context";
+import Input from "@/components/inputs/input";
 
 const EditAccountDetailForm = () => {
     const {user} = useContext(UserContext);
     const {
         register,
         handleSubmit,
-        formState: {errors}
+        formState: {errors, touchedFields}
     } = useForm<EditUserForm>({
         values: {
             name: user?.name ?? "",
@@ -33,22 +34,18 @@ const EditAccountDetailForm = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
             <div className="flex flex-col md:flex-row gap-5">
                 <FieldWrapper>
-                    <label htmlFor="email">Email (non modificabile)</label>
-                    <input id="email" type="email" disabled value={user?.email ?? ""}/>
+                    <Input id="email" name="email" label="Email (non modificabile)" value={user?.email ?? ""} touched={true} disabled/>
                 </FieldWrapper>
                 <FieldWrapper>
-                    <label htmlFor="profile">Username (non modificabile)</label>
-                    <input id="profile" type="text" disabled value={user?.profile ?? ""}/>
+                    <Input id="profile" name="profile" label="Username (non modificabile)" value={user?.profile ?? ""} touched={true} disabled/>
                 </FieldWrapper>
             </div>
             <div className="flex flex-col md:flex-row gap-5">
                 <FieldWrapper error={errors.name}>
-                    <label htmlFor="name">Nome</label>
-                    <input id="name" type="text" {...register("name")}/>
+                    <Input id="name" name="name" label="Nome" type="text" register={{...register("name")}} touched={touchedFields["name"]}/>
                 </FieldWrapper>
                 <FieldWrapper error={errors.surname}>
-                    <label htmlFor="surname">Cognome</label>
-                    <input id="surname" type="text" {...register("surname")}/>
+                    <Input id="surname" name="surname" label="Cognome" type="text" register={{...register("surname")}} touched={touchedFields["surname"]}/>
                 </FieldWrapper>
             </div>
             <button type="submit" className="button--primary ml-auto" disabled={loading}>Aggiorna le informazioni</button>

@@ -11,7 +11,7 @@ export default function LocationAddForm() {
     const {
         register,
         handleSubmit,
-        formState: {errors}
+        formState: {errors, touchedFields}
     } = useForm<AddLocationForm>({
         resolver: zodResolver(LocationSchema)
     });
@@ -24,7 +24,7 @@ export default function LocationAddForm() {
 
     return (
         <>
-            <LocationForm handleSubmit={handleSubmit(onSubmit)} register={register} errors={errors}>
+            <LocationForm handleSubmit={handleSubmit(onSubmit)} register={register} errors={errors} touchedFields={touchedFields}>
                 <button disabled={loading} className="button--primary mx-auto mt-5" type="submit">Inserisci</button>
             </LocationForm>
         </>

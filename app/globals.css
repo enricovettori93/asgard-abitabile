@@ -6,8 +6,20 @@
 @tailwind utilities;
 
 @layer components {
+    button {
+        @apply rounded-2xl p-3
+    }
+
     .button--primary {
-        @apply rounded-2xl bg-orange-400 p-3
+        @apply bg-orange-400
+    }
+
+    .button--info {
+        @apply bg-blue-400
+    }
+
+    .button--danger {
+        @apply bg-red-400
     }
 
     .field-wrapper label {
@@ -20,5 +32,35 @@
 
     a.with-hover-border.active {
         @apply after:w-full
+    }
+
+    .field-wrapper {
+        @apply relative min-h-16 flex flex-col justify-end
+    }
+
+    .field-wrapper.field-wrapper--error input {
+        @apply border-red-400
+    }
+
+    .field-wrapper.field-wrapper--error small {
+        @apply text-ellipsis overflow-hidden whitespace-nowrap text-[11px]
+    }
+
+    .field-wrapper label {
+        @apply absolute top-5 transition-all
+    }
+
+    .field-wrapper input {
+        @apply border-b-[1px] border-orange-400 outline-none
+    }
+
+    .field-wrapper:has(input:active) label,
+    .field-wrapper:has(input:focus) label,
+    .field-wrapper:has(input.input--touched) label,
+    .field-wrapper:has(input.input--dirty) label,
+    .field-wrapper:has(input.input--with-value) label,
+    .field-wrapper:has(input[type="date"]) label,
+    .field-wrapper:has(input[type="file"]) label{
+        @apply top-1 text-sm
     }
 }

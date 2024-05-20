@@ -19,7 +19,7 @@ const LocationListFilters = () => {
     useEscListener(closeMenu);
 
     const filterClasses = classNames({
-        "absolute bg-white border-2 rounded-3xl p-5 top-14 transition-all w-[90vw] sm:w-[25rem] shadow-2xl z-20 left-1/2 transform -translate-x-1/2": true,
+        "absolute bg-white border-2 rounded-3xl p-5 top-14 transition-all w-[90vw] sm:w-[25rem] shadow-2xl z-20 left-1/2 sm:left-auto sm:right-0 -translate-x-1/2 sm:translate-x-0": true,
         "opacity-0 invisible": !isOpen,
         "opacity-100 visible": isOpen
     });
@@ -30,7 +30,7 @@ const LocationListFilters = () => {
     })
 
     return (
-        <div className="flex justify-end">
+        <div className="flex justify-end sm:relative">
             <button className={buttonClasses} onClick={() => setIsOpen(prev => !prev)}>
                 <i className="fi fi-rr-filter mr-2"></i>
                 Filtri
