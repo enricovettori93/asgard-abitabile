@@ -19,8 +19,8 @@ export default function LocationSearchForm({onSearch}: props) {
 
     const initialValues: LocationSearchForm = {
         city: params.get("city") || "",
-        from: params.get("from") || "",
-        to: params.get("to") || "",
+        startDate: params.get("startDate") || "",
+        endDate: params.get("endDate") || "",
         maxAdultsForNight: Number(params.get("maxAdultsForNight")) || undefined,
         priceForNight: Number(params.get("priceForNight")) || undefined
     };
@@ -70,11 +70,11 @@ export default function LocationSearchForm({onSearch}: props) {
                            register={{...register("priceForNight", {valueAsNumber: true})}}
                     />
                 </FieldWrapper>
-                <FieldWrapper error={errors.from}>
-                    <Input id="from" name="from" label="Da" type="date" register={{...register("from")}} touched={touchedFields["from"]}/>
+                <FieldWrapper error={errors.startDate}>
+                    <Input id="startDate" name="startDate" label="Da" type="date" register={{...register("startDate")}} touched={touchedFields["startDate"]}/>
                 </FieldWrapper>
-                <FieldWrapper error={errors.to}>
-                    <Input id="to" name="to" label="A" type="date" register={{...register("to")}} touched={touchedFields["to"]}/>
+                <FieldWrapper error={errors.endDate}>
+                    <Input id="endDate" name="endDate" label="A" type="date" register={{...register("endDate")}} touched={touchedFields["endDate"]}/>
                 </FieldWrapper>
             </div>
             <button className="button--primary mt-5 ml-auto px-10" type="submit">Cerca</button>

@@ -2,10 +2,10 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {LocationSchema} from "@/utils/validators";
 import LocationForm from "@/components/forms/location-form";
-import {EditLocationForm, LocationWithPicturesAndUser} from "@/types/location";
+import {EditLocationForm, LocationWithPicturesAndReservations} from "@/types/location";
 
 interface props {
-    location: LocationWithPicturesAndUser
+    location: LocationWithPicturesAndReservations
     loading: boolean
     onEditLocation: (payload: EditLocationForm) => Promise<void>
 }

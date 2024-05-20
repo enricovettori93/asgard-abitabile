@@ -14,19 +14,33 @@ datasource db {
 }
 
 model Location {
-  id                String    @id @default(uuid())
-  title             String    @db.VarChar(255)
+  id                String        @id @default(uuid())
+  title             String        @db.VarChar(255)
   lat               Float
   lng               Float
   description       String?
-  published         Boolean   @default(false)
-  user              User      @relation(fields: [userId], references: [id])
+  published         Boolean       @default(false)
+  user              User          @relation(fields: [userId], references: [id])
   userId            String
   pictures          Picture[]
-  maxAdultsForNight Int       @default(0)
-  priceForNight     Float     @default(0)
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  maxAdultsForNight Int           @default(0)
+  priceForNight     Float         @default(0)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  reservations      Reservation[]
+}
+
+model Reservation {
+  id             String   @id @default(uuid())
+  locationId     String
+  location       Location @relation(fields: [locationId], references: [id])
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  adultsForNight Int
+  startDate      DateTime
+  endDate        DateTime
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model Picture {
@@ -42,13 +56,14 @@ model Picture {
 }
 
 model User {
-  id        String     @id @default(uuid())
-  email     String     @unique
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  password  String
-  name      String
-  surname   String
-  profile   String     @unique
-  locations Location[]
+  id          String        @id @default(uuid())
+  email       String        @unique
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  password    String
+  name        String
+  surname     String
+  profile     String        @unique
+  locations   Location[]
+  reservation Reservation[]
 }

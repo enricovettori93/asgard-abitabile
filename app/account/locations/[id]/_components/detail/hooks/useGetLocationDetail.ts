@@ -1,11 +1,11 @@
 import {useState} from "react";
-import {LocationWithPicturesAndUser} from "@/types/location";
+import {LocationWithPicturesAndReservations, LocationWithPicturesAndUser} from "@/types/location";
 import LocationService from "@/services/location.service";
 import {Location} from "@prisma/client";
 
 const useGetLocationDetail = () => {
     const [loading, setLoading] = useState(false);
-    const [location, setLocation] = useState<LocationWithPicturesAndUser | null>(null);
+    const [location, setLocation] = useState<LocationWithPicturesAndReservations | null>(null);
 
     const getLocationDetail = async (id: Location["id"]) => {
         try {
