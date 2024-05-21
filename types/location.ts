@@ -17,13 +17,8 @@ const locationWithPicturesAndUserAndReservations = Prisma.validator<Prisma.Locat
     include: { pictures: true, user: true, reservations: true },
 })
 
-const reservationWithUser = Prisma.validator<Prisma.ReservationDefaultArgs>()({
-    include: { user: true }
-})
-
 export type LocationWithPictures = Prisma.LocationGetPayload<typeof locationWithPictures>
 export type LocationAvailableWithPictures = LocationWithPictures & {isAvailable: boolean}
-export type ReservationWithUser = Prisma.ReservationGetPayload<typeof reservationWithUser>
 export type LocationWithPicturesAndReservations = Prisma.LocationGetPayload<typeof locationWithPicturesAndReservations>
 export type LocationWithPicturesAndUser = Prisma.LocationGetPayload<typeof locationWithPicturesAndUser>
 export type LocationWithPicturesAndUserAndReservations = Prisma.LocationGetPayload<typeof locationWithPicturesAndUserAndReservations>
@@ -38,4 +33,4 @@ export interface LocationSearchForm {
     priceForNight?: number
 }
 export type LocationReserveForm = Pick<Reservation, "startDate" | "endDate" | "adultsForNight">
-export type AddReservation = Omit<Reservation, "id" | "createdAt" | "updatedAt">
+

@@ -14,6 +14,7 @@ export const ROUTES = {
     AUTH: "/auth",
     MY_ACCOUNT: "/account/me",
     MY_LOCATIONS: "/account/locations",
+    MY_RESERVATIONS: "/account/reservations",
     ADD_LOCATION: "/locations/add",
     LOCATIONS: "/locations"
 }

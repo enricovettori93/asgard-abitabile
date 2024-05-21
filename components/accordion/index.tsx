@@ -19,7 +19,7 @@ const Accordion = ({children, className = "", title, isOpen = false}: props) => 
     });
 
     const arrowClasses = classNames({
-        "absolute right-0 top-0 transition-all": true,
+        "absolute right-0 top-0 transition-all px-0 py-2": true,
         "rotate-180": open
     });
 
@@ -31,8 +31,8 @@ const Accordion = ({children, className = "", title, isOpen = false}: props) => 
 
     return (
         <div className={containerClasses}>
-            <div>
-                <span className="text-3xl">{title}</span>
+            <div className="flex justify-between items-center">
+                <span className="text-2xl md:text-3xl">{title}</span>
                 <button onClick={() => setIsOpen(!open)} className={arrowClasses}>
                     <i className="fi fi-rr-angle-small-down"></i>
                 </button>

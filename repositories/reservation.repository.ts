@@ -1,5 +1,5 @@
-import {Location, Reservation} from "@prisma/client";
-import {AddReservation, ReservationWithUser} from "@/types/location";
+import {Location, Reservation, User} from "@prisma/client";
+import {AddReservation, ReservationWithLocation, ReservationWithUser} from "@/types/reservation";
 import prisma from "@/prisma/client";
 import NotFound from "@/errors/not-found";
 
@@ -7,7 +7,9 @@ interface RepositoryInterface {
     createReservation(payload: AddReservation): Promise<Reservation>
     get(id: Reservation["id"]): Promise<Reservation>
     getFull(id: Reservation["id"]): Promise<ReservationWithUser>
+    getAllByUser(id: User["id"]): Promise<ReservationWithLocation[]>
     getReservationBetweenDate(locationId: Location["id"], startDate: Date, endDate: Date): Promise<Reservation[]>
+    delete(id: Reservation["id"]): Promise<void>
 }
 
 class ReservationRepository implements RepositoryInterface {
@@ -116,6 +118,25 @@ class ReservationRepository implements RepositoryInterface {
                         ]
                     }
                 ]
+            }
+        });
+    }
+
+    async getAllByUser(id: User["id"]): Promise<ReservationWithLocation[]> {
+        return prisma.reservation.findMany({
+            where: {
+                userId: id
+            },
+            include: {
+                location: true
+            }
+        });
+    }
+
+    async delete(id: Reservation["id"]): Promise<void> {
+        await prisma.reservation.delete({
+            where: {
+                id
             }
         });
     }

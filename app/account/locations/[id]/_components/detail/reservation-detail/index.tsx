@@ -1,6 +1,6 @@
 import React from 'react';
-import {ReservationWithUser} from "@/types/location";
 import {mapDateToStringForInputs} from "@/utils/functions";
+import {ReservationWithUser} from "@/types/reservation";
 
 interface props {
     reservation: ReservationWithUser

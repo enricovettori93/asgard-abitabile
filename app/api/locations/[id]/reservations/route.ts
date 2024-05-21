@@ -5,7 +5,7 @@ import {Location} from "@prisma/client";
 import {LocationReserveSchema} from "@/utils/validators";
 import {transformValidationErrors} from "@/utils/functions";
 import {ResponseDTO} from "@/types/common";
-import {AddReservation} from "@/types/location";
+import {AddReservation} from "@/types/reservation";
 import LocationRepository from "@/repositories/location.repository";
 import NotAllowed from "@/errors/not-allowed";
 import NotAcceptable from "@/errors/not-acceptable";

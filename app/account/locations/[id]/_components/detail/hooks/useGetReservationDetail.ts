@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {Location, Reservation} from "@prisma/client";
 import ReservationService from "@/services/reservation.service";
-import {ReservationWithUser} from "@/types/location";
+import {ReservationWithUser} from "@/types/reservation";
 
 const useGetReservationDetail = () => {
     const [loading, setLoading] = useState(false);

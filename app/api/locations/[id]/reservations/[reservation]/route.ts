@@ -4,7 +4,7 @@ import {getUserIdFromRequest} from "@/utils/session";
 import NotAllowed from "@/errors/not-allowed";
 import ReservationRepository from "@/repositories/reservation.repository";
 import {ResponseDTO} from "@/types/common";
-import {ReservationWithUser} from "@/types/location";
+import {ReservationWithUser} from "@/types/reservation";
 
 interface params {
     params: {

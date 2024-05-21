@@ -1,10 +1,9 @@
-import React from 'react';
 import MyLocationsList from "@/app/account/locations/_components/my-locations-list";
 
-const MyLocationsPage = async () => {
+const Page = () => {
     return (
         <MyLocationsList />
     );
 };
 
-export default MyLocationsPage;
+export default Page;
