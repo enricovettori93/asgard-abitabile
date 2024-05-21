@@ -1,9 +1,10 @@
 import {Location, Reservation} from "@prisma/client";
-import {LocationReserveForm} from "@/types/location";
+import {LocationReserveForm, ReservationWithUser} from "@/types/location";
 import betterFetch from "@/utils/fetch";
 
 interface ReservationServiceInterface {
     createReservation(locationId: Location["id"], payload: LocationReserveForm): Promise<Reservation>
+    getFull(locationId: Location["id"], id: Reservation["id"]): Promise<ReservationWithUser>
 }
 
 class ReservationService implements ReservationServiceInterface {
@@ -12,6 +13,10 @@ class ReservationService implements ReservationServiceInterface {
             method: "POST",
             body: JSON.stringify(payload)
         })).data as Reservation;
+    }
+
+    async getFull(locationId: Location["id"], id: Reservation["id"]): Promise<ReservationWithUser> {
+        return (await betterFetch<ReservationWithUser>(`locations/${locationId}/reservations/${id}`)).data as ReservationWithUser;
     }
 }
 

@@ -38,14 +38,14 @@ const UiContextProvider = ({children}: {children: ReactNode}) => {
         removeModal
     }
 
-    const containerClasses = classNames({
-        "modal inset-0 fixed flex items-center justify-center bg-white bg-opacity-80 transition-all": true,
-        "invisible opacity-0 pointer-events-none -z-50": !modal,
-        "visible opacity-100 z-50 w-screen h-screen": modal
+    const overlayClasses = classNames({
+        "fixed w-screen h-screen flex items-center justify-center bg-white/75 transition-all top-0 bottom-0 z-40": true,
+        "invisible opacity-0 pointer-events-none": !modal,
+        "visible opacity-100": modal
     });
 
     const modalClasses = classNames({
-        "modal__content relative": true,
+        "modal-container relative": true,
         "w-52 h-0": !modal,
         "w-1/2 h-auto": modal
     });
@@ -53,7 +53,7 @@ const UiContextProvider = ({children}: {children: ReactNode}) => {
     return (
         <UiContext.Provider value={value}>
             {children}
-            <div className={containerClasses}>
+            <div className={overlayClasses}>
                 <div className={modalClasses}>{modal}</div>
             </div>
         </UiContext.Provider>

@@ -6,6 +6,8 @@ import {LocationReserveSchema} from "@/utils/validators";
 import {transformValidationErrors} from "@/utils/functions";
 import {ResponseDTO} from "@/types/common";
 import {AddReservation} from "@/types/location";
+import LocationRepository from "@/repositories/location.repository";
+import NotAllowed from "@/errors/not-allowed";
 
 interface Params {
     params: { id: Location["id"] }
@@ -33,6 +35,12 @@ export async function POST(request: NextRequest, {params}: Params) {
     }
 
     try {
+        const location = await LocationRepository.get(id);
+
+        if (location.userId !== userId) {
+            throw new NotAllowed();
+        }
+
         const data: AddReservation = {
             ...parsedBody,
             locationId: id,

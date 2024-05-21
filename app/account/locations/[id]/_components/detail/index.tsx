@@ -1,7 +1,7 @@
 "use client"
 
 import useGetLocationDetail from "@/app/account/locations/[id]/_components/detail/hooks/useGetLocationDetail";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect} from "react";
 import {useParams} from "next/navigation";
 import {Location, Picture, Reservation} from "@prisma/client";
 import useRemoveImage from "@/app/account/locations/[id]/_components/detail/hooks/useRemoveImage";
@@ -12,23 +12,27 @@ import dynamic from "next/dynamic";
 import LocationDetailGallery from "@/app/account/locations/[id]/_components/detail/gallery";
 import Modal from "@/components/modal";
 import {UiContext} from "@/context/ui.context";
+import useGetReservationDetail from "@/app/account/locations/[id]/_components/detail/hooks/useGetReservationDetail";
+import ReservationDetail from "@/app/account/locations/[id]/_components/detail/reservation-detail";
 const ReservationCalendar = dynamic(() => import("@/app/account/locations/[id]/_components/detail/reservations-calendar"), {ssr: false});
 
 const MyAccountLocationDetail = () => {
     const {id} = useParams<{id: Location["id"]}>();
     const {loading: getLocationLoading, location, getLocationDetail} = useGetLocationDetail();
     const {loading: editLocationLoading, editLocation} = useEditLocation();
+    const {getReservationDetail, reservation} = useGetReservationDetail();
     const {removeImage} = useRemoveImage();
     const {setModal, removeModal} = useContext(UiContext);
-    const [reservationDetail, setReservationDetail] = useState<Reservation["id"] | null>(null);
 
     useEffect(() => {
         getLocationDetail(id);
     }, []);
 
     useEffect(() => {
-        reservationDetail ? setModal(ModalComponent) : removeModal();
-    }, [reservationDetail]);
+        if (reservation) {
+            setModal(ModalComponent);
+        }
+    }, [reservation]);
 
     const handleRemoveImage = async (pictureId: Picture["id"]) => {
         await removeImage(location!.id, pictureId);
@@ -40,6 +44,10 @@ const MyAccountLocationDetail = () => {
         await getLocationDetail(id);
     }
 
+    const handleReservationClick = async (reservationId: Reservation["id"]) => {
+        await getReservationDetail(location!.id, reservationId!);
+    }
+
     if (getLocationLoading) {
         return (<p>Loading location..</p>);
     }
@@ -49,12 +57,12 @@ const MyAccountLocationDetail = () => {
     }
 
     const ModalComponent = (
-        <Modal.Container closeModal={() => setReservationDetail(null)}>
+        <Modal.Container closeModal={removeModal}>
             <Modal.Title>
                 Dettagli prenotazione
             </Modal.Title>
             <Modal.Content>
-                <>contenuto modale</>
+                {reservation && <ReservationDetail reservation={reservation}/>}
             </Modal.Content>
         </Modal.Container>
     );
@@ -63,7 +71,7 @@ const MyAccountLocationDetail = () => {
         <>
             <LocationDetailGallery pictures={location?.pictures} onRemoveImage={handleRemoveImage} />
             <LocationEditForm location={location} onEditLocation={handleUpdateLocation} loading={editLocationLoading} />
-            <ReservationCalendar location={location} onClickReservation={(id) => setReservationDetail(id)}/>
+            <ReservationCalendar location={location} onClickReservation={handleReservationClick}/>
         </>
     )
 }
