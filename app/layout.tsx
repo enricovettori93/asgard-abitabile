@@ -7,6 +7,7 @@ import UserContext from "@/context/user.context";
 import React from "react";
 import Footer from "@/app/_components/footer";
 import NavBar from "@/app/_components/navbar";
+import UiContext from "@/context/ui.context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,14 +24,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <UserContext>
-            <NavBar/>
-            <Toaster position="top-right"/>
-            <main className="flex min-h-screen mb-[15em] px-6 md:px-10 flex-col items-center justify-between bg-white z-10 relative">
-                {children}
-            </main>
-            <Footer/>
-        </UserContext>
+      <UiContext>
+          <UserContext>
+              <NavBar/>
+              <Toaster position="top-right"/>
+              <main className="flex min-h-screen mb-[15em] px-6 md:px-10 flex-col items-center justify-between bg-white z-10 relative">
+                  {children}
+              </main>
+              <Footer/>
+          </UserContext>
+      </UiContext>
       </body>
     </html>
   );

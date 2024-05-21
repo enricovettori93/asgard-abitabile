@@ -26,7 +26,6 @@ const LocationsGrid = ({data, totalElements, currentPage}: props) => {
     const pageCount = Math.floor(totalElements / PAGE_SIZE);
 
     const pageChange = async ({selected}: PageChangeEvent) => {
-        console.log(selected)
         await handlePageChange(selected + 1);
     }
 

@@ -1,14 +1,16 @@
-import React from "react";
+import React, {ReactNode} from "react";
 
-interface Props {
-    children: React.ReactNode
+interface props {
+    children: ReactNode
     className?: string
 }
 
-export default function Card({ children, className }: Props) {
+const Card = React.forwardRef<HTMLDivElement, props>(({children, className}, ref) => {
     return (
-        <div className={`rounded-lg shadow-xl p-8 bg-white ${className}`}>
+        <div ref={ref} className={`rounded-lg shadow-xl p-8 bg-white ${className}`}>
             {children}
         </div>
     )
-}
+});
+
+export default Card;
