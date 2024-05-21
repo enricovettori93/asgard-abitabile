@@ -2,6 +2,7 @@ import {useState} from "react";
 import {LocationReserveForm} from "@/types/location";
 import ReservationService from "@/services/reservation.service";
 import {Location} from "@prisma/client";
+import toast from "react-hot-toast";
 
 const useCreateReservation = () => {
     const [loading, setLoading] = useState(false);
@@ -10,8 +11,9 @@ const useCreateReservation = () => {
         try {
             setLoading(true);
             await ReservationService.createReservation(locationId, payload);
-        } catch (e) {
-            // todo: toast with errors
+            toast.success("Prenotazione creata con successo");
+        } catch (e: any) {
+            toast.error(e.message || "Impossibile creare la prenotazione");
         } finally {
             setLoading(false);
         }
