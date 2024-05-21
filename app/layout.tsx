@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import {Toaster} from "react-hot-toast";
 import 'swiper/css';
+import 'swiper/css/navigation';
 import "./globals.css";
 import UserContext from "@/context/user.context";
 import React from "react";

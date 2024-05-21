@@ -99,3 +99,11 @@
         @apply bg-orange-400
     }
 }
+
+.swiper-button-next, .swiper-button-prev {
+    @apply text-orange-400
+}
+
+.swiper-button-next:after, .swiper-button-prev:after {
+    @apply text-xl
+}
