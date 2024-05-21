@@ -7,6 +7,8 @@ import {mapDateToStringForInputs} from "@/utils/functions";
 import useDeleteMyReservation
     from "@/app/account/reservations/_components/my-reservations-list/hooks/useDeleteMyReservation";
 import {Reservation} from "@prisma/client";
+import Link from "next/link";
+import {ROUTES} from "@/utils/constants";
 
 const MyReservationList = () => {
     const {loading, reservations, getMyReservations} = useMyReservations();
@@ -53,7 +55,7 @@ const MyReservationList = () => {
                     </div>
                     <div>
                         <span className="font-semibold">Location:</span>
-                        <span>{reservation.location.title}</span>
+                        <Link className="with-hover-border text-orange-400 font-semibold" href={`${ROUTES.LOCATIONS}/${reservation.locationId}`}>{reservation.location.title}</Link>
                     </div>
                     <button onClick={() => handleDeleteReservation(reservation.id)}
                             disabled={deleteLoading}
