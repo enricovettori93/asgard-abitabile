@@ -22,11 +22,12 @@ const reservationWithUser = Prisma.validator<Prisma.ReservationDefaultArgs>()({
 })
 
 export type LocationWithPictures = Prisma.LocationGetPayload<typeof locationWithPictures>
+export type LocationAvailableWithPictures = LocationWithPictures & {isAvailable: boolean}
 export type ReservationWithUser = Prisma.ReservationGetPayload<typeof reservationWithUser>
 export type LocationWithPicturesAndReservations = Prisma.LocationGetPayload<typeof locationWithPicturesAndReservations>
 export type LocationWithPicturesAndUser = Prisma.LocationGetPayload<typeof locationWithPicturesAndUser>
 export type LocationWithPicturesAndUserAndReservations = Prisma.LocationGetPayload<typeof locationWithPicturesAndUserAndReservations>
-export type AddLocation = Omit<Location, "id">
+export type AddLocation = Omit<Location, "id" | "createdAt" | "updatedAt">
 export type AddLocationForm = Omit<AddLocation, "userId" | "createdAt" | "updatedAt"> & {pictures?: File []}
 export type EditLocationForm = AddLocationForm
 export interface LocationSearchForm {

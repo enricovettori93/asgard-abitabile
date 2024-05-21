@@ -1,6 +1,6 @@
 "use client"
 
-import {LocationWithPictures} from "@/types/location";
+import {LocationAvailableWithPictures} from "@/types/location";
 import useFetchLocations from "@/app/locations/_components/locations-grid/hooks/useFetchLocations";
 import CardLocation from "@/app/locations/_components/location-card";
 import ReactPaginate from "react-paginate";
@@ -10,7 +10,7 @@ import classNames from "classnames";
 import Link from "next/link";
 
 interface props {
-    data: LocationWithPictures[]
+    data: LocationAvailableWithPictures[]
     totalElements: number
     currentPage: number
 }

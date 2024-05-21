@@ -3,23 +3,28 @@ import {NextRequest} from "next/server";
 import {LocationSchema} from "@/utils/validators";
 import {NextResponse} from "next/server";
 import {ResponseDTO} from "@/types/common";
-import {AddLocationForm, LocationWithPictures, LocationWithPicturesAndUser} from "@/types/location";
+import {
+    AddLocationForm,
+    LocationAvailableWithPictures,
+    LocationWithPictures,
+    LocationWithPicturesAndUser
+} from "@/types/location";
 import {ADULTS_PER_NIGHT, CUSTOM_HEADERS} from "@/utils/constants";
 import {transformValidationErrors} from "@/utils/functions";
 import {getUserIdFromRequest} from "@/utils/session";
+import NotAcceptable from "@/errors/not-acceptable";
+import ReservationRepository from "@/repositories/reservation.repository";
 
 export async function GET(request: NextRequest) {
     const page = Number(request.nextUrl.searchParams.get("page")) ?? 1;
     const maxAdultsForNight = request.nextUrl.searchParams.get("maxAdultsForNight");
     const priceForNight = request.nextUrl.searchParams.get("priceForNight");
+    const startDate = request.nextUrl.searchParams.get("startDate");
+    const endDate = request.nextUrl.searchParams.get("endDate");
 
     // todo: create a zod schema just for this custom validation considering pagination
     if (page < 1 || maxAdultsForNight !== null && (Number(maxAdultsForNight) < ADULTS_PER_NIGHT.MIN || Number(maxAdultsForNight) > ADULTS_PER_NIGHT.MAX)) {
-        return NextResponse.json({
-            message: "Invalid request"
-        } satisfies ResponseDTO<never>, {
-            status: 406
-        });
+        throw new NotAcceptable();
     }
 
     const filters: Record<string, any> = {};
@@ -37,9 +42,28 @@ export async function GET(request: NextRequest) {
     try {
         const {data, count} = await LocationRepository.filter(filters);
 
+        if (!startDate || !endDate) {
+            return NextResponse.json({
+                data: data.map(d => ({...d, isAvailable: true}))
+            } satisfies ResponseDTO<LocationAvailableWithPictures[]>, {
+                headers: {
+                    [CUSTOM_HEADERS.X_TOTAL_COUNT]: `${count}`
+                }
+            });
+        }
+
+        const availableData: LocationAvailableWithPictures[] = await Promise.all(data.map(async location => {
+            const checkAvailability = await ReservationRepository.getReservationBetweenDate(location.id, new Date(startDate), new Date(endDate));
+
+            return {
+                ...location,
+                isAvailable: checkAvailability.length === 0
+            };
+        }));
+
         return NextResponse.json({
-            data
-        } satisfies ResponseDTO<LocationWithPictures[]>, {
+            data: availableData
+        } satisfies ResponseDTO<LocationAvailableWithPictures[]>, {
             headers: {
                 [CUSTOM_HEADERS.X_TOTAL_COUNT]: `${count}`
             }

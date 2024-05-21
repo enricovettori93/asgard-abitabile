@@ -124,7 +124,7 @@ class LocationRepository implements RepositoryInterface {
 
         if (maxAdultsForNight >= ADULTS_PER_NIGHT.MIN && maxAdultsForNight <= ADULTS_PER_NIGHT.MAX) {
             whereConditions.maxAdultsForNight = {
-                lt: maxAdultsForNight
+                gte: maxAdultsForNight
             }
         }
 

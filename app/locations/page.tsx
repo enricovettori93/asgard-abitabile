@@ -1,21 +1,20 @@
-import {LocationWithPictures} from "@/types/location";
+import {LocationAvailableWithPictures} from "@/types/location";
 import betterFetch from "@/utils/fetch";
-import {ResponseDTO} from "@/types/common";
 import LocationsGrid from "@/app/locations/_components/locations-grid";
 import LocationListFilters from "@/app/locations/_components/list-filters";
 
 async function getLocations(searchParams: Record<string, string>): Promise<{
-    data: LocationWithPictures[],
+    data: LocationAvailableWithPictures[],
     count: string
 }> {
     const queryParams = new URLSearchParams(searchParams as unknown as Record<string, string>);
     const {
         data,
         count
-    } = await betterFetch<ResponseDTO<LocationWithPictures[]>>(`locations?${queryParams}`);
+    } = await betterFetch<LocationAvailableWithPictures[]>(`locations?${queryParams}`);
 
     return {
-        data: data as LocationWithPictures[],
+        data: data as LocationAvailableWithPictures[],
         count: count as string
     }
 }
