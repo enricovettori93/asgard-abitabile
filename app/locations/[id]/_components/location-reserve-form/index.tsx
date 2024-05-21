@@ -8,18 +8,27 @@ import useCreateReservation from "@/app/locations/[id]/_components/location-rese
 import {Location} from "@prisma/client";
 import FieldWrapper from "@/components/inputs/field-wrapper";
 import Input from "@/components/inputs/input";
+import {useSearchParams} from "next/navigation";
+import {mapDateToStringForInputs} from "@/utils/functions";
 
 interface props {
     location: Location
 }
 
 const LocationReserveForm = ({location}: props) => {
+    const params = useSearchParams();
+
     const {
         register,
         handleSubmit,
         formState: {errors, touchedFields}
     } = useForm<LocationReserveForm>({
-        resolver: zodResolver(LocationReserveSchema)
+        resolver: zodResolver(LocationReserveSchema),
+        // fixme: hacky way to break the zod rules for adding values as string to prepopulate the form
+        defaultValues: {
+            ...(!!params.get("startDate") && {startDate: (mapDateToStringForInputs(new Date(params.get("startDate") as string)) as unknown as Date)}),
+            ...(!!params.get("endDate") && {endDate: (mapDateToStringForInputs(new Date(params.get("endDate") as string)) as unknown as Date)}),
+        }
     });
 
     const {loading, createReservation} = useCreateReservation();

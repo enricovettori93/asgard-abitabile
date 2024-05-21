@@ -11,6 +11,7 @@ import useEditLocation from "@/app/account/locations/[id]/_components/detail/hoo
 import {EditLocationForm} from "@/types/location";
 import {Swiper, SwiperSlide} from "swiper/react";
 import dynamic from "next/dynamic";
+import LocationDetailGallery from "@/app/account/locations/[id]/_components/detail/gallery";
 const ReservationCalendar = dynamic(() => import("@/app/account/locations/[id]/_components/detail/reservations-calendar"), {ssr: false});
 
 const MyAccountLocationDetail = () => {
@@ -43,25 +44,7 @@ const MyAccountLocationDetail = () => {
 
     return (
         <>
-            {
-                location?.pictures?.length === 0 && (<p>Nessuna immagine presente</p>)
-            }
-            {
-                location?.pictures?.length > 0 && (
-                    <>
-                    Immagini presenti
-                        <Swiper>
-                            {
-                                location?.pictures?.map(img =>
-                                    <SwiperSlide key={img.id}>
-                                        <ImageDetail image={img} onRemovePicture={handleRemoveImage} />
-                                    </SwiperSlide>
-                                )
-                            }
-                        </Swiper>
-                    </>
-                )
-            }
+            <LocationDetailGallery pictures={location?.pictures} onRemoveImage={handleRemoveImage} />
             <LocationEditForm location={location} onEditLocation={handleUpdateLocation} loading={editLocationLoading} />
             <ReservationCalendar location={location} onClickReservation={(id) => console.log(id)}/>
         </>

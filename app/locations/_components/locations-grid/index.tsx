@@ -7,6 +7,7 @@ import ReactPaginate from "react-paginate";
 import {PAGE_SIZE, ROUTES} from "@/utils/constants";
 import {useSearchParams} from "next/navigation";
 import classNames from "classnames";
+import Link from "next/link";
 
 interface props {
     data: LocationWithPictures[]
@@ -25,6 +26,7 @@ const LocationsGrid = ({data, totalElements, currentPage}: props) => {
     const pageCount = Math.floor(totalElements / PAGE_SIZE);
 
     const pageChange = async ({selected}: PageChangeEvent) => {
+        console.log(selected)
         await handlePageChange(selected + 1);
     }
 
@@ -38,13 +40,31 @@ const LocationsGrid = ({data, totalElements, currentPage}: props) => {
         "pagination--one-page": pageCount <= 1
     });
 
+    if (!totalElements) {
+        return (
+            <>
+                <h2 className="text-2xl">Nessuna locations trovata</h2>
+            </>
+        )
+    }
+
     return (
-        <section>
+        <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                {data.map(location => <CardLocation key={location.id} location={location}/>)}
+                {data.map(location => {
+                    return (
+                        <Link href={{
+                            pathname: `${ROUTES.LOCATIONS}/${location.id}`,
+                            query: {startDate: params.get("startDate"), endDate: params.get("endDate")}
+                        }} key={location.id}>
+                            <CardLocation location={location}/>
+                        </Link>
+                    )}
+                )}
             </div>
             <div className="flex justify-end">
                 <ReactPaginate
+                    forcePage={currentPage - 1}
                     className={paginationClasses}
                     pageCount={pageCount}
                     onPageChange={pageChange}
@@ -54,7 +74,7 @@ const LocationsGrid = ({data, totalElements, currentPage}: props) => {
                     activeClassName="page--active"
                 />
             </div>
-        </section>
+        </>
     )
 }
 
