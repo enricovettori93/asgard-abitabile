@@ -1,30 +1,54 @@
-import React from 'react';
+import React, {useState} from 'react';
 import FieldWrapper from "@/components/inputs/field-wrapper";
-import {DeepMap, DeepPartial, FieldError, FieldErrors, UseFormRegister} from "react-hook-form";
-import {AddLocationForm, EditLocationForm} from "@/types/location";
+import {DeepPartial, FieldError, SubmitHandler, useForm} from "react-hook-form";
 import Input from "@/components/inputs/input";
 import TextArea from "@/components/inputs/textarea";
 import {ACCEPTED_IMAGE_TYPES} from "@/utils/constants";
 import classNames from "classnames";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {LocationSchema} from "@/utils/validators";
+import LocationFormImagesPreview from "@/components/forms/location-form/images-preview";
+import {AddLocationForm, EditLocationForm} from "@/types/location";
 
 interface props {
-    register: UseFormRegister<AddLocationForm | EditLocationForm>
-    handleSubmit: () => void
-    errors: FieldErrors<AddLocationForm>
+    onSubmit: (payload: AddLocationForm | EditLocationForm) => Promise<void>
     children: React.ReactNode
-    touchedFields: DeepMap<DeepPartial<AddLocationForm>, boolean>
-    onChangeFiles: (e: React.ChangeEvent<HTMLInputElement>) => void
     className?: string
+    defaultValues?: DeepPartial<EditLocationForm>
 }
 
-const LocationForm = ({register, handleSubmit, errors, children, touchedFields, className = "", onChangeFiles}: props) => {
+const LocationForm = ({children, className = "", defaultValues = {}, onSubmit}: props) => {
+    const [images, setImages] = useState<File[]>([]);
+
+    const {
+        register,
+        handleSubmit,
+        formState: {errors, touchedFields}
+    } = useForm<AddLocationForm | EditLocationForm>({
+        resolver: zodResolver(LocationSchema),
+        defaultValues: defaultValues,
+    });
+
     const formClasses = classNames({
         [className]: true,
         "flex flex-col w-full": true,
     });
 
+    const handleRemoveImage = (idx: number) => {
+        setImages(prev => prev.filter((_, i) => i !== idx));
+    }
+
+    const handleChangeFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // @ts-ignore
+        setImages(Array.from(e.target.files));
+    }
+
+    const submit: SubmitHandler<AddLocationForm | EditLocationForm> = async ({pictures, ...payload}) => {
+        await onSubmit({...payload, pictures: images});
+    }
+
     return (
-        <form onSubmit={handleSubmit} className={formClasses}>
+        <form onSubmit={handleSubmit(submit)} className={formClasses}>
             <div className="flex gap-5">
                 <FieldWrapper error={errors.title}>
                     <Input id="title" name="title" label="Titolo" type="text" register={{...register("title")}}
@@ -85,8 +109,13 @@ const LocationForm = ({register, handleSubmit, errors, children, touchedFields, 
                 <FieldWrapper error={errors.pictures as FieldError}>
                     <Input id="pictures" name="pictures" label="Fotografie" type="file" accept={ACCEPTED_IMAGE_TYPES.join(",")} multiple
                            className="mt-2"
-                           register={{...register("pictures", {onChange: onChangeFiles})}} touched={false}/>
+                           register={{...register("pictures", {onChange: handleChangeFiles})}} touched={false}/>
                 </FieldWrapper>
+            </div>
+            <div>
+                {
+                    images.length > 0 && <LocationFormImagesPreview onRemovePicture={handleRemoveImage} files={images} />
+                }
             </div>
             {children}
         </form>
