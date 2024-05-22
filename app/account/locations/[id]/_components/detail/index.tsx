@@ -10,44 +10,12 @@ import useEditLocation from "@/app/account/locations/[id]/_components/detail/hoo
 import {EditLocationForm} from "@/types/location";
 import dynamic from "next/dynamic";
 import LocationDetailGallery from "@/app/account/locations/[id]/_components/detail/gallery";
-import Modal from "@/components/modal";
 import {UiContext} from "@/context/ui.context";
 import useGetReservationDetail from "@/app/account/locations/[id]/_components/detail/hooks/useGetReservationDetail";
-import ReservationDetail from "@/app/account/locations/[id]/_components/detail/reservation-detail";
-import {ReservationWithUser} from "@/types/reservation";
 import useConfirmReservation from "@/app/account/locations/[id]/_components/detail/hooks/useConfirmReservation";
+import DetailReservationModal from "@/app/account/locations/[id]/_components/detail/modals/delete-reservation";
+import DeleteImageModal from "@/app/account/locations/[id]/_components/detail/modals/delete-image";
 const ReservationCalendar = dynamic(() => import("@/app/account/locations/[id]/_components/detail/reservations-calendar"), {ssr: false});
-
-interface modalProps {
-    reservation: ReservationWithUser
-    closeModal: () => void
-    loading: boolean
-    handleConfirmReservation: () => void
-}
-
-const DetailReservationModal = ({reservation, closeModal, handleConfirmReservation, loading}: modalProps) => (
-    <Modal.Container closeModal={closeModal}>
-        <Modal.Title>
-            Dettagli prenotazione
-        </Modal.Title>
-        <Modal.Content>
-            <ReservationDetail reservation={reservation}/>
-        </Modal.Content>
-        <Modal.Actions>
-            {
-                !reservation.confirmed && (
-                    <button
-                        className="button--primary"
-                        onClick={handleConfirmReservation}
-                        disabled={loading}
-                    >
-                        Conferma prenotazione
-                    </button>
-                )
-            }
-        </Modal.Actions>
-    </Modal.Container>
-)
 
 const MyAccountLocationDetail = () => {
     const {id} = useParams<{id: Location["id"]}>();
@@ -55,7 +23,7 @@ const MyAccountLocationDetail = () => {
     const {loading: editLocationLoading, editLocation} = useEditLocation();
     const {loading: confirmLoading, confirmReservation} = useConfirmReservation();
     const {getReservationDetail, reservation} = useGetReservationDetail();
-    const {removeImage} = useRemoveImage();
+    const {loading: removeImageLoading, removeImage} = useRemoveImage();
     const {setModal, removeModal} = useContext(UiContext);
 
     useEffect(() => {
@@ -68,7 +36,7 @@ const MyAccountLocationDetail = () => {
                 <DetailReservationModal
                     reservation={reservation}
                     closeModal={removeModal}
-                    handleConfirmReservation={() => handleConfirmReservation(reservation.id)}
+                    onConfirmDeleteReservation={() => handleConfirmReservation(reservation.id)}
                     loading={confirmLoading}
                 />
             );
@@ -80,9 +48,10 @@ const MyAccountLocationDetail = () => {
         removeModal();
     }
 
-    const handleRemoveImage = async (pictureId: Picture["id"]) => {
+    const handleConfirmDeleteImage = async (pictureId: Picture["id"]) => {
         await removeImage(location!.id, pictureId);
         await getLocationDetail(id);
+        removeModal();
     }
 
     const handleUpdateLocation = async (payload: EditLocationForm) => {
@@ -92,6 +61,17 @@ const MyAccountLocationDetail = () => {
 
     const handleReservationClick = async (reservationId: Reservation["id"]) => {
         await getReservationDetail(location!.id, reservationId!);
+    }
+
+    const handleDeleteImage = async (pictureId: Picture["id"]) => {
+        removeModal();
+        setModal(
+            <DeleteImageModal
+                loading={removeImageLoading}
+                closeModal={removeModal}
+                onConfirmDeleteImage={() => handleConfirmDeleteImage(pictureId)}
+            />
+        );
     }
 
     if (getLocationLoading) {
@@ -104,9 +84,12 @@ const MyAccountLocationDetail = () => {
 
     return (
         <>
-            <LocationDetailGallery pictures={location?.pictures} onRemoveImage={handleRemoveImage} />
+            <h2 className="text-3xl mb-5">Modifica la tua location</h2>
+            <div className="grid grid-cols-2 gap-5">
+                <LocationDetailGallery pictures={location?.pictures} onRemoveImage={handleDeleteImage} />
+                <ReservationCalendar location={location} onClickReservation={handleReservationClick}/>
+            </div>
             <LocationEditForm location={location} onEditLocation={handleUpdateLocation} loading={editLocationLoading} />
-            <ReservationCalendar location={location} onClickReservation={handleReservationClick}/>
         </>
     )
 }

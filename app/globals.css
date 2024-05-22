@@ -66,12 +66,6 @@
         @apply flex-row items-center gap-2
     }
 
-    .field-wrapper:has(textarea) label,
-    .field-wrapper:has(input[type="file"]) label,
-    .field-wrapper:has(input[type="checkbox"]) label {
-        @apply relative top-0
-    }
-
     .field-wrapper:has(input:active) label,
     .field-wrapper:has(input:focus) label,
     .field-wrapper:has(input.input--touched) label,
@@ -80,6 +74,12 @@
     .field-wrapper:has(input[type="date"]) label,
     .field-wrapper:has(input[type="file"]) label {
         @apply top-1 text-sm
+    }
+
+    .field-wrapper:has(textarea) label,
+    .field-wrapper:has(input[type="file"]) label,
+    .field-wrapper:has(input[type="checkbox"]) label {
+        @apply relative top-0 text-base
     }
 
     .pagination {
@@ -128,4 +128,8 @@
 .fc-button-group button.fc-button-primary:active,
 .fc-button-group button.fc-button-primary:focus {
     @apply !bg-orange-500 !border-0 !shadow-none
+}
+
+input[type='file'] {
+    color: transparent;
 }

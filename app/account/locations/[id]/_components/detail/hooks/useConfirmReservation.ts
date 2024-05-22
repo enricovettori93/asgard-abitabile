@@ -9,13 +9,13 @@ const useConfirmReservation = () => {
 
     const confirmReservation = async (reservationId: Reservation["id"]) => {
         try {
-            setLoading(false);
+            setLoading(true);
             await ReservationService.confirm(reservationId);
             toast.success("Prenotazione confermata");
         } catch (e: any) {
             toast.error(e.message || "Impossibile confermare la prenotazione");
         } finally {
-            setLoading(true);
+            setLoading(false);
         }
     }
 

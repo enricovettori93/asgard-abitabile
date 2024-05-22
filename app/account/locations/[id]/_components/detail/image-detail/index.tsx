@@ -1,22 +1,27 @@
 import {Picture} from "@prisma/client";
 import Image from "next/image";
+import ImageActionsContainer from "@/components/forms/image-actions-container";
 
 interface props {
-    image: Picture
+    image: Pick<Picture, "id" | "src" | "width" | "height" | "alt">
+    fill?: boolean
     onRemovePicture: (id: Picture["id"]) => void
 }
 
-const ImageDetail = ({image, onRemovePicture}: props) => {
+const ImageDetail = ({image, onRemovePicture, fill = false}: props) => {
     return (
-        <div className="relative">
-            <button className="absolute top-5 right-5 bg-red-500 p-5 rounded-2xl" onClick={() => onRemovePicture(image.id)}>X</button>
+        <ImageActionsContainer onRemovePicture={() => onRemovePicture(image.id)}>
             <Image
                 src={`/${image.src}`}
-                width={image.width}
-                height={image.height}
+                {...(fill && {fill: true})}
+                {...(!fill && {
+                    width: image.width,
+                    height: image.height
+                })}
                 alt={image.alt || ""}
+                className="h-full"
             />
-        </div>
+        </ImageActionsContainer>
     )
 }
 

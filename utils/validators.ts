@@ -12,8 +12,8 @@ export const LocationSchema: ZodType<AddLocationForm> = z.object({
     priceForNight: z.number().min(0),
     published: z.boolean(),
     pictures: z.any().refine(
-        (files) => {
-            return Object.values(files as unknown as File).every((file: File) => {
+        (files: FileList) => {
+            return Object.values(files).every((file: File) => {
                 return ACCEPTED_IMAGE_TYPES.includes(file.type)
             });
         },
