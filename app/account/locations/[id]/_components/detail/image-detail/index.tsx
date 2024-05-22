@@ -19,7 +19,7 @@ const ImageDetail = ({image, onRemovePicture, fill = false}: props) => {
                     height: image.height
                 })}
                 alt={image.alt || ""}
-                className="h-full"
+                className="h-full w-full"
             />
         </ImageActionsContainer>
     )

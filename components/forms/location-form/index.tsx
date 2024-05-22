@@ -107,7 +107,7 @@ const LocationForm = ({children, className = "", defaultValues = {}, onSubmit}: 
             </div>
             <div className="flex gap-5">
                 <FieldWrapper error={errors.pictures as FieldError}>
-                    <Input id="pictures" name="pictures" label="Fotografie" type="file" accept={ACCEPTED_IMAGE_TYPES.join(",")} multiple
+                    <Input id="pictures" name="pictures" label="Aggiungi le immagini" type="file" accept={ACCEPTED_IMAGE_TYPES.join(",")} multiple
                            className="mt-2"
                            register={{...register("pictures", {onChange: handleChangeFiles})}} touched={false}/>
                 </FieldWrapper>

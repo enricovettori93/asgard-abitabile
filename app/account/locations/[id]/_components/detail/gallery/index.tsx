@@ -14,7 +14,7 @@ interface props {
 
 const LocationDetailGallery = ({pictures, onRemoveImage, className = ""}: props) => {
     const classes = classNames({
-        "h-full w-full": true,
+        "w-full": true,
         [className]: true
     });
 
@@ -27,7 +27,7 @@ const LocationDetailGallery = ({pictures, onRemoveImage, className = ""}: props)
                 pictures?.length > 0 && (
                     <>
                         <Swiper
-                            className="h-full"
+                            className="h-full w-full"
                             modules={[Navigation]}
                             navigation={pictures.length > 1}
                         >

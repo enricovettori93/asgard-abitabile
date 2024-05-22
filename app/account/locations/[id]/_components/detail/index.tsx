@@ -15,6 +15,8 @@ import useGetReservationDetail from "@/app/account/locations/[id]/_components/de
 import useConfirmReservation from "@/app/account/locations/[id]/_components/detail/hooks/useConfirmReservation";
 import DetailReservationModal from "@/app/account/locations/[id]/_components/detail/modals/delete-reservation";
 import DeleteImageModal from "@/app/account/locations/[id]/_components/detail/modals/delete-image";
+import Accordion from "@/components/accordion";
+import Card from "@/components/card";
 const ReservationCalendar = dynamic(() => import("@/app/account/locations/[id]/_components/detail/reservations-calendar"), {ssr: false});
 
 const MyAccountLocationDetail = () => {
@@ -84,12 +86,24 @@ const MyAccountLocationDetail = () => {
 
     return (
         <>
-            <h2 className="text-3xl mb-5">Modifica la tua location</h2>
-            <div className="grid grid-cols-2 gap-5">
-                <LocationDetailGallery pictures={location?.pictures} onRemoveImage={handleDeleteImage} />
+            <div>
+                <h2 className="text-3xl mb-5">Calendario prenotazioni</h2>
                 <ReservationCalendar location={location} onClickReservation={handleReservationClick}/>
             </div>
-            <LocationEditForm location={location} onEditLocation={handleUpdateLocation} loading={editLocationLoading} />
+            <div className="mt-10 flex flex-col gap-5">
+                <h2 className="text-3xl">Gestisci i dettagli della location</h2>
+                <Card>
+                    <Accordion title="Immagini presenti">
+                        <LocationDetailGallery className="pt-10" pictures={location?.pictures} onRemoveImage={handleDeleteImage}/>
+                    </Accordion>
+                </Card>
+                <Card>
+                    <Accordion title="Dati della locations">
+                        <LocationEditForm location={location} onEditLocation={handleUpdateLocation}
+                                          loading={editLocationLoading}/>
+                    </Accordion>
+                </Card>
+            </div>
         </>
     )
 }
