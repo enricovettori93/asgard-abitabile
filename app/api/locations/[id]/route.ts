@@ -48,7 +48,7 @@ export async function PATCH(request: Request, {params}: Params) {
 
     const validationResult = LocationSchema.safeParse(body);
 
-    if (!validationResult) {
+    if (!validationResult.success) {
         return NextResponse.json({
             errors: transformValidationErrors(validationResult)
         } satisfies ResponseDTO<never>, {
