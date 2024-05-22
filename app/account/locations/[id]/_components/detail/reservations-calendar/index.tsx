@@ -17,7 +17,9 @@ const ReservationCalendar = ({location, onClickReservation}: props) => {
                 start: reservation.startDate,
                 end: reservation.endDate,
                 title: `${reservation.adultsForNight} ${reservation.adultsForNight === 1 ? "persona" : "persone"}`,
-                id: reservation.id
+                id: reservation.id,
+                backgroundColor: reservation.confirmed ? "#4caf50" : "#36b2f4",
+                borderColor: reservation.confirmed ? "#4caf50" : "#36b2f4",
             }))}
             eventClick={({event: {id}}) => onClickReservation(id)}
             plugins={[dayGridPlugin]}

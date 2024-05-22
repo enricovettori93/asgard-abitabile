@@ -23,7 +23,7 @@ type PageChangeEvent = {
 const LocationsGrid = ({data, totalElements, currentPage}: props) => {
     const params = useSearchParams();
     const {handlePageChange} = useFetchLocations();
-    const pageCount = Math.floor(totalElements / PAGE_SIZE);
+    const pageCount = Math.ceil(totalElements / PAGE_SIZE);
 
     const pageChange = async ({selected}: PageChangeEvent) => {
         await handlePageChange(selected + 1);

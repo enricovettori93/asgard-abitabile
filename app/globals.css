@@ -111,3 +111,21 @@
 .swiper-button-next:after, .swiper-button-prev:after {
     @apply text-xl
 }
+
+.fc-event {
+    @apply !cursor-pointer
+}
+
+.fc-today-button {
+    @apply !bg-orange-400 !rounded-2xl !border-0 !text-black
+}
+
+.fc-button-group button.fc-button-primary {
+    @apply !bg-orange-400 !border-0 !ml-1 rounded-xl !text-black
+}
+
+.fc-button-group button.fc-button-primary:hover,
+.fc-button-group button.fc-button-primary:active,
+.fc-button-group button.fc-button-primary:focus {
+    @apply !bg-orange-500 !border-0 !shadow-none
+}

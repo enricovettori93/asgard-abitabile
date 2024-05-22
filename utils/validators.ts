@@ -27,7 +27,7 @@ export const LocationReserveSchema: ZodType<LocationReserveForm> = z.object({
     adultsForNight: z.number().min(1)
 }).refine((data) => new Date(data.startDate) < new Date(data.endDate), {
     message: "End date cannot be earlier than start date.",
-    path: ["to"],
+    path: ["endDate"],
 });
 
 export const SearchLocationSchema: ZodType<LocationSearchForm> = z.object({
@@ -38,7 +38,10 @@ export const SearchLocationSchema: ZodType<LocationSearchForm> = z.object({
     endDate: z.string()
 }).refine((data) => new Date(data.startDate) < new Date(data.endDate), {
     message: "End date cannot be earlier than start date.",
-    path: ["to"],
+    path: ["endDate"],
+}).refine((data) => new Date(data.startDate) > new Date(), {
+    message: "Start date cannot be in the past.",
+    path: ["startDate"],
 });
 
 const passwordPattern = z
