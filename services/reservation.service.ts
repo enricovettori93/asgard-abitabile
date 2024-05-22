@@ -5,9 +5,10 @@ import {ReservationWithLocation, ReservationWithUser} from "@/types/reservation"
 
 interface ReservationServiceInterface {
     createReservation(locationId: Location["id"], payload: LocationReserveForm): Promise<Reservation>
-    getFull(locationId: Location["id"], id: Reservation["id"]): Promise<ReservationWithUser>
+    getWithUser(locationId: Location["id"], id: Reservation["id"]): Promise<ReservationWithUser>
     getAllByUser(userId: User["id"]): Promise<ReservationWithLocation[]>
     delete(id: Reservation["id"]): Promise<void>
+    confirm(id: Reservation["id"]): Promise<Reservation>
 }
 
 class ReservationService implements ReservationServiceInterface {
@@ -18,7 +19,7 @@ class ReservationService implements ReservationServiceInterface {
         })).data as Reservation;
     }
 
-    async getFull(locationId: Location["id"], id: Reservation["id"]): Promise<ReservationWithUser> {
+    async getWithUser(locationId: Location["id"], id: Reservation["id"]): Promise<ReservationWithUser> {
         return (await betterFetch<ReservationWithUser>(`locations/${locationId}/reservations/${id}`)).data as ReservationWithUser;
     }
 
@@ -30,6 +31,12 @@ class ReservationService implements ReservationServiceInterface {
         await betterFetch<void>(`users/me/reservations/${id}`, {
             method: "DELETE"
         });
+    }
+
+    async confirm(id: Reservation["id"]): Promise<Reservation> {
+        return (await betterFetch<Reservation>(`users/me/reservations/${id}/confirm`, {
+            method: "PATCH"
+        })).data as Reservation;
     }
 }
 

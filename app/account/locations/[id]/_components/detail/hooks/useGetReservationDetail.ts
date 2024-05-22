@@ -10,7 +10,7 @@ const useGetReservationDetail = () => {
     const getReservationDetail = async (locationId: Location["id"], reservationId: Reservation["id"]) => {
         try {
             setLoading(true);
-            const data = await ReservationService.getFull(locationId, reservationId);
+            const data = await ReservationService.getWithUser(locationId, reservationId);
             setReservation(data);
         } catch (e) {
             // todo toast

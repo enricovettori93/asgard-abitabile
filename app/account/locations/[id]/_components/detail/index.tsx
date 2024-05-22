@@ -14,12 +14,46 @@ import Modal from "@/components/modal";
 import {UiContext} from "@/context/ui.context";
 import useGetReservationDetail from "@/app/account/locations/[id]/_components/detail/hooks/useGetReservationDetail";
 import ReservationDetail from "@/app/account/locations/[id]/_components/detail/reservation-detail";
+import {ReservationWithUser} from "@/types/reservation";
+import useConfirmReservation from "@/app/account/locations/[id]/_components/detail/hooks/useConfirmReservation";
 const ReservationCalendar = dynamic(() => import("@/app/account/locations/[id]/_components/detail/reservations-calendar"), {ssr: false});
+
+interface modalProps {
+    reservation: ReservationWithUser
+    closeModal: () => void
+    loading: boolean
+    handleConfirmReservation: () => void
+}
+
+const DetailReservationModal = ({reservation, closeModal, handleConfirmReservation, loading}: modalProps) => (
+    <Modal.Container closeModal={closeModal}>
+        <Modal.Title>
+            Dettagli prenotazione
+        </Modal.Title>
+        <Modal.Content>
+            <ReservationDetail reservation={reservation}/>
+        </Modal.Content>
+        <Modal.Actions>
+            {
+                !reservation.confirmed && (
+                    <button
+                        className="button--primary"
+                        onClick={handleConfirmReservation}
+                        disabled={loading}
+                    >
+                        Conferma prenotazione
+                    </button>
+                )
+            }
+        </Modal.Actions>
+    </Modal.Container>
+)
 
 const MyAccountLocationDetail = () => {
     const {id} = useParams<{id: Location["id"]}>();
     const {loading: getLocationLoading, location, getLocationDetail} = useGetLocationDetail();
     const {loading: editLocationLoading, editLocation} = useEditLocation();
+    const {loading: confirmLoading, confirmReservation} = useConfirmReservation();
     const {getReservationDetail, reservation} = useGetReservationDetail();
     const {removeImage} = useRemoveImage();
     const {setModal, removeModal} = useContext(UiContext);
@@ -30,9 +64,21 @@ const MyAccountLocationDetail = () => {
 
     useEffect(() => {
         if (reservation) {
-            setModal(ModalComponent);
+            setModal(
+                <DetailReservationModal
+                    reservation={reservation}
+                    closeModal={removeModal}
+                    handleConfirmReservation={() => handleConfirmReservation(reservation.id)}
+                    loading={confirmLoading}
+                />
+            );
         }
     }, [reservation]);
+
+    const handleConfirmReservation = async (reservation: Reservation["id"]) => {
+        await confirmReservation(reservation);
+        removeModal();
+    }
 
     const handleRemoveImage = async (pictureId: Picture["id"]) => {
         await removeImage(location!.id, pictureId);
@@ -55,17 +101,6 @@ const MyAccountLocationDetail = () => {
     if (!location) {
         return (<p>Location not found</p>);
     }
-
-    const ModalComponent = (
-        <Modal.Container closeModal={removeModal}>
-            <Modal.Title>
-                Dettagli prenotazione
-            </Modal.Title>
-            <Modal.Content>
-                {reservation && <ReservationDetail reservation={reservation}/>}
-            </Modal.Content>
-        </Modal.Container>
-    );
 
     return (
         <>

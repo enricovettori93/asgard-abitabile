@@ -31,6 +31,11 @@ const ReservationDetail = ({reservation}: props) => {
                 <span className="font-semibold">Dall'utente:</span>&nbsp;
                 <span>{reservation.user.name}&nbsp;{reservation.user.surname}</span>
             </div>
+            {
+                reservation.confirmed && (
+                    <p className="font-semibold mt-5">La prenotazione é confermata</p>
+                )
+            }
         </div>
     );
 };

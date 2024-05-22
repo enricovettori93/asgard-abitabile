@@ -11,13 +11,19 @@ interface commonProps {
 
 const ModalTitle = ({children, className = ""}: commonProps) => {
     return (
-        <div className={`${className} modal__title text-xl font-semibold`}>{children}</div>
+        <div className={`modal__title text-xl font-semibold ${className}`}>{children}</div>
     )
 }
 
 const ModalContent = ({children, className = ""}: commonProps) => {
     return (
-        <div className={`${className} modal__content mt-5`}>{children}</div>
+        <div className={`modal__content mt-5 ${className}`}>{children}</div>
+    )
+}
+
+const ModalActions = ({children, className = ""}: commonProps) => {
+    return (
+        <div className={`modal__actions mt-5 flex justify-center gap-5 items-center ${className}`}>{children}</div>
     )
 }
 
@@ -48,5 +54,6 @@ const ModalContainer = ({children, closeModal, className = ""}: modalContainerPr
 export default {
     Container: ModalContainer,
     Title: ModalTitle,
+    Actions: ModalActions,
     Content: ModalContent
 }

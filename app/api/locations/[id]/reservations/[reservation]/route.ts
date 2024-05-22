@@ -19,7 +19,7 @@ export async function GET(request: NextRequest, {params}: params) {
 
     try {
         const location = await LocationRepository.get(locationId);
-        const reservation = await ReservationRepository.getFull(reservationId);
+        const reservation = await ReservationRepository.getWithUser(reservationId);
 
         if (location.userId !== userId && reservation.userId !== userId) {
             throw new NotAllowed();
