@@ -1,7 +1,7 @@
 "use client"
 
 import useGetLocationDetail from "@/app/account/locations/[id]/_components/detail/hooks/useGetLocationDetail";
-import {useContext, useEffect, useRef, useState} from "react";
+import {memo, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {useParams} from "next/navigation";
 import {Location, Picture, Reservation} from "@prisma/client";
 import useRemoveImage from "@/app/account/locations/[id]/_components/detail/hooks/useRemoveImage";
@@ -18,7 +18,7 @@ import DeleteImageModal from "@/app/account/locations/[id]/_components/detail/mo
 import Accordion from "@/components/accordion";
 import Card from "@/components/card";
 import useGetReservations from "@/app/account/locations/[id]/_components/detail/hooks/useGetReservations";
-const ReservationCalendar = dynamic(() => import("@/app/account/locations/[id]/_components/detail/reservations-calendar"), {ssr: false});
+const ReservationCalendar = memo(dynamic(() => import("@/app/account/locations/[id]/_components/detail/reservations-calendar"), {ssr: false}));
 
 const MyAccountLocationDetail = () => {
     const {id} = useParams<{id: Location["id"]}>();
@@ -49,11 +49,11 @@ const MyAccountLocationDetail = () => {
         }
     }, [reservation]);
 
-    const handleChangeDate = async (startDate: Date, endDate: Date) => {
+    const handleChangeDate = useCallback(async (startDate: Date, endDate: Date) => {
         startDateRef.current = startDate;
         endDateRef.current = endDate;
         await getReservations(id,{startDate, endDate});
-    }
+    }, [getReservations]);
 
     const handleConfirmReservation = async (reservation: Reservation["id"]) => {
         await confirmReservation(reservation);
@@ -72,9 +72,9 @@ const MyAccountLocationDetail = () => {
         await getLocationDetail(id);
     }
 
-    const handleReservationClick = async (reservationId: Reservation["id"]) => {
+    const handleReservationClick = useCallback(async (reservationId: Reservation["id"]) => {
         await getReservationDetail(location!.id, reservationId!);
-    }
+    }, [getReservationDetail]);
 
     const handleDeleteImage = async (pictureId: Picture["id"]) => {
         removeModal();

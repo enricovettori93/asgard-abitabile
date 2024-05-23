@@ -54,7 +54,7 @@
         @apply absolute top-5 transition-all
     }
 
-    .field-wrapper input {
+    .field-wrapper input, .field-wrapper textarea {
         @apply border-b-[1px] border-orange-400 outline-none
     }
 
@@ -132,4 +132,12 @@
 
 input[type='file'] {
     color: transparent;
+}
+
+::-webkit-scrollbar {
+    @apply w-[5px]
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-orange-300 rounded
 }

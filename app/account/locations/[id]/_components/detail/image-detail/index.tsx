@@ -10,7 +10,7 @@ interface props {
 
 const ImageDetail = ({image, onRemovePicture, fill = false}: props) => {
     return (
-        <ImageActionsContainer onRemovePicture={() => onRemovePicture(image.id)}>
+        <ImageActionsContainer className="h-full w-full" onRemovePicture={() => onRemovePicture(image.id)}>
             <Image
                 src={`/${image.src}`}
                 {...(fill && {fill: true})}
@@ -19,7 +19,7 @@ const ImageDetail = ({image, onRemovePicture, fill = false}: props) => {
                     height: image.height
                 })}
                 alt={image.alt || ""}
-                className="h-full w-full"
+                className="w-full max-h-full object-contain"
             />
         </ImageActionsContainer>
     )

@@ -2,7 +2,7 @@ import React from 'react';
 import {UseFormRegisterReturn} from "react-hook-form";
 import classNames from "classnames";
 
-interface props extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement> {
+interface props extends React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement> {
     id: string
     name: string
     label?: string

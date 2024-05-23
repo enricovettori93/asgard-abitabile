@@ -6,12 +6,12 @@ import {Reservation} from "@prisma/client";
 import {mapDateToStringForInputs} from "@/utils/functions";
 
 interface props {
-    reservations?: Reservation[]
+    reservations: Reservation[]
     onClickReservation: (id: Reservation["id"]) => void
     onChangeDate: (startDate: Date, endDate: Date) => void
 }
 
-const ReservationCalendar = ({reservations = [], onClickReservation, onChangeDate}: props) => {
+const ReservationCalendar = ({reservations, onClickReservation, onChangeDate}: props) => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-10">
             <FullCalendar

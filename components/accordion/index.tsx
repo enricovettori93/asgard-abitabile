@@ -31,9 +31,9 @@ const Accordion = ({children, className = "", title, isOpen = false}: props) => 
 
     return (
         <div className={containerClasses}>
-            <div className="flex justify-between items-center">
+            <div role="button" onClick={() => setIsOpen(!open)} className="flex justify-between items-center">
                 <span className="text-2xl md:text-3xl">{title}</span>
-                <button onClick={() => setIsOpen(!open)} className={arrowClasses}>
+                <button className={arrowClasses}>
                     <i className="fi fi-rr-angle-small-down"></i>
                 </button>
             </div>
