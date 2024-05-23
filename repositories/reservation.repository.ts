@@ -39,7 +39,11 @@ class ReservationRepository implements RepositoryInterface {
                 id
             },
             include: {
-                user: true
+                user: {
+                    omit: {
+                        password: true
+                    }
+                }
             }
         });
 

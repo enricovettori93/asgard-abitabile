@@ -1,11 +1,11 @@
 import {Prisma, Reservation} from "@prisma/client";
 
 const reservationWithUser = Prisma.validator<Prisma.ReservationDefaultArgs>()({
-    include: { user: true }
+    include: {user: {omit: {password: true}}}
 })
 
 const reservationWithLocation = Prisma.validator<Prisma.ReservationDefaultArgs>()({
-    include: { location: true }
+    include: {location: true}
 })
 
 export type ReservationWithUser = Prisma.ReservationGetPayload<typeof reservationWithUser>

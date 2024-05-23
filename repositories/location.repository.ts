@@ -29,7 +29,11 @@ class LocationRepository implements RepositoryInterface {
             data: payload,
             include: {
                 pictures: true,
-                user: true
+                user: {
+                    omit: {
+                        password: true
+                    }
+                }
             }
         });
     }
@@ -49,7 +53,11 @@ class LocationRepository implements RepositoryInterface {
             },
             include: {
                 pictures: true,
-                user: true,
+                user: {
+                    omit: {
+                        password: true
+                    }
+                }
             }
         });
 
@@ -65,7 +73,11 @@ class LocationRepository implements RepositoryInterface {
             },
             include: {
                 pictures: true,
-                user: true,
+                user: {
+                    omit: {
+                        password: true
+                    }
+                },
                 reservations: true
             }
         });
@@ -158,7 +170,11 @@ class LocationRepository implements RepositoryInterface {
             data: payload,
             include: {
                 pictures: true,
-                user: true,
+                user: {
+                    omit: {
+                        password: true
+                    }
+                }
             }
         });
     }

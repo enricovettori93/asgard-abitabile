@@ -10,11 +10,11 @@ const locationWithPicturesAndReservations = Prisma.validator<Prisma.LocationDefa
 })
 
 const locationWithPicturesAndUser = Prisma.validator<Prisma.LocationDefaultArgs>()({
-    include: { pictures: true, user: true },
+    include: { pictures: true, user: {omit: {password: true}} },
 })
 
 const locationWithPicturesAndUserAndReservations = Prisma.validator<Prisma.LocationDefaultArgs>()({
-    include: { pictures: true, user: true, reservations: true },
+    include: { pictures: true, user: {omit: {password: true}}, reservations: true },
 })
 
 export type LocationWithPictures = Prisma.LocationGetPayload<typeof locationWithPictures>

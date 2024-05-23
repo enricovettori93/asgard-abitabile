@@ -28,24 +28,30 @@ class UserRepository implements RepositoryInterface {
         const user = await prisma.user.findUnique({
             where: {
                 email
+            },
+            omit: {
+                password: true
             }
         });
 
         if (!user) throw new NotFound();
 
-        return UserAdapter.fromUserToSafeUser(user);
+        return user;
     }
 
     async findById(id: User["id"]): Promise<SafeUser | null> {
         const user = await prisma.user.findUnique({
             where: {
                 id
+            },
+            omit: {
+                password: true
             }
         });
 
         if (!user) throw new NotFound();
 
-        return UserAdapter.fromUserToSafeUser(user);
+        return user;
     }
 
     async login(payload: UserSignInForm): Promise<SafeUser> {
@@ -74,14 +80,15 @@ class UserRepository implements RepositoryInterface {
 
         if (!userDB) throw new NotFound();
 
-        const user = await prisma.user.update({
+        return prisma.user.update({
             where: {
                 id
             },
+            omit: {
+                password: true
+            },
             data: {...payload}
         });
-
-        return UserAdapter.fromUserToSafeUser(user);
     }
 
     async updatePassword(id: User["id"], payload: EditUserPasswordForm): Promise<void> {
