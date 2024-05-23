@@ -2,12 +2,13 @@ import {Location, Picture} from "@prisma/client";
 import {
     AddLocationForm,
     EditLocationForm,
-    LocationWithPicturesAndReservations
+    LocationWithPicturesAndReservations, LocationWithPicturesAndUser
 } from "@/types/location";
 import betterFetch from "@/utils/fetch";
+import {mapDateToStringForInputs} from "@/utils/functions";
 
 interface LocationServiceInterface {
-    getDetail(locationId: Location["id"]): Promise<LocationWithPicturesAndReservations>
+    getDetail(locationId: Location["id"], {startDate, endDate}: {startDate: Date, endDate: Date}): Promise<LocationWithPicturesAndUser>
     add(payload: AddLocationForm): Promise<Location>
     update(locationId: Location["id"], payload: EditLocationForm): Promise<Location>
     addPictures(locationId: Location["id"], payload: File[]): Promise<Location>
@@ -33,8 +34,8 @@ class LocationService implements LocationServiceInterface {
         })).data as Location;
     }
 
-    async getDetail(locationId: Location["id"]): Promise<LocationWithPicturesAndReservations> {
-        return (await betterFetch<LocationWithPicturesAndReservations>(`users/me/locations/${locationId}`)).data as LocationWithPicturesAndReservations;
+    async getDetail(locationId: Location["id"]): Promise<LocationWithPicturesAndUser> {
+        return (await betterFetch<LocationWithPicturesAndUser>(`users/me/locations/${locationId}`)).data as LocationWithPicturesAndUser;
     }
 
     async removePicture(locationId: Location["id"], pictureId: Picture["id"]): Promise<void> {

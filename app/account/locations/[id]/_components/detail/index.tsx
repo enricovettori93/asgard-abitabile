@@ -1,7 +1,7 @@
 "use client"
 
 import useGetLocationDetail from "@/app/account/locations/[id]/_components/detail/hooks/useGetLocationDetail";
-import {useContext, useEffect} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {useParams} from "next/navigation";
 import {Location, Picture, Reservation} from "@prisma/client";
 import useRemoveImage from "@/app/account/locations/[id]/_components/detail/hooks/useRemoveImage";
@@ -17,6 +17,7 @@ import DetailReservationModal from "@/app/account/locations/[id]/_components/det
 import DeleteImageModal from "@/app/account/locations/[id]/_components/detail/modals/delete-image";
 import Accordion from "@/components/accordion";
 import Card from "@/components/card";
+import useGetReservations from "@/app/account/locations/[id]/_components/detail/hooks/useGetReservations";
 const ReservationCalendar = dynamic(() => import("@/app/account/locations/[id]/_components/detail/reservations-calendar"), {ssr: false});
 
 const MyAccountLocationDetail = () => {
@@ -26,7 +27,10 @@ const MyAccountLocationDetail = () => {
     const {loading: confirmLoading, confirmReservation} = useConfirmReservation();
     const {getReservationDetail, reservation} = useGetReservationDetail();
     const {loading: removeImageLoading, removeImage} = useRemoveImage();
+    const {reservations, getReservations} = useGetReservations();
     const {setModal, removeModal} = useContext(UiContext);
+    const startDateRef = useRef(new Date());
+    const endDateRef = useRef(new Date());
 
     useEffect(() => {
         getLocationDetail(id);
@@ -45,8 +49,15 @@ const MyAccountLocationDetail = () => {
         }
     }, [reservation]);
 
+    const handleChangeDate = async (startDate: Date, endDate: Date) => {
+        startDateRef.current = startDate;
+        endDateRef.current = endDate;
+        await getReservations(id,{startDate, endDate});
+    }
+
     const handleConfirmReservation = async (reservation: Reservation["id"]) => {
         await confirmReservation(reservation);
+        await getReservations(id,{startDate: startDateRef.current, endDate: endDateRef.current});
         removeModal();
     }
 
@@ -88,7 +99,7 @@ const MyAccountLocationDetail = () => {
         <>
             <div>
                 <h2 className="text-3xl mb-5">Calendario prenotazioni</h2>
-                <ReservationCalendar location={location} onClickReservation={handleReservationClick}/>
+                <ReservationCalendar onChangeDate={handleChangeDate} reservations={reservations} onClickReservation={handleReservationClick}/>
             </div>
             <div className="mt-10 flex flex-col gap-5">
                 <h2 className="text-3xl">Gestisci i dettagli della location</h2>
@@ -99,8 +110,7 @@ const MyAccountLocationDetail = () => {
                 </Card>
                 <Card>
                     <Accordion title="Dati della locations">
-                        <LocationEditForm location={location} onEditLocation={handleUpdateLocation}
-                                          loading={editLocationLoading}/>
+                        <LocationEditForm location={location} onEditLocation={handleUpdateLocation} loading={editLocationLoading}/>
                     </Accordion>
                 </Card>
             </div>

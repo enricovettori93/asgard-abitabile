@@ -2,7 +2,7 @@ import {NextRequest, NextResponse} from "next/server";
 import {getUserIdFromRequest} from "@/utils/session";
 import LocationRepository from "@/repositories/location.repository";
 import {ResponseDTO} from "@/types/common";
-import {LocationWithPicturesAndReservations} from "@/types/location";
+import {LocationWithPicturesAndUser} from "@/types/location";
 import {Location} from "@prisma/client";
 
 interface Params {
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest, {params}: Params) {
     const {id} = params;
 
     try {
-        const data = await LocationRepository.getWithReservations(id);
+        const data = await LocationRepository.get(id);
 
         if (userId !== data.userId) {
             return NextResponse.json({
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest, {params}: Params) {
 
         return NextResponse.json({
             data
-        } satisfies ResponseDTO<LocationWithPicturesAndReservations>);
+        } satisfies ResponseDTO<LocationWithPicturesAndUser>);
     } catch (e: any) {
         return NextResponse.json({
             message: e.message || "Server error"

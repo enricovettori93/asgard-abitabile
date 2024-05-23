@@ -1,10 +1,10 @@
 "use client"
 
 import LocationForm from "@/components/forms/location-form";
-import {EditLocationForm, LocationWithPicturesAndReservations} from "@/types/location";
+import {EditLocationForm, LocationWithPictures} from "@/types/location";
 
 interface props {
-    location: LocationWithPicturesAndReservations
+    location: LocationWithPictures
     loading: boolean
     onEditLocation: (payload: EditLocationForm) => Promise<void>
 }
