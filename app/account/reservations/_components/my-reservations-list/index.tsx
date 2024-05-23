@@ -63,37 +63,33 @@ const MyReservationList = () => {
     return (
         <div className="flex flex-col gap-5">
             {reservations.map((reservation) => (
-                <Card key={reservation.id} className="relative">
-                    <div>
-                        <span className="font-semibold">Data Prenotazione:</span>
+                <Card key={reservation.id} className="relative flex flex-col gap-1">
+                    <div className="flex flex-col sm:flex-row">
+                        <span className="font-semibold">Effettuata il:&nbsp;</span>
                         <span>{mapDateToStringForInputs(new Date(reservation.createdAt))}</span>
                     </div>
-                    <div>
-                        <span className="font-semibold">Da:</span>
-                        <span>{mapDateToStringForInputs(new Date(reservation.startDate))}</span>
+                    <div className="flex flex-col sm:flex-row">
+                        <span className="font-semibold">Periodo:&nbsp;</span>
+                        <span>{mapDateToStringForInputs(new Date(reservation.startDate))}&nbsp;/&nbsp;{mapDateToStringForInputs(new Date(reservation.endDate))}</span>
                     </div>
-                    <div>
-                        <span className="font-semibold">A:</span>
-                        <span>{mapDateToStringForInputs(new Date(reservation.endDate))}</span>
-                    </div>
-                    <div>
-                        <span className="font-semibold">Numero persone:</span>
+                    <div className="flex flex-col sm:flex-row">
+                        <span className="font-semibold">Numero persone:&nbsp;</span>
                         <span>{reservation.adultsForNight}</span>
                     </div>
-                    <div>
-                        <span className="font-semibold">Location:</span>
+                    <div className="flex flex-col sm:flex-row">
+                        <span className="font-semibold">Location:&nbsp;</span>
                         <Link className="with-hover-border text-orange-400 font-semibold" href={`${ROUTES.LOCATIONS}/${reservation.locationId}`}>{reservation.location.title}</Link>
                     </div>
-                    <div>
-                        <span className="font-semibold">Stato della prenotazione:</span>
+                    <div className="flex flex-col sm:flex-row">
+                        <span className="font-semibold">Stato della prenotazione:&nbsp;</span>
                         {
                             reservation.confirmed && (
-                                <span>la prenotazione é stata confermata dall'host, non é piú possibile cancellarla.</span>
+                                <span><span className="underline font-semibold">confermata</span> dall'host, non é piú possibile cancellarla.</span>
                             )
                         }
                         {
                             !reservation.confirmed && (
-                                <span>la prenotazione è in attesa di conferma dall'host, puoi ancora cancellarla.</span>
+                                <span>in attesa di conferma dall'host, puoi ancora cancellarla.</span>
                             )
                         }
                     </div>
