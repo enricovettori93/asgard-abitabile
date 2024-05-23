@@ -39,7 +39,7 @@ const ReservationCalendar = ({reservations = [], onClickReservation, onChangeDat
                                 className="mr-auto with-hover-border flex items-center gap-1 py-1">
                             <i className="fi fi-tr-file-circle-info mt-1"></i>&nbsp;
                             <div>
-                                <span>Da {mapDateToStringForInputs(new Date(reservation.startDate))} A {mapDateToStringForInputs(new Date(reservation.endDate))}</span>
+                                <span>{mapDateToStringForInputs(new Date(reservation.startDate))}&nbsp;/&nbsp;{mapDateToStringForInputs(new Date(reservation.endDate))}</span>
                                 &nbsp;-&nbsp;
                                 <span>{reservation.adultsForNight} {reservation.adultsForNight === 1 ? "persona" : "persone"}</span>
                                 &nbsp;{reservation.confirmed ? (<i className="fi fi-rr-badge-check text-green-400"></i>) : (<i className="fi fi-tr-highlighter text-orange-400"></i>)}
