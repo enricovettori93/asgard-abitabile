@@ -27,7 +27,7 @@ const LocationEditForm = ({location, loading, onEditLocation}: props) => {
     return (
         <>
             <LocationForm onSubmit={handleSubmit} defaultValues={defaultValues}>
-                <button disabled={loading} className="button--primary mx-auto mt-5" type="submit">Modifica</button>
+                <button disabled={loading} className="ml-auto button--primary mt-5" type="submit">Modifica</button>
             </LocationForm>
         </>
     )

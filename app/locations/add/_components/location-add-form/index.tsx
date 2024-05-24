@@ -14,7 +14,7 @@ export default function LocationAddForm() {
     return (
         <>
             <LocationForm onSubmit={handleSubmit}>
-                <button disabled={loading} className="button--primary mx-auto mt-5" type="submit">Inserisci</button>
+                <button disabled={loading} className="button--primary mx-auto ml-auto" type="submit">Inserisci</button>
             </LocationForm>
         </>
     );

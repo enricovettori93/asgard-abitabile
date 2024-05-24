@@ -2,10 +2,9 @@ import {Location, Picture} from "@prisma/client";
 import {
     AddLocationForm,
     EditLocationForm,
-    LocationWithPicturesAndReservations, LocationWithPicturesAndUser
+    LocationWithPicturesAndUser
 } from "@/types/location";
 import betterFetch from "@/utils/fetch";
-import {mapDateToStringForInputs} from "@/utils/functions";
 
 interface LocationServiceInterface {
     getDetail(locationId: Location["id"], {startDate, endDate}: {startDate: Date, endDate: Date}): Promise<LocationWithPicturesAndUser>

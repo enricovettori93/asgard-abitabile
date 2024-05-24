@@ -1,14 +1,20 @@
-import React, {useState} from 'react';
+"use client"
+
+import "quill/dist/quill.core.css";
+import "quill/dist/quill.snow.css";
+import {useState, useRef} from 'react';
 import FieldWrapper from "@/components/inputs/field-wrapper";
 import {DeepPartial, FieldError, SubmitHandler, useForm} from "react-hook-form";
 import Input from "@/components/inputs/input";
-import TextArea from "@/components/inputs/textarea";
 import {ACCEPTED_IMAGE_TYPES} from "@/utils/constants";
 import classNames from "classnames";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {LocationSchema} from "@/utils/validators";
 import LocationFormImagesPreview from "@/components/forms/location-form/images-preview";
 import {AddLocationForm, EditLocationForm} from "@/types/location";
+import Editor from "@/components/editor";
+import Quill from "quill";
+const Delta = Quill.import('delta');
 
 interface props {
     onSubmit: (payload: AddLocationForm | EditLocationForm) => Promise<void>
@@ -19,6 +25,7 @@ interface props {
 
 const LocationForm = ({children, className = "", defaultValues = {}, onSubmit}: props) => {
     const [images, setImages] = useState<File[]>([]);
+    const quillRef = useRef<Quill>(null);
 
     const {
         register,
@@ -39,12 +46,11 @@ const LocationForm = ({children, className = "", defaultValues = {}, onSubmit}: 
     }
 
     const handleChangeFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // @ts-ignore
-        setImages(Array.from(e.target.files));
+        e.target.files && setImages(Array.from(e.target.files));
     }
 
     const submit: SubmitHandler<AddLocationForm | EditLocationForm> = async ({pictures, ...payload}) => {
-        await onSubmit({...payload, pictures: images});
+        await onSubmit({...payload, pictures: images, description: JSON.stringify(quillRef.current?.editor.delta)});
     }
 
     return (
@@ -87,10 +93,10 @@ const LocationForm = ({children, className = "", defaultValues = {}, onSubmit}: 
                     />
                 </FieldWrapper>
             </div>
-            <div className="flex gap-5">
+            <div>
                 <FieldWrapper className="w-full" error={errors.description}>
-                    <TextArea id="description" name="description" label="Descrizione" rows={10}
-                              register={{...register("description")}} touched={touchedFields["description"]}/>
+                    <label className="!relative mb-2 !top-0">Descrizione</label>
+                    <Editor ref={quillRef} defaultValue={new Delta(JSON.parse(`${defaultValues.description || "[]"}`))}/>
                 </FieldWrapper>
             </div>
             <div className="flex gap-5">

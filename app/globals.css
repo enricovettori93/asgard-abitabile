@@ -141,3 +141,19 @@ input[type='file'] {
 ::-webkit-scrollbar-thumb {
     @apply bg-orange-300 rounded
 }
+
+.ql-editor {
+    @apply min-h-[15rem]
+}
+
+.location__description ul, .location__description ol {
+    @apply !pl-5
+}
+
+.location__description ul li {
+    @apply !list-disc
+}
+
+.location__description ol li {
+    @apply !list-decimal
+}
