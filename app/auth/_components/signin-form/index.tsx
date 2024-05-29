@@ -9,15 +9,16 @@ import useSignIn from "@/app/auth/_components/signin-form/hooks/useSignIn";
 import Input from "@/components/inputs/input";
 
 export default function SignInForm() {
+    const {loading, signIn, errors: apiErrors} = useSignIn();
+
     const {
         handleSubmit,
         register,
         formState: {errors, touchedFields}
     } = useForm<UserSignInForm>({
-        resolver: zodResolver(SignInSchema)
+        resolver: zodResolver(SignInSchema),
+        errors: apiErrors
     });
-
-    const {loading, signIn} = useSignIn();
 
     const onSubmit: SubmitHandler<UserSignInForm> = async (payload) => {
         await signIn(payload);

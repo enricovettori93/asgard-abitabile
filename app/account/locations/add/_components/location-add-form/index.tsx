@@ -5,7 +5,7 @@ import useAddLocation from "@/app/account/locations/add/_components/location-add
 import LocationForm from "@/components/forms/location-form";
 
 export default function LocationAddForm() {
-    const {addLocation, loading} = useAddLocation();
+    const {addLocation, loading, errors} = useAddLocation();
 
     const handleSubmit = async (payload: AddLocationForm) => {
         await addLocation(payload);
@@ -13,7 +13,7 @@ export default function LocationAddForm() {
 
     return (
         <>
-            <LocationForm onSubmit={handleSubmit}>
+            <LocationForm onSubmit={handleSubmit} errors={errors}>
                 <button disabled={loading} className="button--primary mx-auto ml-auto" type="submit">Inserisci</button>
             </LocationForm>
         </>

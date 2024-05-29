@@ -13,15 +13,15 @@ interface props {
 }
 
 export default function SignupForm({handleSignUpFlow}: props) {
+    const {signUp, loading, errors: apiErrors} = useSignUp();
     const {
         register,
         handleSubmit,
         formState: {errors, touchedFields}
     } = useForm<AddUserForm & {confirmPassword: string}>({
-        resolver: zodResolver(SignupSchema)
+        resolver: zodResolver(SignupSchema),
+        errors: apiErrors
     });
-
-    const {signUp, loading} = useSignUp();
 
     const onSubmit: SubmitHandler<AddUserForm & {confirmPassword: string}> = async (payload) => {
         await signUp(payload);

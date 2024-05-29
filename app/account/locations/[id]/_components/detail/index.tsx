@@ -23,7 +23,7 @@ const ReservationCalendar = memo(dynamic(() => import("@/app/account/locations/[
 const MyAccountLocationDetail = () => {
     const {id} = useParams<{id: Location["id"]}>();
     const {loading: getLocationLoading, location, getLocationDetail} = useGetLocationDetail();
-    const {loading: editLocationLoading, editLocation} = useEditLocation();
+    const {loading: editLocationLoading, editLocation, errors} = useEditLocation();
     const {loading: confirmLoading, confirmReservation} = useConfirmReservation();
     const {getReservationDetail, reservation} = useGetReservationDetail();
     const {loading: removeImageLoading, removeImage} = useRemoveImage();
@@ -110,7 +110,7 @@ const MyAccountLocationDetail = () => {
                 </Card>
                 <Card>
                     <Accordion title="Dati della locations">
-                        <LocationEditForm location={location} onEditLocation={handleUpdateLocation} loading={editLocationLoading}/>
+                        <LocationEditForm location={location} onEditLocation={handleUpdateLocation} loading={editLocationLoading} errors={errors}/>
                     </Accordion>
                 </Card>
             </div>

@@ -2,14 +2,16 @@
 
 import LocationForm from "@/components/forms/location-form";
 import {EditLocationForm, LocationWithPictures} from "@/types/location";
+import {ValidationErrors} from "@/types/common";
 
 interface props {
     location: LocationWithPictures
     loading: boolean
+    errors: ValidationErrors
     onEditLocation: (payload: EditLocationForm) => Promise<void>
 }
 
-const LocationEditForm = ({location, loading, onEditLocation}: props) => {
+const LocationEditForm = ({location, loading, onEditLocation, errors}: props) => {
     const defaultValues = {
         title: location.title,
         description: location.description,
@@ -26,7 +28,7 @@ const LocationEditForm = ({location, loading, onEditLocation}: props) => {
 
     return (
         <>
-            <LocationForm onSubmit={handleSubmit} defaultValues={defaultValues}>
+            <LocationForm onSubmit={handleSubmit} defaultValues={defaultValues} errors={errors}>
                 <button disabled={loading} className="ml-auto button--primary mt-5" type="submit">Modifica</button>
             </LocationForm>
         </>

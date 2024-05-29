@@ -50,6 +50,7 @@ export async function PATCH(request: Request, {params}: Params) {
 
     if (!validationResult.success) {
         return NextResponse.json({
+            message: "Dati del form non validi",
             errors: transformValidationErrors(validationResult)
         } satisfies ResponseDTO<never>, {
             status: 406

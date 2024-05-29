@@ -2,9 +2,13 @@ import LocationService from "@/services/location.service";
 import {EditLocationForm} from "@/types/location";
 import {useState} from "react";
 import {Location} from "@prisma/client";
+import {ValidationErrors} from "@/types/common";
+import toast from "react-hot-toast";
 
 const useEditLocation = () => {
     const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState<ValidationErrors>({});
+
     const editLocation = async (locationId: Location["id"], payload: EditLocationForm) => {
         try {
             setLoading(true);
@@ -13,8 +17,9 @@ const useEditLocation = () => {
             if (pictures?.length > 0) {
                 await LocationService.addPictures(id, pictures);
             }
-        } catch (error) {
-            // todo: toast
+        } catch (e: any) {
+            setErrors(e.cause);
+            toast.error(e.message || "Impossibile aggiornare la location");
         } finally {
             setLoading(false);
         }
@@ -22,6 +27,7 @@ const useEditLocation = () => {
 
     return {
         loading,
+        errors,
         editLocation
     };
 }

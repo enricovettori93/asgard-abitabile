@@ -10,5 +10,7 @@ export interface PaginationParams {
 export interface ResponseDTO<T> {
     data?: T
     message?: string
-    errors?: {[p: string]: string}
+    errors?: ValidationErrors
 }
+
+export type ValidationErrors = Record<string, { message: string, type: string }>

@@ -14,16 +14,18 @@ import LocationFormImagesPreview from "@/components/forms/location-form/images-p
 import {AddLocationForm, EditLocationForm} from "@/types/location";
 import Editor from "@/components/editor";
 import Quill from "quill";
+import {ValidationErrors} from "@/types/common";
 const Delta = Quill.import('delta');
 
 interface props {
     onSubmit: (payload: AddLocationForm | EditLocationForm) => Promise<void>
     children: React.ReactNode
+    errors: ValidationErrors
     className?: string
     defaultValues?: DeepPartial<EditLocationForm>
 }
 
-const LocationForm = ({children, className = "", defaultValues = {}, onSubmit}: props) => {
+const LocationForm = ({children, className = "", defaultValues = {}, onSubmit, errors: propsErrors}: props) => {
     const [images, setImages] = useState<File[]>([]);
     const quillRef = useRef<Quill>(null);
 
@@ -33,7 +35,8 @@ const LocationForm = ({children, className = "", defaultValues = {}, onSubmit}: 
         formState: {errors, touchedFields}
     } = useForm<AddLocationForm | EditLocationForm>({
         resolver: zodResolver(LocationSchema),
-        defaultValues: defaultValues,
+        errors: propsErrors,
+        ...(defaultValues && {defaultValues})
     });
 
     const formClasses = classNames({
@@ -94,9 +97,9 @@ const LocationForm = ({children, className = "", defaultValues = {}, onSubmit}: 
                 </FieldWrapper>
             </div>
             <div>
-                <FieldWrapper className="w-full" error={errors.description}>
+                <FieldWrapper className="w-full mt-5" error={errors.description as FieldError}>
                     <label className="!relative mb-2 !top-0">Descrizione</label>
-                    <Editor ref={quillRef} defaultValue={new Delta(JSON.parse(`${defaultValues.description || "[]"}`))}/>
+                    <Editor ref={quillRef} defaultValue={new Delta(defaultValues.description || [])}/>
                 </FieldWrapper>
             </div>
             <div className="flex gap-5">

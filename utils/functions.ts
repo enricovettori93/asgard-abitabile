@@ -1,9 +1,16 @@
 import {SafeParseReturnType} from "zod";
+import {ValidationErrors} from "@/types/common";
 
-export function transformValidationErrors(validationResult: SafeParseReturnType<any, any>) {
-    return Object.fromEntries(
-        validationResult.error?.issues?.map((issue) => [issue.path[0], issue.message]) || []
-    );
+export function transformValidationErrors(validationResult: SafeParseReturnType<any, any>): ValidationErrors {
+    return validationResult.error?.issues.reduce((acc, issue) => {
+        return {
+            ...acc,
+            [issue.path[0]]: {
+                message: issue.message,
+                type: issue.code
+            }
+        }
+    }, {}) || {};
 }
 
 export function mapDateToStringForInputs(date: Date) {

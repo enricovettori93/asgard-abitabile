@@ -21,6 +21,8 @@ interface props {
 const LocationReserveForm = ({location, className = "", disabled}: props) => {
     const params = useSearchParams();
 
+    const {loading, createReservation, errors: apiErrors} = useCreateReservation();
+
     const {
         register,
         handleSubmit,
@@ -32,14 +34,13 @@ const LocationReserveForm = ({location, className = "", disabled}: props) => {
         defaultValues: {
             ...(!!params.get("startDate") && {startDate: (mapDateToStringForInputs(new Date(params.get("startDate") as string)) as unknown as Date)}),
             ...(!!params.get("endDate") && {endDate: (mapDateToStringForInputs(new Date(params.get("endDate") as string)) as unknown as Date)}),
-        }
+        },
+        errors: apiErrors
     });
 
     const startDate = watch().startDate;
     const endDate = watch().endDate;
     const persons = watch().adultsForNight;
-
-    const {loading, createReservation} = useCreateReservation();
 
     const onSubmit: SubmitHandler<LocationReserveForm> = async (payload) => {
         await createReservation(location.id, payload);

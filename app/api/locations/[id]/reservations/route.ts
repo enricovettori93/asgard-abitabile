@@ -29,6 +29,7 @@ export async function POST(request: NextRequest, {params}: Params) {
 
     if (!validationResult.success) {
         return NextResponse.json({
+            message: "Dati del form non validi",
             errors: transformValidationErrors(validationResult)
         } satisfies ResponseDTO<never>, {
             status: 406

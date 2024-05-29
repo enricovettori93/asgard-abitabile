@@ -4,12 +4,14 @@ import userService from "@/services/user.service";
 import {UserContext} from "@/context/user.context";
 import {useRouter, useSearchParams} from "next/navigation";
 import toast from "react-hot-toast";
+import {ValidationErrors} from "@/types/common";
 
 const useSignIn = () => {
     const {login} = useContext(UserContext);
     const queryParams = useSearchParams();
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState<ValidationErrors>({});
 
     const parseUrlWithQueryParams = () => {
         const params = queryParams.get("returnUrl")!;
@@ -29,6 +31,7 @@ const useSignIn = () => {
                 router.push("/");
             }
         } catch (e: any) {
+            setErrors(e.cause);
             toast.error(e.message || "Errore durante l'autenticazione");
         } finally {
             setLoading(false);
@@ -37,6 +40,7 @@ const useSignIn = () => {
 
     return {
         loading,
+        errors,
         signIn
     }
 }

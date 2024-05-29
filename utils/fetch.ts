@@ -19,7 +19,7 @@ const betterFetch = async <T>(endpoint: string | Request | URL, options: Request
     } = (await res.json()) as ResponseDTO<T>;
 
     if (!res.ok) {
-        throw new Error(message || "Server error");
+        throw new Error(message || "Server error", {cause: errors});
     }
 
     const count = res.headers.get(CUSTOM_HEADERS.X_TOTAL_COUNT);

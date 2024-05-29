@@ -26,7 +26,10 @@ interface RepositoryInterface {
 class LocationRepository implements RepositoryInterface {
     async add(payload: AddLocation): Promise<LocationWithPicturesAndUser> {
         return prisma.location.create({
-            data: payload,
+            data: {
+                ...payload,
+                description: JSON.parse(payload.description as string)
+            },
             include: {
                 pictures: true,
                 user: {
@@ -167,7 +170,10 @@ class LocationRepository implements RepositoryInterface {
             where: {
                 id: id
             },
-            data: payload,
+            data: {
+                ...payload,
+                description: JSON.parse(payload.description as string)
+            },
             include: {
                 pictures: true,
                 user: {
