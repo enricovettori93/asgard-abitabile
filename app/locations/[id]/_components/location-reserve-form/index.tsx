@@ -10,17 +10,21 @@ import FieldWrapper from "@/components/inputs/field-wrapper";
 import Input from "@/components/inputs/input";
 import {useSearchParams} from "next/navigation";
 import {mapDateToStringForInputs} from "@/utils/functions";
+import classNames from "classnames";
 
 interface props {
     location: Location
+    disabled: boolean
+    className?: string
 }
 
-const LocationReserveForm = ({location}: props) => {
+const LocationReserveForm = ({location, className = "", disabled}: props) => {
     const params = useSearchParams();
 
     const {
         register,
         handleSubmit,
+        watch,
         formState: {errors, touchedFields}
     } = useForm<LocationReserveForm>({
         resolver: zodResolver(LocationReserveSchema),
@@ -31,14 +35,29 @@ const LocationReserveForm = ({location}: props) => {
         }
     });
 
+    const startDate = watch().startDate;
+    const endDate = watch().endDate;
+    const persons = watch().adultsForNight;
+
     const {loading, createReservation} = useCreateReservation();
 
     const onSubmit: SubmitHandler<LocationReserveForm> = async (payload) => {
         await createReservation(location.id, payload);
     }
 
+    const formClasses = classNames({
+        "flex flex-col": true,
+        [className]: true
+    });
+
+    const numberOfNight = (new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24);
+
+    const calculateTotal = () => {
+        return ((numberOfNight * location.priceForNight) * persons).toFixed(2);
+    }
+
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+        <form onSubmit={handleSubmit(onSubmit)} className={formClasses}>
             <FieldWrapper error={errors.startDate}>
                 <Input id="startDate" name="startDate" label="Da" type="date" register={{...register("startDate", {valueAsDate: true})}} touched={touchedFields["startDate"]}/>
             </FieldWrapper>
@@ -57,7 +76,24 @@ const LocationReserveForm = ({location}: props) => {
                     touched={touchedFields["adultsForNight"]}
                 />
             </FieldWrapper>
-            <button type="submit" className="button--primary" disabled={loading}>Reserve</button>
+            <div className="flex flex-col gap-2">
+                <span>Costo a persona a notte: {location.priceForNight.toFixed(2)}€</span>
+            </div>
+            {
+                numberOfNight > 0 && (
+                    <div>
+                        <span>Numero notti: {numberOfNight}</span>
+                    </div>
+                )
+            }
+            {
+                (!!startDate && !!endDate && persons > 0) && (
+                    <div className="font-semibold mt-3">
+                        <span>Totale: {calculateTotal()}€</span>
+                    </div>
+                )
+            }
+            <button type="submit" className="button--primary mt-5" disabled={loading || disabled}>Reserve</button>
         </form>
     );
 };
