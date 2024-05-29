@@ -50,15 +50,12 @@ const MyLocationsList = () => {
 
     if (loading) return (<p>Loading...</p>);
 
-    if (locations.length === 0) return (
-        <div className="flex">
-            <p>Nessuna locations trovata,&nbsp;</p>
-            <Link className="underline text-orange-400 font-bold" href={ROUTES.ADD_LOCATION}>aggiungine una!</Link>
-        </div>
-    );
-
     return (
         <div className="flex flex-col gap-5">
+            {locations.length === 0 && <p>Nessuna location trovata</p>}
+            <Link className="ml-auto with-hover-border flex gap-2 items-center" href={ROUTES.ADD_LOCATION}>
+                <i className="fi fi-tr-house-chimney-heart mt-1"></i>Aggiungi una location
+            </Link>
             {locations.map(l => <Location key={l.id} location={l}/>)}
         </div>
     )

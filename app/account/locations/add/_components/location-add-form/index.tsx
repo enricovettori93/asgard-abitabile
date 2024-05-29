@@ -1,7 +1,7 @@
 "use client"
 
 import {AddLocationForm} from "@/types/location";
-import useAddLocation from "@/app/locations/add/_components/location-add-form/hooks/useAddLocation";
+import useAddLocation from "@/app/account/locations/add/_components/location-add-form/hooks/useAddLocation";
 import LocationForm from "@/components/forms/location-form";
 
 export default function LocationAddForm() {
