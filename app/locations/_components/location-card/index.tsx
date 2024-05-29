@@ -40,7 +40,7 @@ export default function CardLocation({ location }: Props) {
                 }
             </Swiper>
             <div className="basis-3/12 flex flex-col gap-1">
-                <span className="font-bold">{location.title}</span>
+                <span className="font-bold">{location.title}</span>#
                 {!location.isAvailable && (
                     <span className="text-red-500 font-semibold text-sm">Non disponibile per le date selezionate</span>
                 )}

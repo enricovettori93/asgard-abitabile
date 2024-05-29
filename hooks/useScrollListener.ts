@@ -1,25 +1,33 @@
 import {useEffect, useRef, useState} from "react";
 
 const useScrollListener = () => {
-    const lastScrollTop = useRef(0);
+    const lastScrollPosition = useRef(0);
     const [direction, setDirection] = useState<"up" | "down" | null>(null);
+    const [isOnTop, setIsOnTop] = useState(typeof window !== "undefined" && window.scrollY === 0);
+    const [scrollFromTop, setScrollFromTop] = useState(0);
 
     useEffect(() => {
         const handleScroll = () => {
-            const currentPosition = window.scrollY;
-            setDirection(lastScrollTop.current - currentPosition < 0 ? "down" : "up");
-            lastScrollTop.current = currentPosition;
+            if (typeof window !== "undefined") {
+                const currentPosition = window.scrollY;
+                setDirection(lastScrollPosition.current - currentPosition < 0 ? "down" : "up");
+                setIsOnTop(currentPosition === 0);
+                setScrollFromTop(currentPosition);
+                lastScrollPosition.current = currentPosition;
+            }
         }
 
-        typeof document !== "undefined" && document.addEventListener("scrollend", handleScroll);
+        typeof document !== "undefined" && document.addEventListener("scroll", handleScroll);
 
         return(() => {
-            typeof document !== "undefined" && document.removeEventListener("scrollend", handleScroll);
+            typeof document !== "undefined" && document.removeEventListener("scroll", handleScroll);
         });
     }, []);
 
     return {
-        direction
+        direction,
+        scrollFromTop,
+        isOnTop
     }
 }
 

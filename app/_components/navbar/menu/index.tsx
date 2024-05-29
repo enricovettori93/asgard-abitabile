@@ -79,27 +79,27 @@ const Menu = () => {
                     isLogged ? (
                         <ul className="flex flex-col gap-3">
                             <MenuItem iconName="fi fi-tr-house-chimney-heart">
-                                <Link href={ROUTES.ADD_LOCATION}>Aggiungi una location</Link>
+                                <Link className="with-hover-border" href={ROUTES.ADD_LOCATION}>Aggiungi una location</Link>
                             </MenuItem>
                             <LineSeparator/>
                             <MenuItem iconName="fi fi-ts-user-pen">
-                                <Link href={ROUTES.MY_ACCOUNT}>Il mio account</Link>
+                                <Link className="with-hover-border" href={ROUTES.MY_ACCOUNT}>Il mio account</Link>
                             </MenuItem>
                             <MenuItem iconName="fi fi-ts-house-chimney">
-                                <Link href={ROUTES.MY_LOCATIONS}>Le mie locations</Link>
+                                <Link className="with-hover-border" href={ROUTES.MY_LOCATIONS}>Le mie locations</Link>
                             </MenuItem>
                             <MenuItem iconName="fi fi-tr-calendar-check">
-                                <Link href={ROUTES.MY_RESERVATIONS}>Le mie prenotazioni</Link>
+                                <Link className="with-hover-border" href={ROUTES.MY_RESERVATIONS}>Le mie prenotazioni</Link>
                             </MenuItem>
                             <LineSeparator/>
                             <MenuItem iconName="fi fi-ts-sign-out-alt">
-                                <Link href={ROUTES.AUTH} onClick={handleLogout}>Logout</Link>
+                                <Link className="with-hover-border" href={ROUTES.AUTH} onClick={handleLogout}>Logout</Link>
                             </MenuItem>
                         </ul>
                     ) : (
                         <ul>
                             <MenuItem iconName="fi fi-tr-sign-in-alt">
-                                <Link href={ROUTES.AUTH}>Registrati / Login</Link>
+                                <Link className="with-hover-border" href={ROUTES.AUTH}>Registrati / Login</Link>
                             </MenuItem>
                         </ul>
                     )

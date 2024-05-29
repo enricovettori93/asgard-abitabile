@@ -3,11 +3,11 @@
 import Link from "next/link";
 import Menu, {MenuItem} from "@/app/_components/navbar/menu";
 import classNames from "classnames";
-import useScrollTop from "@/hooks/useScrollTop";
 import {ROUTES} from "@/utils/constants";
+import useScrollListener from "@/hooks/useScrollListener";
 
 export default function NavBar() {
-    const {isOnTop} = useScrollTop();
+    const {isOnTop} = useScrollListener();
 
     const navClasses = classNames({
         "flex justify-center transition-all relative": true,
@@ -20,9 +20,9 @@ export default function NavBar() {
     });
 
     return (
-        <header className="sticky top-0 z-20 bg-white border-b-2 p-3 rounded-b-3xl">
+        <header className="fixed left-0 right-0 top-0 z-20 bg-white border-b-2 p-3 rounded-b-3xl">
             <div className="flex justify-between">
-                <h1 className="text-2xl font-semibold">
+                <h1 className="text-2xl font-semibold hover:text-orange-400 transition-all">
                     <Link href={ROUTES.HOME}>
                         <i className="fi fi-ts-rocket-lunch text-4xl"></i>
                     </Link>
