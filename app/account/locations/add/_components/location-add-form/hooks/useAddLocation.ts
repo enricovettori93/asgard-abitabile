@@ -19,6 +19,7 @@ const useAddLocation = () => {
                 await LocationService.addPictures(id, pictures);
             }
             router.push(`/locations/${id}`);
+            toast.success("Location aggiunta con successo");
         } catch (e: any) {
             setErrors(e.cause);
             toast.error(e.message || "Impossibile aggiungere la location");

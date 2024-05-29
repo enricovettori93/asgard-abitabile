@@ -3,6 +3,7 @@
 import {useState} from "react";
 import ReservationService from "@/services/reservation.service";
 import {ReservationWithLocation} from "@/types/reservation";
+import toast from "react-hot-toast";
 
 const useMyReservations = () => {
     const [loading, setLoading] = useState(false);
@@ -13,8 +14,8 @@ const useMyReservations = () => {
             setLoading(true);
             const data = [] = await ReservationService.getAllByUser();
             setReservations(data);
-        } catch (e) {
-            // todo: toast
+        } catch (e: any) {
+            toast.error(e.message || "Impossibile caricare le prenotazioni");
         } finally {
             setLoading(false);
         }

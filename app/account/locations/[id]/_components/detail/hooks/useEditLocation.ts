@@ -17,6 +17,7 @@ const useEditLocation = () => {
             if (pictures?.length > 0) {
                 await LocationService.addPictures(id, pictures);
             }
+            toast.success("Location aggiornata con successo");
         } catch (e: any) {
             setErrors(e.cause);
             toast.error(e.message || "Impossibile aggiornare la location");

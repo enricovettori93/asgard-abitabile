@@ -4,6 +4,7 @@ import {SafeUser} from "@/types/user";
 import React, {createContext, useEffect, useMemo, useState} from "react";
 import UserService from "@/services/user.service";
 import {getCookie} from "@/utils/cookie";
+import toast from "react-hot-toast";
 
 interface UserContextInterface {
     user: SafeUser | null
@@ -46,8 +47,8 @@ export default function UserContextProvider({children}: UserContextProps) {
             setLoading(true);
             const user = await UserService.me();
             setUser(user);
-        } catch (e) {
-            // todo: toast
+        } catch (e: any) {
+            toast.error(e.message || "Errore durante il recupero del profilo");
         } finally {
             setReady(true);
             setLoading(false);

@@ -1,6 +1,7 @@
 import betterFetch from "@/utils/fetch";
 import {LocationWithPictures} from "@/types/location";
 import {useState} from "react";
+import toast from "react-hot-toast";
 
 const useMyLocations = () => {
     const [loading, setLoading] = useState(false);
@@ -11,8 +12,8 @@ const useMyLocations = () => {
             setLoading(true);
             const {data = []} = await betterFetch<LocationWithPictures[]>("users/me/locations");
             setLocations(data);
-        } catch (e) {
-            // todo: toast
+        } catch (e: any) {
+            toast.error(e.message || "Impossibile caricare le location");
         } finally {
             setLoading(false);
         }
