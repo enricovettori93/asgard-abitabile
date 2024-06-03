@@ -10,9 +10,10 @@ import Input from "@/components/inputs/input";
 
 interface props {
     handleSignUpFlow: Function
+    onToggle: Function
 }
 
-export default function SignupForm({handleSignUpFlow}: props) {
+export default function SignupForm({handleSignUpFlow, onToggle}: props) {
     const {signUp, loading, errors: apiErrors} = useSignUp();
     const {
         register,
@@ -30,31 +31,39 @@ export default function SignupForm({handleSignUpFlow}: props) {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-            <div className="flex gap-5">
+            <h2 className="text-2xl font-bold mb-5">Registra il tuo account</h2>
+            <div className="flex flex-col flex-wrap md:flex-row gap-0 md:gap-5">
                 <FieldWrapper error={errors.email}>
-                    <Input id="email" name="email" label="Indirizzo email" type="email" register={{...register("email")}} touched={touchedFields["email"]}/>
+                    <Input id="email" name="email" label="Indirizzo email" type="email"
+                           register={{...register("email")}} touched={touchedFields["email"]}/>
                 </FieldWrapper>
                 <FieldWrapper error={errors.profile}>
-                    <Input id="profile" name="profile" label="Username" type="text" register={{...register("profile")}} touched={touchedFields["profile"]}/>
+                    <Input id="profile" name="profile" label="Username" type="text" register={{...register("profile")}}
+                           touched={touchedFields["profile"]}/>
                 </FieldWrapper>
-            </div>
-            <div className="flex gap-5">
                 <FieldWrapper error={errors.name}>
-                    <Input id="name" name="name" label="Nome" type="text" register={{...register("name")}} touched={touchedFields["name"]}/>
+                    <Input id="name" name="name" label="Nome" type="text" register={{...register("name")}}
+                           touched={touchedFields["name"]}/>
                 </FieldWrapper>
                 <FieldWrapper error={errors.surname}>
-                    <Input id="surname" name="surname" label="Cognome" type="text" register={{...register("surname")}} touched={touchedFields["surname"]}/>
+                    <Input id="surname" name="surname" label="Cognome" type="text" register={{...register("surname")}}
+                           touched={touchedFields["surname"]}/>
                 </FieldWrapper>
-            </div>
-            <div className="flex gap-5">
                 <FieldWrapper error={errors.password}>
-                    <Input id="password" name="password" label="Password" type="text" register={{...register("password")}} touched={touchedFields["password"]}/>
+                    <Input id="password" name="password" label="Password" type="text"
+                           register={{...register("password")}} touched={touchedFields["password"]}/>
                 </FieldWrapper>
                 <FieldWrapper error={errors.confirmPassword}>
-                    <Input id="confirmPassword" name="confirmPassword" label="Conferma la password" type="text" register={{...register("confirmPassword")}} touched={touchedFields["confirmPassword"]}/>
+                    <Input id="confirmPassword" name="confirmPassword" label="Conferma la password" type="text"
+                           register={{...register("confirmPassword")}} touched={touchedFields["confirmPassword"]}/>
                 </FieldWrapper>
             </div>
-            <button type="submit" className="button--primary" disabled={loading}>Sign up</button>
+            <div className="flex ml-auto mt-5 gap-5">
+                <button type="button" onClick={() => onToggle()} className="button--info">
+                    Utente giá registrato?
+                </button>
+                <button type="submit" className="button--primary" disabled={loading}>Sign up</button>
+            </div>
         </form>
     )
 }

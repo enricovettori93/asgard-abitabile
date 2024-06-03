@@ -29,7 +29,7 @@ export default function RootLayout({
           <UserContext>
               <NavBar/>
               <Toaster position="top-right"/>
-              <main className="flex min-h-screen mb-[15rem] mt-[8rem] px-2 md:px-10 flex-col items-center justify-between bg-white z-10 relative">
+              <main className="flex min-h-screen mb-[15rem] mt-[8rem] px-2 md:px-10 flex-col items-center justify-between bg-white z-10 relative overflow-x-hidden">
                   {children}
               </main>
               <Footer/>

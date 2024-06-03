@@ -8,7 +8,7 @@ import {SignInSchema} from "@/utils/validators";
 import useSignIn from "@/app/auth/_components/signin-form/hooks/useSignIn";
 import Input from "@/components/inputs/input";
 
-export default function SignInForm() {
+export default function SignInForm({onToggle}: {onToggle: Function}) {
     const {loading, signIn, errors: apiErrors} = useSignIn();
 
     const {
@@ -26,17 +26,23 @@ export default function SignInForm() {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-            <div className="flex gap-5">
+            <h2 className="text-2xl font-bold mb-5">Accedi con il tuo account</h2>
+            <div className="flex flex-col md:flex-row gap-5">
                 <FieldWrapper error={errors.email}>
-                    <Input id="email" name="email" label="Email" type="email" register={{...register("email")}} touched={touchedFields["email"]}/>
+                    <Input id="email" name="email" label="Email" type="email" register={{...register("email")}}
+                           touched={touchedFields["email"]}/>
                 </FieldWrapper>
-            </div>
-            <div className="flex gap-5">
                 <FieldWrapper error={errors.password}>
-                    <Input id="password" name="password" label="Password" type="password" register={{...register("password")}} touched={touchedFields["password"]}/>
+                    <Input id="password" name="password" label="Password" type="password"
+                           register={{...register("password")}} touched={touchedFields["password"]}/>
                 </FieldWrapper>
             </div>
-            <button type="submit" className="button--primary" disabled={loading}>Login</button>
+            <div className="flex ml-auto mt-5 gap-5">
+                <button type="button" onClick={() => onToggle()} className="button--info">
+                    Utente da registrare?
+                </button>
+                <button type="submit" className="button--primary" disabled={loading}>Login</button>
+            </div>
         </form>
     )
 }

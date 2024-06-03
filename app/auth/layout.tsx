@@ -4,6 +4,6 @@ export default function AuthLayout({children}: {
     children: React.ReactNode
 }) {
     return (
-        <section className="w-full p-5">{children}</section>
+        <section className="w-full md:w-[60%] relative md:mt-10">{children}</section>
     )
 }

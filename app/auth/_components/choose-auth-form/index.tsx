@@ -3,6 +3,8 @@
 import {useState} from "react";
 import SignupForm from "@/app/auth/_components/signup-form";
 import SignInForm from "@/app/auth/_components/signin-form";
+import classNames from "classnames";
+import Card from "@/components/card";
 
 const ChooseAuthForm = () => {
     const [formType, setFormType] = useState<"signup" | "signin">("signin");
@@ -11,12 +13,29 @@ const ChooseAuthForm = () => {
         setFormType(prev => prev === "signup" ? "signin" : "signup");
     }
 
+    const commonStyle = "w-full absolute transition-all duration-500";
+
+    const signUpCardStyle = classNames({
+        [commonStyle]: true,
+        "scale-50 opacity-0 invisible": formType === "signin",
+        "scale-100 opacity-100 visible": formType !== "signin",
+    });
+
+    const signInCardStyle = classNames({
+        [commonStyle]: true,
+        "scale-150 opacity-0 invisible": formType === "signup",
+        "scale-100 opacity-100 visible": formType !== "signup",
+    });
+
     return (
-        <div>
-            {formType === "signup" ? <SignupForm handleSignUpFlow={handleChangeForm}/> : <SignInForm/>}
-            <button onClick={handleChangeForm}
-                    className="button--primary mt-10">{formType === "signup" ? "Utente giá registrato?" : "Utente da registrare?"}</button>
-        </div>
+        <>
+            <Card className={signUpCardStyle}>
+                <SignupForm onToggle={handleChangeForm} handleSignUpFlow={handleChangeForm}/>
+            </Card>
+            <Card className={signInCardStyle}>
+                <SignInForm onToggle={handleChangeForm}/>
+            </Card>
+        </>
     )
 }
 
