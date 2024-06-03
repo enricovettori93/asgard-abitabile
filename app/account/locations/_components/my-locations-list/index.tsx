@@ -7,6 +7,7 @@ import Link from "next/link";
 import useMyLocations from "@/app/account/locations/_components/my-locations-list/hooks/useMyLocations";
 import {ROUTES} from "@/utils/constants";
 import Card from "@/components/card";
+import ListLoader from "@/components/skeleton-loaders/list-loader";
 
 const Location = ({location}: { location: LocationWithPictures }) => {
     return (
@@ -48,7 +49,7 @@ const MyLocationsList = () => {
         getMyLocations();
     }, []);
 
-    if (loading) return (<p>Loading...</p>);
+    if (loading) return <ListLoader/>;
 
     return (
         <div className="flex flex-col gap-5">

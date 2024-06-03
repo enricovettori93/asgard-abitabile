@@ -11,6 +11,7 @@ import Link from "next/link";
 import {ROUTES} from "@/utils/constants";
 import Modal from "@/components/modal";
 import {UiContext} from "@/context/ui.context";
+import ListLoader from "@/components/skeleton-loaders/list-loader";
 
 interface modalProps {
     closeModal: () => void
@@ -40,9 +41,7 @@ const MyReservationList = () => {
         getMyReservations();
     }, []);
 
-    if (loading) {
-        return (<p>Loading...</p>);
-    }
+    if (loading) return <ListLoader/>;
 
     if (reservations.length === 0) {
         return (

@@ -1,6 +1,6 @@
 import Skeleton from "react-loading-skeleton";
 
-const ListLoader = () => {
+const LocationGridLoader = () => {
     return (
         <div>
             <Skeleton count={1} height={100}/>
@@ -9,4 +9,4 @@ const ListLoader = () => {
     )
 }
 
-export default ListLoader;
+export default LocationGridLoader;

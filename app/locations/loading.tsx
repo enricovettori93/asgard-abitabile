@@ -1,4 +1,4 @@
-import ListLoader from "@/app/locations/_components/list-loader";
+import LocationGridLoader from "../../components/skeleton-loaders/location-grid-cell-loader";
 
 export default function Loading() {
     return (
@@ -6,7 +6,7 @@ export default function Loading() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-14">
                 {
                     Array(6).fill(1).map((_, idx) => (
-                        <ListLoader key={idx}/>
+                        <LocationGridLoader key={idx}/>
                     ))
                 }
             </div>
