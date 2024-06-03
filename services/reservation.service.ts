@@ -15,7 +15,7 @@ interface ReservationServiceInterface {
 
 class ReservationService implements ReservationServiceInterface {
     async createReservation(locationId: Location["id"], payload: LocationReserveForm): Promise<Reservation> {
-        return (await betterFetch<Reservation>(`locations/${locationId}/reservations`, {
+        return (await betterFetch<Reservation>(`users/me/locations/${locationId}/reservations`, {
             method: "POST",
             body: JSON.stringify(payload)
         })).data as Reservation;
@@ -26,7 +26,7 @@ class ReservationService implements ReservationServiceInterface {
     }
 
     async getWithUser(locationId: Location["id"], id: Reservation["id"]): Promise<ReservationWithUser> {
-        return (await betterFetch<ReservationWithUser>(`locations/${locationId}/reservations/${id}`)).data as ReservationWithUser;
+        return (await betterFetch<ReservationWithUser>(`users/me/locations/${locationId}/reservations/${id}`)).data as ReservationWithUser;
     }
 
     async getAllByUser(): Promise<ReservationWithLocation[]> {

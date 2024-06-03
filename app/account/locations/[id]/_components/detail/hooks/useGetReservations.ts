@@ -1,6 +1,4 @@
 import {useState} from "react";
-import {LocationWithPicturesAndUser} from "@/types/location";
-import LocationService from "@/services/location.service";
 import {Location, Reservation} from "@prisma/client";
 import toast from "react-hot-toast";
 import ReservationService from "@/services/reservation.service";

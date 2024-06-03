@@ -16,7 +16,7 @@ interface LocationServiceInterface {
 
 class LocationService implements LocationServiceInterface {
     async add(payload: AddLocationForm): Promise<Location> {
-        return (await betterFetch<Location>("locations", {
+        return (await betterFetch<Location>("users/me/locations", {
             method: "POST",
             body: JSON.stringify(payload)
         })).data as Location;
@@ -27,7 +27,7 @@ class LocationService implements LocationServiceInterface {
         for(let file of payload) {
             formData.append(file.name, file);
         }
-        return (await betterFetch<Location>(`locations/${locationId}/pictures`, {
+        return (await betterFetch<Location>(`users/me/locations/${locationId}/pictures`, {
             method: "PUT",
             body: formData
         })).data as Location;
@@ -38,13 +38,13 @@ class LocationService implements LocationServiceInterface {
     }
 
     async removePicture(locationId: Location["id"], pictureId: Picture["id"]): Promise<void> {
-        await betterFetch(`locations/${locationId}/pictures/${pictureId}`, {
+        await betterFetch(`users/me/locations/${locationId}/pictures/${pictureId}`, {
             method: "DELETE"
         });
     }
 
     async update(locationId: Location["id"], payload: EditLocationForm): Promise<Location> {
-        return (await betterFetch<Location>(`locations/${locationId}`, {
+        return (await betterFetch<Location>(`users/me/locations/${locationId}`, {
             method: "PATCH",
             body: JSON.stringify(payload)
         })).data as Location;

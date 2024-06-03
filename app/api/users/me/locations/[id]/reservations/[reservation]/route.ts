@@ -5,11 +5,12 @@ import NotAllowed from "@/errors/not-allowed";
 import ReservationRepository from "@/repositories/reservation.repository";
 import {ResponseDTO} from "@/types/common";
 import {ReservationWithUser} from "@/types/reservation";
+import {Location, Reservation} from "@prisma/client";
 
 interface params {
     params: {
-        id: string
-        reservation: string
+        id: Location["id"]
+        reservation: Reservation["id"]
     }
 }
 
