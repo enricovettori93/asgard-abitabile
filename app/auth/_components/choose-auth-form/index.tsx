@@ -1,6 +1,6 @@
 "use client"
 
-import {useState} from "react";
+import {Suspense, useState} from "react";
 import SignupForm from "@/app/auth/_components/signup-form";
 import SignInForm from "@/app/auth/_components/signin-form";
 import classNames from "classnames";
@@ -32,9 +32,11 @@ const ChooseAuthForm = () => {
             <Card className={signUpCardStyle}>
                 <SignupForm onToggle={handleChangeForm} handleSignUpFlow={handleChangeForm}/>
             </Card>
-            <Card className={signInCardStyle}>
-                <SignInForm onToggle={handleChangeForm}/>
-            </Card>
+            <Suspense>
+                <Card className={signInCardStyle}>
+                    <SignInForm onToggle={handleChangeForm}/>
+                </Card>
+            </Suspense>
         </>
     )
 }

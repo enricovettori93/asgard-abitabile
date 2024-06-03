@@ -42,4 +42,6 @@ const Editor = forwardRef<Quill, props>(
     },
 );
 
+Editor.displayName= "Editor";
+
 export default Editor;
