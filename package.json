@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "cli:next": "docker exec -it asgard-abitabile-next-app-1 bash",
     "migrate-dev": "npx prisma migrate dev",
     "generate": "npx prisma generate",
     "reset": "npx prisma migrate reset"
