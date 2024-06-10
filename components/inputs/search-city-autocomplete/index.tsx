@@ -4,7 +4,7 @@ import Select from "react-select";
 import {Location} from "@prisma/client";
 import useSearchCity from "@/components/inputs/search-city-autocomplete/hooks/useSearchCity";
 import {useCallback, useMemo, useState} from "react";
-import {debounce} from "next/dist/server/utils";
+import debounce from "lodash/debounce";
 import classNames from "classnames";
 
 export type AutocompleteCityOption = Pick<Location, "lat" | "lng"> & {
@@ -46,8 +46,6 @@ const SearchCityAutocomplete = ({onCitySelect, initialValue}: props) => {
         if (selection) {
             setHasValue(true);
             onCitySelect(selection)
-        } else {
-            setHasValue(false);
         }
     }
 
@@ -63,7 +61,6 @@ const SearchCityAutocomplete = ({onCitySelect, initialValue}: props) => {
             <Select
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}
-                defaultValue={initialValue}
                 styles={{
                     control: (baseStyles) => ({
                         ...baseStyles,
@@ -116,6 +113,7 @@ const SearchCityAutocomplete = ({onCitySelect, initialValue}: props) => {
                 isLoading={loading}
                 onInputChange={handleCitySearch}
                 onChange={handleCitySelect}
+                {...initialValue?.value && {defaultValue: initialValue}}
             />
         </>
     );
