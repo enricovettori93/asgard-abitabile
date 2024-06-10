@@ -25,8 +25,7 @@ export type LocationWithPicturesAndUserAndReservations = Prisma.LocationGetPaylo
 export type AddLocation = Omit<Location, "id" | "createdAt" | "updatedAt">
 export type AddLocationForm = Omit<AddLocation, "userId" | "createdAt" | "updatedAt" | "description"> & {pictures?: File [], description: any}
 export type EditLocationForm = AddLocationForm
-export interface LocationSearchForm {
-    city: string
+export type LocationSearchForm = Pick<Location, "cityName" | "lat" | "lng"> & {
     startDate: string
     endDate: string
     maxAdultsForNight?: number

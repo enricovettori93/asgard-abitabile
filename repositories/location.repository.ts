@@ -7,7 +7,7 @@ import {
 } from "@/types/location";
 import {Location, User} from "@prisma/client";
 import prisma from "@/prisma/client";
-import {ADULTS_PER_NIGHT, PAGE_SIZE} from "@/utils/constants";
+import {ADULTS_PER_NIGHT, PAGE_SIZE, SEARCH_RADIUS} from "@/utils/constants";
 import {PaginationParams, LocationFilters} from "@/types/common";
 import NotFound from "@/errors/not-found";
 
@@ -132,7 +132,7 @@ class LocationRepository implements RepositoryInterface {
         return {count, data};
     }
 
-    async filter({skip = 0, maxAdultsForNight = 0, priceForNight = 0} = {}): Promise<{data: LocationWithPictures[], count: number}> {
+    async filter({skip = 0, maxAdultsForNight = 0, priceForNight = 0, lat = 0, lng = 0} = {}): Promise<{data: LocationWithPictures[], count: number}> {
         const whereConditions: any = {
             published: true,
         }
@@ -147,6 +147,17 @@ class LocationRepository implements RepositoryInterface {
             whereConditions.priceForNight = {
                 lt: priceForNight
             }
+        }
+
+        if (lat && lng) {
+            whereConditions.lat = {
+                gte: lat - SEARCH_RADIUS,
+                lte: lat + SEARCH_RADIUS
+            };
+            whereConditions.lng = {
+                gte: lng - SEARCH_RADIUS,
+                lte: lng + SEARCH_RADIUS
+            };
         }
 
         const count = await prisma.location.count({

@@ -15,6 +15,8 @@ export async function GET(request: NextRequest) {
     const priceForNight = request.nextUrl.searchParams.get("priceForNight");
     const startDate = request.nextUrl.searchParams.get("startDate");
     const endDate = request.nextUrl.searchParams.get("endDate");
+    const lat = request.nextUrl.searchParams.get("lat");
+    const lng = request.nextUrl.searchParams.get("lng");
 
     // todo: create a zod schema just for this custom validation considering pagination
     if (page < 1 || maxAdultsForNight !== null && (Number(maxAdultsForNight) < ADULTS_PER_NIGHT.MIN || Number(maxAdultsForNight) > ADULTS_PER_NIGHT.MAX)) {
@@ -31,6 +33,11 @@ export async function GET(request: NextRequest) {
 
     if (priceForNight !== null) {
         filters.priceForNight = Number(priceForNight);
+    }
+
+    if (lat !== null && lng !== null) {
+        filters.lat = Number(lat);
+        filters.lng = Number(lng);
     }
 
     try {

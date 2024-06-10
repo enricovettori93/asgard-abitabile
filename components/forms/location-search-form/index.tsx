@@ -8,6 +8,7 @@ import {SearchLocationSchema} from "@/utils/validators";
 import FieldWrapper from "@/components/inputs/field-wrapper";
 import {ADULTS_PER_NIGHT} from "@/utils/constants";
 import Input from "@/components/inputs/input";
+import SearchCityAutocomplete, {AutocompleteCityOption} from "@/components/inputs/search-city-autocomplete";
 
 interface props {
     onSearch?: () => void
@@ -18,7 +19,9 @@ export default function LocationSearchForm({onSearch}: props) {
     const params = useSearchParams();
 
     const initialValues: LocationSearchForm = {
-        city: params.get("city") || "",
+        cityName: params.get("cityName") || "",
+        lat: Number(params.get("lat")) || 0,
+        lng: Number(params.get("lng")) || 0,
         startDate: params.get("startDate") || "",
         endDate: params.get("endDate") || "",
         maxAdultsForNight: Number(params.get("maxAdultsForNight")) || undefined,
@@ -28,6 +31,7 @@ export default function LocationSearchForm({onSearch}: props) {
     const {
         register,
         handleSubmit,
+        setValue,
         formState: {errors, touchedFields}
     } = useForm<LocationSearchForm>({
         resolver: zodResolver(SearchLocationSchema),
@@ -40,11 +44,25 @@ export default function LocationSearchForm({onSearch}: props) {
         router.push(`/locations?${queryParams}`);
     }
 
+    const handleSelectCity = (selection: AutocompleteCityOption) => {
+        const {lat, value, lng} = selection;
+        setValue("lat", lat);
+        setValue("lng", lng);
+        setValue("cityName", value);
+    }
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full z-10">
             <div className="flex flex-col">
-                <FieldWrapper error={errors.city}>
-                    <Input id="city" name="city" label="Cittá" type="text" register={{...register("city")}} touched={touchedFields["city"]}/>
+                <FieldWrapper error={errors.cityName}>
+                    <SearchCityAutocomplete onCitySelect={handleSelectCity} {...(!!initialValues.cityName && {
+                        initialValue: {
+                            value: initialValues.cityName || "",
+                            label: initialValues.cityName || "",
+                            lat: Number(initialValues.lat),
+                            lng: Number(initialValues.lng)
+                        }
+                    })} />
                 </FieldWrapper>
             </div>
             <div className="grid grid-cols-2 gap-x-2">
@@ -71,10 +89,12 @@ export default function LocationSearchForm({onSearch}: props) {
                     />
                 </FieldWrapper>
                 <FieldWrapper error={errors.startDate}>
-                    <Input id="startDate" name="startDate" label="Da" type="date" register={{...register("startDate")}} touched={touchedFields["startDate"]}/>
+                    <Input id="startDate" name="startDate" label="Da" type="date" register={{...register("startDate")}}
+                           touched={touchedFields["startDate"]}/>
                 </FieldWrapper>
                 <FieldWrapper error={errors.endDate}>
-                    <Input id="endDate" name="endDate" label="A" type="date" register={{...register("endDate")}} touched={touchedFields["endDate"]}/>
+                    <Input id="endDate" name="endDate" label="A" type="date" register={{...register("endDate")}}
+                           touched={touchedFields["endDate"]}/>
                 </FieldWrapper>
             </div>
             <button className="button--primary mt-5 ml-auto px-10" type="submit">Cerca</button>

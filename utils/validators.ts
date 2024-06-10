@@ -33,10 +33,12 @@ export const LocationReserveSchema: ZodType<LocationReserveForm> = z.object({
 });
 
 export const SearchLocationSchema: ZodType<LocationSearchForm> = z.object({
-    city: z.string().min(1).max(100),
+    cityName: z.string().min(1).max(100),
     startDate: z.string(),
     maxAdultsForNight: z.number().min(ADULTS_PER_NIGHT.MIN).max(ADULTS_PER_NIGHT.MAX).optional(),
     priceForNight: z.number().min(0).optional(),
+    lat: z.number(),
+    lng: z.number(),
     endDate: z.string()
 }).refine((data) => new Date(data.startDate) < new Date(data.endDate), {
     message: "End date cannot be earlier than start date.",

@@ -3,7 +3,7 @@
 import Select from "react-select";
 import {Location} from "@prisma/client";
 import useSearchCity from "@/components/inputs/search-city-autocomplete/hooks/useSearchCity";
-import {useMemo, useState} from "react";
+import {useCallback, useMemo, useState} from "react";
 import {debounce} from "next/dist/server/utils";
 import classNames from "classnames";
 
@@ -36,11 +36,11 @@ const SearchCityAutocomplete = ({onCitySelect, initialValue}: props) => {
         }))
     }, [cities]);
 
-    const handleCitySearch = debounce(async (city: string) => {
+    const handleCitySearch = useCallback(debounce(async (city: string) => {
         if (city) {
             await searchCity(city);
         }
-    }, 800);
+    }, 800), [searchCity]);
 
     const handleCitySelect = (selection: AutocompleteCityOption | null) => {
         if (selection) {
@@ -65,7 +65,7 @@ const SearchCityAutocomplete = ({onCitySelect, initialValue}: props) => {
                 onBlur={() => setFocused(false)}
                 defaultValue={initialValue}
                 styles={{
-                    control: (baseStyles, state) => ({
+                    control: (baseStyles) => ({
                         ...baseStyles,
                         borderTop: "none",
                         borderLeft: "none",
@@ -78,16 +78,22 @@ const SearchCityAutocomplete = ({onCitySelect, initialValue}: props) => {
                             boxShadow: "none"
                         }
                     }),
-                    valueContainer: (baseStyles, state) => ({
+                    valueContainer: (baseStyles) => ({
+                        ...baseStyles,
                         paddingRight: "0",
                         paddingLeft: "0",
-                        height: "15px"
+                        alignItems: "flex-end"
                     }),
-                    menu: (baseStyles, state) => ({
+                    singleValue: (baseStyles) => ({
+                        ...baseStyles,
+                        marginLeft: "0"
+                    }),
+                    menu: (baseStyles) => ({
                         ...baseStyles,
                         marginTop: "0"
                     }),
-                    indicatorsContainer: (baseStyles, state) => ({
+                    indicatorsContainer: (baseStyles) => ({
+                        ...baseStyles,
                         "display": "none"
                     }),
                     option: (baseStyles, state) => ({
@@ -106,6 +112,7 @@ const SearchCityAutocomplete = ({onCitySelect, initialValue}: props) => {
                 id="city-autocomplete"
                 options={options}
                 loadingMessage={_ => `Caricamento...`}
+                noOptionsMessage={_ => `Nessuna città trovata`}
                 isLoading={loading}
                 onInputChange={handleCitySearch}
                 onChange={handleCitySelect}
