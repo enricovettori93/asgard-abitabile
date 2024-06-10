@@ -6,6 +6,7 @@ import {AddUserForm, EditUserForm, EditUserPasswordForm} from "@/types/user";
 // @ts-ignore
 export const LocationSchema: ZodType<AddLocationForm> = z.object({
     title: z.string().min(1).max(50),
+    cityName: z.string().min(1).max(500),
     description: z.any(),
     lat: z.number(),
     lng: z.number(),

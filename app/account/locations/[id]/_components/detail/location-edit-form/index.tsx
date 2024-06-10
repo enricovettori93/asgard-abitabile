@@ -19,6 +19,7 @@ const LocationEditForm = ({location, loading, onEditLocation, errors}: props) =>
         lng: location.lng,
         maxAdultsForNight: location.maxAdultsForNight,
         priceForNight: location.priceForNight,
+        cityName: location.cityName,
         published: location.published
     };
 

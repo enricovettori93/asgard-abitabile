@@ -20,6 +20,7 @@ async function main() {
                 lng: i,
                 title: `location ${i}`,
                 description: `description ${i}`,
+                cityName: `city ${i}`,
                 published: i % 2 === 0,
                 user: {
                     connect: {

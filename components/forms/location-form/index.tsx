@@ -15,6 +15,7 @@ import {AddLocationForm, EditLocationForm} from "@/types/location";
 import Editor from "@/components/editor";
 import Quill from "quill";
 import {ValidationErrors} from "@/types/common";
+import SearchCityAutocomplete, {AutocompleteCityOption} from "@/components/inputs/search-city-autocomplete";
 const Delta = Quill.import('delta');
 
 interface props {
@@ -32,6 +33,7 @@ const LocationForm = ({children, className = "", defaultValues = {}, onSubmit, e
     const {
         register,
         handleSubmit,
+        setValue,
         formState: {errors, touchedFields}
     } = useForm<AddLocationForm | EditLocationForm>({
         resolver: zodResolver(LocationSchema),
@@ -56,6 +58,13 @@ const LocationForm = ({children, className = "", defaultValues = {}, onSubmit, e
         await onSubmit({...payload, pictures: images, description: JSON.stringify(quillRef.current?.editor.delta)});
     }
 
+    const handleSelectCity = (selection: AutocompleteCityOption) => {
+        const {lat, value, lng} = selection;
+        setValue("lat", lat);
+        setValue("lng", lng);
+        setValue("cityName", value);
+    }
+
     return (
         <form onSubmit={handleSubmit(submit)} className={formClasses}>
             <div className="flex gap-5">
@@ -68,16 +77,30 @@ const LocationForm = ({children, className = "", defaultValues = {}, onSubmit, e
                            register={{...register("published")}} touched={touchedFields["published"]}/>
                 </FieldWrapper>
             </div>
+            <div className="h-18 w-full md:w-1/2">
+                <FieldWrapper error={errors.cityName}>
+                    <SearchCityAutocomplete onCitySelect={handleSelectCity} {...(defaultValues && {
+                        initialValue: {
+                            value: defaultValues.cityName || "",
+                            label: defaultValues.cityName || "",
+                            lat: Number(defaultValues.lat),
+                            lng: Number(defaultValues.lng)
+                        }
+                    })} />
+                </FieldWrapper>
+            </div>
             <div className="flex gap-1 md:gap-5 flex-wrap">
-                <FieldWrapper className="basis-full md:basis-[19%]" error={errors.lat}>
-                    <Input id="lat" name="lat" label="Latitudine" type="number"
+                <FieldWrapper className="flex-1" error={errors.lat}>
+                    <Input id="lat" name="lat" label="Latitudine" type="number" step="any"
                            register={{...register("lat", {valueAsNumber: true})}} touched={touchedFields["lat"]}/>
                 </FieldWrapper>
-                <FieldWrapper className="basis-full md:basis-[19%]" error={errors.lng}>
-                    <Input id="lng" name="lng" label="Longitudine" type="number"
+                <FieldWrapper className="flex-1" error={errors.lng}>
+                    <Input id="lng" name="lng" label="Longitudine" type="number" step="any"
                            register={{...register("lng", {valueAsNumber: true})}} touched={touchedFields["lng"]}/>
                 </FieldWrapper>
-                <FieldWrapper className="basis-full md:basis-[19%]" error={errors.maxAdultsForNight}>
+            </div>
+            <div className="flex gap-1 md:gap-5 flex-wrap">
+                <FieldWrapper className="flex-1" error={errors.maxAdultsForNight}>
                     <Input id="maxAdultsForNight"
                            name="maxAdultsForNight"
                            label="Adulti per notte"
@@ -86,7 +109,7 @@ const LocationForm = ({children, className = "", defaultValues = {}, onSubmit, e
                            touched={touchedFields["maxAdultsForNight"]}
                     />
                 </FieldWrapper>
-                <FieldWrapper className="basis-full md:basis-[19%]" error={errors.priceForNight}>
+                <FieldWrapper className="flex-1" error={errors.priceForNight}>
                     <Input id="priceForNight"
                            name="priceForNight"
                            label="Prezzo per notte"
@@ -110,11 +133,9 @@ const LocationForm = ({children, className = "", defaultValues = {}, onSubmit, e
                            register={{...register("pictures", {onChange: handleChangeFiles})}} touched={false}/>
                 </FieldWrapper>
             </div>
-            <div>
-                {
-                    images.length > 0 && <LocationFormImagesPreview onRemovePicture={handleRemoveImage} files={images}/>
-                }
-            </div>
+            {
+                images.length > 0 && <LocationFormImagesPreview onRemovePicture={handleRemoveImage} files={images}/>
+            }
             {children}
         </form>
     );

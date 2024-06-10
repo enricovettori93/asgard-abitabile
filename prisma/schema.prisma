@@ -20,6 +20,7 @@ model Location {
   title             String        @unique @db.VarChar(255)
   lat               Float
   lng               Float
+  cityName          String        @default("")
   description       Json          @default("[]")
   published         Boolean       @default(false)
   user              User          @relation(fields: [userId], references: [id])

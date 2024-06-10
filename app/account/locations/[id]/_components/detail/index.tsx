@@ -1,7 +1,7 @@
 "use client"
 
 import useGetLocationDetail from "@/app/account/locations/[id]/_components/detail/hooks/useGetLocationDetail";
-import {memo, useCallback, useContext, useEffect, useRef, useState} from "react";
+import {memo, useCallback, useContext, useEffect, useRef} from "react";
 import {useParams} from "next/navigation";
 import {Location, Picture, Reservation} from "@prisma/client";
 import useRemoveImage from "@/app/account/locations/[id]/_components/detail/hooks/useRemoveImage";
