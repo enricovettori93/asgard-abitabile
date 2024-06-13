@@ -36,9 +36,22 @@ export const writeImageBufferToFileSystem = async (locationId: Location["id"], b
     }
 }
 
+export const removeLocationImageFolder = async (id: Location["id"]) => {
+    try {
+        console.log("Removing locations images folder", id);
+        await rm(path.join("public/uploads/" + id), {recursive: true, force: true});
+        console.log("Remove folder success");
+    } catch (e) {
+        console.error("Error deleting folder from file system", e, id);
+        throw e;
+    }
+}
+
 export const removeImageFromFileSystem = async (uploadPath: string) => {
     try {
+        console.log("Removing image", uploadPath);
         await rm(path.join("public/" + uploadPath));
+        console.log("Remove image success")
     } catch (e) {
         console.error("Error deleting image from file system", e);
         throw e;

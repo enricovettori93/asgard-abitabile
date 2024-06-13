@@ -18,6 +18,8 @@ import DeleteImageModal from "@/app/account/locations/[id]/_components/detail/mo
 import Accordion from "@/components/accordion";
 import Card from "@/components/card";
 import useGetReservations from "@/app/account/locations/[id]/_components/detail/hooks/useGetReservations";
+import DeleteLocationModal from "@/app/account/locations/[id]/_components/detail/modals/delete-location";
+import useDeleteLocation from "@/app/account/locations/[id]/_components/detail/hooks/useDeleteLocation";
 const ReservationCalendar = memo(dynamic(() => import("@/app/account/locations/[id]/_components/detail/reservations-calendar"), {ssr: false}));
 
 const MyAccountLocationDetail = () => {
@@ -27,6 +29,7 @@ const MyAccountLocationDetail = () => {
     const {loading: confirmLoading, confirmReservation} = useConfirmReservation();
     const {getReservationDetail, reservation} = useGetReservationDetail();
     const {loading: removeImageLoading, removeImage} = useRemoveImage();
+    const {loading: deleteLocationLoading, deleteLocation} = useDeleteLocation();
     const {reservations, getReservations} = useGetReservations();
     const {setModal, removeModal} = useContext(UiContext);
     const startDateRef = useRef(new Date());
@@ -67,6 +70,11 @@ const MyAccountLocationDetail = () => {
         removeModal();
     }
 
+    const handleConfirmDeleteLocation = async () => {
+        await deleteLocation(id);
+        removeModal();
+    }
+
     const handleUpdateLocation = async (payload: EditLocationForm) => {
         await editLocation(location!.id, payload);
         await getLocationDetail(id);
@@ -85,6 +93,17 @@ const MyAccountLocationDetail = () => {
                 onConfirmDeleteImage={() => handleConfirmDeleteImage(pictureId)}
             />
         );
+    }
+
+    const handleDeleteLocation = async () => {
+        removeModal();
+        setModal(
+            <DeleteLocationModal
+                loading={deleteLocationLoading}
+                closeModal={removeModal}
+                onConfirmDeleteLocation={handleConfirmDeleteLocation}
+            />
+        )
     }
 
     if (getLocationLoading) {
@@ -113,6 +132,9 @@ const MyAccountLocationDetail = () => {
                         <LocationEditForm location={location} onEditLocation={handleUpdateLocation} loading={editLocationLoading} errors={errors}/>
                     </Accordion>
                 </Card>
+                <div className="flex justify-end my-5">
+                    <button onClick={handleDeleteLocation} className="button button--danger">Cancella la location</button>
+                </div>
             </div>
         </>
     )

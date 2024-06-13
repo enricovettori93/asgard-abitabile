@@ -7,6 +7,7 @@ interface RepositoryInterface {
     get: (id: Picture["id"]) => Promise<Picture>
     add: (locationId: Location["id"], payload: Picture) => Promise<Picture>
     delete: (id: Picture["id"]) => Promise<void>
+    deleteManyByLocation: (locationId: Location["id"]) => Promise<void>
     addMany: (locationId: Location["id"], payload: Picture[]) => Promise<void>
 }
 
@@ -56,6 +57,14 @@ class PictureRepository implements RepositoryInterface {
         if (!data) throw new NotFound();
 
         return data as unknown as Picture;
+    }
+
+    async deleteManyByLocation(locationId: Location["id"]): Promise<void> {
+        await prisma.picture.deleteMany({
+            where: {
+                locationId
+            }
+        });
     }
 }
 
