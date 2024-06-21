@@ -8,9 +8,6 @@ export default function Home() {
         <>
             <HeroBanner/>
             <WhatCanDo/>
-            <section className="h-[25em]">
-                bla bla bla
-            </section>
         </>
     );
 }

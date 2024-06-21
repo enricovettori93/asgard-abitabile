@@ -5,6 +5,22 @@ interface props {
     className?: string
 }
 
+const CardTitle = ({children, className}: props) => {
+    return (
+        <div className={`text-2xl mb-5 font-bold ${className}`}>
+            {children}
+        </div>
+    )
+};
+
+const CardContent = ({children, className}: props) => {
+    return (
+        <div className={className}>
+            {children}
+        </div>
+    )
+};
+
 const Card = React.forwardRef<HTMLDivElement, props>(({children, className}, ref) => {
     return (
         <div ref={ref} className={`rounded-lg shadow-xl p-8 bg-white ${className}`}>
@@ -14,5 +30,10 @@ const Card = React.forwardRef<HTMLDivElement, props>(({children, className}, ref
 });
 
 Card.displayName = "Card";
+
+export const CardComposition = {
+    Title: CardTitle,
+    Content: CardContent
+}
 
 export default Card;
