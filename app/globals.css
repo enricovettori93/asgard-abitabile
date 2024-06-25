@@ -135,7 +135,7 @@ input[type='file'] {
 }
 
 ::-webkit-scrollbar {
-    @apply w-[5px]
+    @apply w-[5px] h-[5px]
 }
 
 ::-webkit-scrollbar-thumb {

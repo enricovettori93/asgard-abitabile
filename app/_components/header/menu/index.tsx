@@ -3,7 +3,7 @@
 import {ReactNode, useContext, useEffect, useRef, useState} from "react";
 import {UserContext} from "@/context/user.context";
 import Link from "next/link";
-import useLogout from "@/app/_components/navbar/hooks/useLogout";
+import useLogout from "@/app/_components/header/hooks/useLogout";
 import useClickOutside from "@/hooks/useClickOutside";
 import useEscListener from "@/hooks/useEscListener";
 import classNames from "classnames";
@@ -11,9 +11,9 @@ import LineSeparator from "@/components/line-separator";
 import {usePathname} from "next/navigation";
 import {ROUTES} from "@/utils/constants";
 
-export const MenuItem = ({iconName, children}: {iconName: string, children: ReactNode}) => {
+export const MenuItem = ({iconName, children, className = ""}: {iconName: string, children: ReactNode, className?: string}) => {
     return (
-        <li className="flex items-center">
+        <li className={`flex items-center ${className}`}>
             <i className={`${iconName} mt-1 mr-3`}></i>
             {children}
         </li>

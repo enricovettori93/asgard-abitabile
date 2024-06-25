@@ -7,8 +7,9 @@ import "./globals.css";
 import UserContext from "@/context/user.context";
 import React from "react";
 import Footer from "@/app/_components/footer";
-import NavBar from "@/app/_components/navbar";
+import Header from "@/app/_components/header";
 import UiContext from "@/context/ui.context";
+import NavBar from "@/app/_components/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,7 +28,9 @@ export default function RootLayout({
       <body className={inter.className}>
       <UiContext>
           <UserContext>
-              <NavBar/>
+              <Header>
+                  <NavBar />
+              </Header>
               <Toaster position="top-right"/>
               <main className="flex min-h-screen mb-[15rem] mt-[8rem] px-2 md:px-10 flex-col items-center justify-between bg-white z-10 relative overflow-x-hidden pb-20">
                   {children}

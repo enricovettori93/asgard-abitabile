@@ -3,7 +3,7 @@ import {useEffect, useRef, useState} from "react";
 const useScrollListener = () => {
     const lastScrollPosition = useRef(0);
     const [direction, setDirection] = useState<"up" | "down" | null>(null);
-    const [isOnTop, setIsOnTop] = useState(typeof window !== "undefined" && window.scrollY === 0);
+    const [isOnTop, setIsOnTop] = useState(typeof window !== "undefined" ? window.scrollY === 0 : true);
     const [scrollFromTop, setScrollFromTop] = useState(0);
 
     useEffect(() => {

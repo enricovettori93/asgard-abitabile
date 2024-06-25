@@ -1,6 +1,7 @@
 export interface LocationFilters {
     maxAdultsForNight?: number
     priceForNight?: number
+    tags?: never[]
 }
 
 export interface PaginationParams {
