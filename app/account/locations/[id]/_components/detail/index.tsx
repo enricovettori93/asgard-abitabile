@@ -3,7 +3,7 @@
 import useGetLocationDetail from "@/app/account/locations/[id]/_components/detail/hooks/useGetLocationDetail";
 import {memo, useCallback, useContext, useEffect, useRef} from "react";
 import {useParams} from "next/navigation";
-import {Location, Picture, Reservation} from "@prisma/client";
+import {Location, Picture, Reservation, Tag} from "@prisma/client";
 import useRemoveImage from "@/app/account/locations/[id]/_components/detail/hooks/useRemoveImage";
 import LocationEditForm from "@/app/account/locations/[id]/_components/detail/location-edit-form";
 import useEditLocation from "@/app/account/locations/[id]/_components/detail/hooks/useEditLocation";
@@ -20,6 +20,9 @@ import Card from "@/components/card";
 import useGetReservations from "@/app/account/locations/[id]/_components/detail/hooks/useGetReservations";
 import DeleteLocationModal from "@/app/account/locations/[id]/_components/detail/modals/delete-location";
 import useDeleteLocation from "@/app/account/locations/[id]/_components/detail/hooks/useDeleteLocation";
+import useGetTags from "@/app/account/locations/[id]/_components/detail/hooks/useGetTags";
+import LocationTags from "@/app/account/locations/[id]/_components/detail/location-tags";
+import useManageTag from "@/app/account/locations/[id]/_components/detail/hooks/useManageTag";
 const ReservationCalendar = memo(dynamic(() => import("@/app/account/locations/[id]/_components/detail/reservations-calendar"), {ssr: false}));
 
 const MyAccountLocationDetail = () => {
@@ -30,13 +33,18 @@ const MyAccountLocationDetail = () => {
     const {getReservationDetail, reservation} = useGetReservationDetail();
     const {loading: removeImageLoading, removeImage} = useRemoveImage();
     const {loading: deleteLocationLoading, deleteLocation} = useDeleteLocation();
+    const {loading: tagsLoading, getTags, tags} = useGetTags();
     const {reservations, getReservations} = useGetReservations();
+    const {loading: manageTagLoading,unlinkTag, linkTag} = useManageTag();
     const {setModal, removeModal} = useContext(UiContext);
     const startDateRef = useRef(new Date());
     const endDateRef = useRef(new Date());
 
     useEffect(() => {
-        getLocationDetail(id);
+        (async () => {
+            await getLocationDetail(id);
+            await getTags();
+        })();
     }, []);
 
     useEffect(() => {
@@ -77,6 +85,16 @@ const MyAccountLocationDetail = () => {
 
     const handleUpdateLocation = async (payload: EditLocationForm) => {
         await editLocation(location!.id, payload);
+        await getLocationDetail(id);
+    }
+
+    const handleLinkTag = async (tagId: Tag["id"]) => {
+        await linkTag(tagId, location!.id);
+        await getLocationDetail(id);
+    }
+
+    const handleUnlinkTag = async (tagId: Tag["id"]) => {
+        await unlinkTag(tagId, location!.id);
         await getLocationDetail(id);
     }
 
@@ -132,6 +150,15 @@ const MyAccountLocationDetail = () => {
                         <LocationEditForm location={location} onEditLocation={handleUpdateLocation} loading={editLocationLoading} errors={errors}/>
                     </Accordion>
                 </Card>
+                {
+                    !tagsLoading && (
+                        <Card>
+                            <Accordion title="Tags">
+                                <LocationTags tags={tags} locationTags={location.tags} onAdd={handleLinkTag} onRemove={handleUnlinkTag}/>
+                            </Accordion>
+                        </Card>
+                    )
+                }
                 <div className="flex justify-end my-5">
                     <button onClick={handleDeleteLocation} className="button button--danger">Cancella la location</button>
                 </div>

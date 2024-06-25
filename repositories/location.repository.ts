@@ -2,8 +2,8 @@ import {
     AddLocation,
     EditLocationForm,
     LocationWithPictures,
-    LocationWithPicturesAndReservations,
-    LocationWithPicturesAndUser
+    LocationWithPicturesAndReservationsAndTags,
+    LocationWithPicturesAndUserAndTags,
 } from "@/types/location";
 import {Location, User} from "@prisma/client";
 import prisma from "@/prisma/client";
@@ -16,15 +16,15 @@ interface RepositoryInterface {
     getAll: (params: PaginationParams) => Promise<{data: LocationWithPictures[], count: number}>
     getAllPublished: (params: PaginationParams) => Promise<{data: LocationWithPictures[], count: number}>
     filter: (params: LocationFilters & PaginationParams) => Promise<{data: LocationWithPictures[], count: number}>
-    get: (id: Location["id"]) => Promise<LocationWithPicturesAndUser | null>
-    getWithReservations: (id: Location["id"]) => Promise<LocationWithPicturesAndReservations | null>
-    add: (payload: AddLocation) => Promise<LocationWithPicturesAndUser>
+    get: (id: Location["id"]) => Promise<LocationWithPicturesAndUserAndTags | null>
+    getWithReservations: (id: Location["id"]) => Promise<LocationWithPicturesAndReservationsAndTags | null>
+    add: (payload: AddLocation) => Promise<LocationWithPicturesAndUserAndTags>
     delete: (id: Location["id"]) => Promise<void>
-    update: (id: Location["id"], payload: Omit<EditLocationForm, "pictures">) => Promise<LocationWithPicturesAndUser>
+    update: (id: Location["id"], payload: Omit<EditLocationForm, "pictures">) => Promise<LocationWithPicturesAndUserAndTags>
 }
 
 class LocationRepository implements RepositoryInterface {
-    async add(payload: AddLocation): Promise<LocationWithPicturesAndUser> {
+    async add(payload: AddLocation): Promise<LocationWithPicturesAndUserAndTags> {
         return prisma.location.create({
             data: {
                 ...payload,
@@ -32,6 +32,7 @@ class LocationRepository implements RepositoryInterface {
             },
             include: {
                 pictures: true,
+                tags: true,
                 user: {
                     omit: {
                         password: true
@@ -49,13 +50,14 @@ class LocationRepository implements RepositoryInterface {
         });
     }
 
-    async get(id: Location["id"]): Promise<LocationWithPicturesAndUser> {
+    async get(id: Location["id"]): Promise<LocationWithPicturesAndUserAndTags> {
         const data = await prisma.location.findUnique({
             where: {
                 id
             },
             include: {
                 pictures: true,
+                tags: true,
                 user: {
                     omit: {
                         password: true
@@ -69,13 +71,14 @@ class LocationRepository implements RepositoryInterface {
         return data;
     }
 
-    async getWithReservations(id: Location["id"]): Promise<LocationWithPicturesAndReservations> {
+    async getWithReservations(id: Location["id"]): Promise<LocationWithPicturesAndReservationsAndTags> {
         const data = await prisma.location.findUnique({
             where: {
                 id
             },
             include: {
                 pictures: true,
+                tags: true,
                 user: {
                     omit: {
                         password: true
@@ -176,7 +179,7 @@ class LocationRepository implements RepositoryInterface {
         return {data, count};
     }
 
-    async update(id: Location["id"], payload: Omit<EditLocationForm, "pictures">): Promise<LocationWithPicturesAndUser> {
+    async update(id: Location["id"], payload: Omit<EditLocationForm, "pictures">): Promise<LocationWithPicturesAndUserAndTags> {
         return prisma.location.update({
             where: {
                 id: id
@@ -187,6 +190,7 @@ class LocationRepository implements RepositoryInterface {
             },
             include: {
                 pictures: true,
+                tags: true,
                 user: {
                     omit: {
                         password: true
@@ -196,7 +200,7 @@ class LocationRepository implements RepositoryInterface {
         });
     }
 
-    async getAllByUser(userId: User["id"]): Promise<{data: LocationWithPicturesAndReservations[], count: number}> {
+    async getAllByUser(userId: User["id"]): Promise<{data: LocationWithPicturesAndReservationsAndTags[], count: number}> {
         const count = await prisma.location.count({
             where: {
                 userId
@@ -206,7 +210,8 @@ class LocationRepository implements RepositoryInterface {
         const data = await prisma.location.findMany({
             include: {
                 pictures: true,
-                reservations: true
+                reservations: true,
+                tags: true
             },
             where: {
                 userId

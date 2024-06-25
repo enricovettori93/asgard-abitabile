@@ -2,7 +2,7 @@ import {NextRequest, NextResponse} from "next/server";
 import {getUserIdFromRequest} from "@/utils/session";
 import {ResponseDTO} from "@/types/common";
 import LocationRepository from "@/repositories/location.repository";
-import {AddLocationForm, LocationWithPictures, LocationWithPicturesAndUser} from "@/types/location";
+import {AddLocationForm, LocationWithPictures, LocationWithPicturesAndUserAndTags} from "@/types/location";
 import {CUSTOM_HEADERS} from "@/utils/constants";
 import {LocationSchema} from "@/utils/validators";
 import {transformValidationErrors} from "@/utils/functions";
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
 
         return NextResponse.json({
             data
-        } satisfies ResponseDTO<LocationWithPicturesAndUser>);
+        } satisfies ResponseDTO<LocationWithPicturesAndUserAndTags>);
     } catch (e: any) {
         return NextResponse.json({
             message: e.message || "Server error"

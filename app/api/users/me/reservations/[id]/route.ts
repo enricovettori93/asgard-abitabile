@@ -3,10 +3,11 @@ import {getUserIdFromRequest} from "@/utils/session";
 import {ResponseDTO} from "@/types/common";
 import ReservationRepository from "@/repositories/reservation.repository";
 import NotAllowed from "@/errors/not-allowed";
+import {Reservation} from "@prisma/client";
 
 interface Params {
     params: {
-        id: string
+        id: Reservation["id"]
     }
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {LocationWithPicturesAndReservations} from "@/types/location";
+import {LocationWithPicturesAndReservationsAndTags} from "@/types/location";
 import {Swiper, SwiperSlide} from "swiper/react";
 import ImageDetail from "@/app/account/locations/[id]/_components/detail/image-detail";
 import {Picture} from "@prisma/client";
@@ -8,7 +8,7 @@ import {Navigation} from "swiper/modules";
 
 interface props {
     className?: string
-    pictures: LocationWithPicturesAndReservations["pictures"]
+    pictures: LocationWithPicturesAndReservationsAndTags["pictures"]
     onRemoveImage: (id: Picture["id"]) => void;
 }
 

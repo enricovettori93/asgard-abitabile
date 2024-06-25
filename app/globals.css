@@ -35,7 +35,7 @@
     }
 
     .with-hover-border.active {
-        @apply after:w-full
+        @apply after:w-full after:left-0
     }
 
     .field-wrapper {

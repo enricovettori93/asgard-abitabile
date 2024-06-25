@@ -4,7 +4,7 @@ import {writeImageBufferToFileSystem} from "@/utils/fs";
 import sharp from "sharp";
 import {NextResponse} from "next/server";
 import {ResponseDTO} from "@/types/common";
-import {LocationWithPicturesAndUser} from "@/types/location";
+import {LocationWithPicturesAndUserAndTags} from "@/types/location";
 import path from "node:path";
 import * as fs from "node:fs";
 import {Location} from "@prisma/client";
@@ -45,11 +45,11 @@ export async function PUT(request: Request, { params }: Params) {
             });
         }
 
-        const data = await LocationRepository.get(id) as LocationWithPicturesAndUser;
+        const data = await LocationRepository.get(id) as LocationWithPicturesAndUserAndTags;
 
         return NextResponse.json({
             data
-        } satisfies ResponseDTO<LocationWithPicturesAndUser>);
+        } satisfies ResponseDTO<LocationWithPicturesAndUserAndTags>);
     } catch (e: any) {
         return NextResponse.json({
             message: e.message || "Server error"

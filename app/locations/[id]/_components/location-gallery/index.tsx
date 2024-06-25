@@ -1,11 +1,11 @@
-import {LocationWithPicturesAndUser} from "@/types/location";
+import {LocationWithPicturesAndUserAndTags} from "@/types/location";
 import {Navigation} from "swiper/modules";
 import {Swiper, SwiperSlide} from "swiper/react";
 import Image from "next/image";
 import classNames from "classnames";
 
 interface props {
-    location: LocationWithPicturesAndUser
+    location: LocationWithPicturesAndUserAndTags
     className?: string
 }
 

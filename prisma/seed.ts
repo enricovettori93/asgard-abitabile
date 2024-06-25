@@ -13,7 +13,7 @@ async function main() {
             profile: "test"
         }
     });
-    for(let i = 0; i < 2; i++) {
+    for(let i = 0; i < 0; i++) {
         let location = await prisma.location.create({
             data: {
                 lat: i,
@@ -48,14 +48,20 @@ async function main() {
         });
         locations.push(location);
     }
-    console.log("locations seeded", locations)
+    for(let item of ["montagna", "campagna", "mare", "cittá", "spazioso", "monolocale", "luminoso", "arte"]) {
+        await prisma.tag.create({
+            data: {
+                value: item,
+            }
+        })
+    }
+    console.log("seed complete", locations)
 }
 main()
-    .then(async () => {
-        await prisma.$disconnect()
-    })
     .catch(async (e) => {
         console.error(e)
-        await prisma.$disconnect()
         process.exit(1)
+    })
+    .finally(async () => {
+        await prisma.$disconnect()
     })

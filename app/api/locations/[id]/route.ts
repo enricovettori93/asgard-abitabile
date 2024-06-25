@@ -1,7 +1,7 @@
 import LocationRepository from "@/repositories/location.repository";
 import {NextResponse} from "next/server";
 import {ResponseDTO} from "@/types/common";
-import {LocationWithPicturesAndUser} from "@/types/location";
+import {LocationWithPicturesAndUserAndTags} from "@/types/location";
 import {Location} from "@prisma/client";
 
 interface Params {
@@ -16,7 +16,7 @@ export async function GET(request: Request, {params}: Params) {
 
         return NextResponse.json({
             data
-        } satisfies ResponseDTO<LocationWithPicturesAndUser>);
+        } satisfies ResponseDTO<LocationWithPicturesAndUserAndTags>);
     } catch (e: any) {
         return NextResponse.json({
             message: e.message || "Server error"

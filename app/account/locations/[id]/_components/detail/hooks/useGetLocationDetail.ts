@@ -1,12 +1,12 @@
 import {useState} from "react";
-import {LocationWithPicturesAndUser} from "@/types/location";
+import {LocationWithPicturesAndUserAndTags} from "@/types/location";
 import LocationService from "@/services/location.service";
 import {Location} from "@prisma/client";
 import toast from "react-hot-toast";
 
 const useGetLocationDetail = () => {
     const [loading, setLoading] = useState(false);
-    const [location, setLocation] = useState<LocationWithPicturesAndUser | null>(null);
+    const [location, setLocation] = useState<LocationWithPicturesAndUserAndTags | null>(null);
 
     const getLocationDetail = async (id: Location["id"]) => {
         try {

@@ -2,7 +2,7 @@ import {NextRequest, NextResponse} from "next/server";
 import {getUserIdFromRequest} from "@/utils/session";
 import LocationRepository from "@/repositories/location.repository";
 import {ResponseDTO} from "@/types/common";
-import {LocationWithPicturesAndUser} from "@/types/location";
+import {LocationWithPicturesAndUserAndTags} from "@/types/location";
 import {Location} from "@prisma/client";
 import {LocationSchema} from "@/utils/validators";
 import {transformValidationErrors} from "@/utils/functions";
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest, {params}: Params) {
 
         return NextResponse.json({
             data
-        } satisfies ResponseDTO<LocationWithPicturesAndUser>);
+        } satisfies ResponseDTO<LocationWithPicturesAndUserAndTags>);
     } catch (e: any) {
         return NextResponse.json({
             message: e.message || "Server error"
@@ -106,7 +106,7 @@ export async function PATCH(request: Request, {params}: Params) {
 
         return NextResponse.json({
             data
-        } satisfies ResponseDTO<LocationWithPicturesAndUser>);
+        } satisfies ResponseDTO<LocationWithPicturesAndUserAndTags>);
     } catch (e: any) {
         return NextResponse.json({
             message: e.message || "Server error"

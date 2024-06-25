@@ -1,11 +1,11 @@
 import betterFetch from "@/utils/fetch";
 import {LocationDetail} from "@/app/locations/[id]/_components/location-detail";
-import {LocationWithPicturesAndUser} from "@/types/location";
+import {LocationWithPicturesAndUserAndTags} from "@/types/location";
 
-async function getLocation(id: string): Promise<LocationWithPicturesAndUser> {
-    const res = await betterFetch<LocationWithPicturesAndUser>(`locations/${id}`);
+async function getLocation(id: string): Promise<LocationWithPicturesAndUserAndTags> {
+    const res = await betterFetch<LocationWithPicturesAndUserAndTags>(`locations/${id}`);
 
-    return res.data as LocationWithPicturesAndUser;
+    return res.data as LocationWithPicturesAndUserAndTags;
 }
 
 export default async function Page({ params }: { params: { id: string }}) {

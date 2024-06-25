@@ -6,7 +6,7 @@
 
 generator client {
   provider        = "prisma-client-js"
-  binaryTargets = ["native", "debian-openssl-3.0.x"]
+  binaryTargets   = ["native", "debian-openssl-3.0.x"]
   previewFeatures = ["omitApi"]
 }
 
@@ -31,6 +31,7 @@ model Location {
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
   reservations      Reservation[]
+  tags              Tag[]
 }
 
 model Reservation {
@@ -70,4 +71,13 @@ model User {
   profile     String        @unique
   locations   Location[]
   reservation Reservation[]
+}
+
+model Tag {
+  id        String     @id @default(uuid())
+  value     String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  color     String     @default("efb61f")
+  locations Location[]
 }
