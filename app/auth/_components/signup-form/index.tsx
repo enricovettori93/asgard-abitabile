@@ -14,7 +14,7 @@ interface props {
 }
 
 export default function SignupForm({handleSignUpFlow, onToggle}: props) {
-    const {signUp, loading, errors: apiErrors} = useSignUp();
+    const {signUp, isPending, errors: apiErrors} = useSignUp({handleSignUpFlow});
     const {
         register,
         handleSubmit,
@@ -25,8 +25,7 @@ export default function SignupForm({handleSignUpFlow, onToggle}: props) {
     });
 
     const onSubmit: SubmitHandler<AddUserForm & {confirmPassword: string}> = async (payload) => {
-        await signUp(payload);
-        handleSignUpFlow();
+        signUp(payload);
     }
 
     return (
@@ -62,7 +61,7 @@ export default function SignupForm({handleSignUpFlow, onToggle}: props) {
                 <button type="button" onClick={() => onToggle()} className="button--info">
                     Utente giá registrato?
                 </button>
-                <button type="submit" className="button--primary" disabled={loading}>Sign up</button>
+                <button type="submit" className="button--primary" disabled={isPending}>Sign up</button>
             </div>
         </form>
     )

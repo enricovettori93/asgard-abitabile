@@ -9,7 +9,7 @@ import useSignIn from "@/app/auth/_components/signin-form/hooks/useSignIn";
 import Input from "@/components/inputs/input";
 
 export default function SignInForm({onToggle}: {onToggle: Function}) {
-    const {loading, signIn, errors: apiErrors} = useSignIn();
+    const {isPending, signIn, errors: apiErrors} = useSignIn();
 
     const {
         handleSubmit,
@@ -21,7 +21,7 @@ export default function SignInForm({onToggle}: {onToggle: Function}) {
     });
 
     const onSubmit: SubmitHandler<UserSignInForm> = async (payload) => {
-        await signIn(payload);
+        signIn(payload);
     }
 
     return (
@@ -41,7 +41,7 @@ export default function SignInForm({onToggle}: {onToggle: Function}) {
                 <button type="button" onClick={() => onToggle()} className="button--info">
                     Utente da registrare?
                 </button>
-                <button type="submit" className="button--primary" disabled={loading}>Login</button>
+                <button type="submit" className="button--primary" disabled={isPending}>Login</button>
             </div>
         </form>
     )

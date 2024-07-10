@@ -44,7 +44,7 @@ const Menu = () => {
 
     const handleLogout = async (e: any) => {
         e.preventDefault();
-        await logout();
+        logout();
     }
 
     const userInitialLetters = () => {

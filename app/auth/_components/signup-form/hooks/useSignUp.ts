@@ -1,27 +1,29 @@
 import {useState} from "react";
-import {AddUserForm} from "@/types/user";
 import userService from "@/services/user.service";
 import {ValidationErrors} from "@/types/common";
 import toast from "react-hot-toast";
+import {useMutation} from "@tanstack/react-query";
 
-const useSignUp = () => {
-    const [loading, setLoading] = useState(false);
+interface props {
+    handleSignUpFlow: Function
+}
+
+const useSignUp = ({handleSignUpFlow}: props) => {
     const [errors, setErrors] = useState<ValidationErrors>({});
-
-    const signUp = async (payload: AddUserForm) => {
-        try {
-            setLoading(true);
-            await userService.signUp(payload);
-        } catch (e: any) {
+    const {isPending, mutate: signUp} = useMutation({
+        mutationFn: userService.signUp,
+        onSuccess: () => {
+            toast.success("Registrazione completata con successo");
+            handleSignUpFlow();
+        },
+        onError: (e: any) => {
             setErrors(e.cause);
             toast.error(e.message || "Errore durante la registrazione");
-        } finally {
-            setLoading(false);
         }
-    }
+    });
 
     return {
-        loading,
+        isPending,
         errors,
         signUp
     }

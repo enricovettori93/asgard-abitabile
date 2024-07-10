@@ -1,30 +1,27 @@
 "use client"
 
-import {useState} from "react";
 import ReservationService from "@/services/reservation.service";
-import {ReservationWithLocation} from "@/types/reservation";
 import toast from "react-hot-toast";
+import {useQuery} from "@tanstack/react-query";
+import {useEffect} from "react";
+import {QUERY_CLIENT_KEYS} from "@/utils/constants";
 
 const useMyReservations = () => {
-    const [loading, setLoading] = useState(false);
-    const [reservations, setReservations] = useState<ReservationWithLocation[]>([]);
+    const {isPending, error, data: reservations} = useQuery({
+        queryKey: [QUERY_CLIENT_KEYS.MY_RESERVATIONS],
+        queryFn: ReservationService.getAllByUser,
+        initialData: []
+    });
 
-    const getMyReservations = async () => {
-        try {
-            setLoading(true);
-            const data = [] = await ReservationService.getAllByUser();
-            setReservations(data);
-        } catch (e: any) {
-            toast.error(e.message || "Impossibile caricare le prenotazioni");
-        } finally {
-            setLoading(false);
+    useEffect(() => {
+        if (error) {
+            toast.error(error.message || "Impossibile caricare le prenotazioni");
         }
-    }
+    }, [error]);
 
     return {
-        loading,
-        reservations,
-        getMyReservations
+        isPending,
+        reservations
     }
 }
 

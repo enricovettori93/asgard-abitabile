@@ -1,28 +1,31 @@
 "use client"
 
-import {useState} from "react";
 import ReservationService from "@/services/reservation.service";
-import {ReservationWithLocation} from "@/types/reservation";
-import {Reservation} from "@prisma/client";
 import toast from "react-hot-toast";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {QUERY_CLIENT_KEYS} from "@/utils/constants";
 
-const useDeleteMyReservation = () => {
-    const [loading, setLoading] = useState(false);
+interface props {
+    handleSuccess: Function
+}
 
-    const deleteReservation = async (id: Reservation["id"]) => {
-        try {
-            setLoading(true);
-            await ReservationService.delete(id);
+const useDeleteMyReservation = ({handleSuccess}: props) => {
+    const queryClient = useQueryClient();
+
+    const {isPending, mutate: deleteReservation} = useMutation({
+        mutationFn: ReservationService.delete,
+        onSuccess: async () => {
             toast.success("Prenotazione eliminata con successo");
-        } catch (e: any) {
-            toast.error(e.message || "Impossibile eliminare la prenotazione");
-        } finally {
-            setLoading(false);
+            await queryClient.invalidateQueries({ queryKey: [QUERY_CLIENT_KEYS.MY_RESERVATIONS]})
+            handleSuccess();
+        },
+        onError: () => {
+            toast.error("Impossibile eliminare la prenotazione");
         }
-    }
+    });
 
     return {
-        loading,
+        isPending,
         deleteReservation
     }
 }
