@@ -1,27 +1,17 @@
-import {useState} from "react";
 import TagService from "@/services/tag.service";
-import toast from "react-hot-toast";
-import {Tag} from "@prisma/client";
+import {useQuery} from "@tanstack/react-query";
+import {QUERY_CLIENT_KEYS} from "@/utils/constants";
 
 const useGetTags = () => {
-    const [loading, setLoading] = useState(false);
-    const [tags, setTags] = useState<Tag[]>([]);
-
-    const getTags = async () => {
-        try {
-            setLoading(true);
-            const data = await TagService.getAllTags();
-            setTags(data);
-        } catch (e: any) {
-            toast.error(e.message || "Impossibile caricare i tag");
-        } finally {
-            setLoading(false);
-        }
-    }
+    const {data: tags, isPending, error} = useQuery({
+        queryKey: [QUERY_CLIENT_KEYS.TAGS],
+        queryFn: TagService.getAllTags,
+        initialData: []
+    });
 
     return {
-        loading,
-        getTags,
+        error,
+        isPending,
         tags
     }
 }

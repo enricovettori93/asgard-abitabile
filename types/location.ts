@@ -27,7 +27,9 @@ export type LocationWithPicturesAndReservationsAndTags = Prisma.LocationGetPaylo
 export type LocationWithPicturesAndUserAndTags = Prisma.LocationGetPayload<typeof locationWithPicturesAndUserAndTags>
 export type LocationWithPicturesAndUserAndReservations = Prisma.LocationGetPayload<typeof locationWithPicturesAndUserAndReservations>
 export type AddLocation = Omit<Location, "id" | "createdAt" | "updatedAt">
-export type AddLocationForm = Omit<AddLocation, "userId" | "createdAt" | "updatedAt" | "description"> & {pictures?: File [], description: any}
+export type AddLocationForm = Omit<AddLocation, "userId" | "createdAt" | "updatedAt" | "description"> & {pictures: LocationPicturesPayload, description: any}
+export type AddLocationFormWithoutPictures = Omit<AddLocationForm, "pictures">
+export type LocationPicturesPayload = File[]
 export type EditLocationForm = AddLocationForm
 export type LocationSearchForm = Pick<Location, "cityName" | "lat" | "lng"> & {
     startDate: string

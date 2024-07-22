@@ -103,7 +103,7 @@ const LocationForm = ({children, className = "", defaultValues = {}, onSubmit, e
                 <FieldWrapper className="flex-1" error={errors.maxAdultsForNight}>
                     <Input id="maxAdultsForNight"
                            name="maxAdultsForNight"
-                           label="Adulti per notte"
+                           label="Max adulti per notte"
                            type="number"
                            register={{...register("maxAdultsForNight", {valueAsNumber: true})}}
                            touched={touchedFields["maxAdultsForNight"]}

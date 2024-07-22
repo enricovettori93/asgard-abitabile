@@ -14,10 +14,12 @@ const useDeleteMyReservation = ({handleSuccess}: props) => {
 
     const {isPending, mutate: deleteReservation} = useMutation({
         mutationFn: ReservationService.delete,
-        onSuccess: async () => {
+        onSuccess: () => {
             toast.success("Prenotazione eliminata con successo");
-            await queryClient.invalidateQueries({ queryKey: [QUERY_CLIENT_KEYS.MY_RESERVATIONS]})
             handleSuccess();
+        },
+        onSettled: async () => {
+            await queryClient.invalidateQueries({ queryKey: [QUERY_CLIENT_KEYS.MY_RESERVATIONS]})
         },
         onError: () => {
             toast.error("Impossibile eliminare la prenotazione");

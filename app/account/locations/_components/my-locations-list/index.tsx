@@ -43,13 +43,10 @@ const Location = ({location}: { location: LocationWithPictures }) => {
 }
 
 const MyLocationsList = () => {
-    const {getMyLocations, locations, loading} = useMyLocations();
+    const {locations, isPending, isError} = useMyLocations();
 
-    useEffect(() => {
-        getMyLocations();
-    }, []);
-
-    if (loading) return <ListLoader/>;
+    if (isPending) return <ListLoader/>;
+    if (isError) return (<p>Errore durante il caricamento delle locations, riprova piú tardi</p>);
 
     return (
         <div className="flex flex-col gap-5">

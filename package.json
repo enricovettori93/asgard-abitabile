@@ -43,6 +43,7 @@
     "zod": "^3.23.6"
   },
   "devDependencies": {
+    "@tanstack/react-query-devtools": "^5.51.1",
     "@types/bcrypt": "^5.0.2",
     "@types/lodash": "^4.17.5",
     "@types/node": "^20",

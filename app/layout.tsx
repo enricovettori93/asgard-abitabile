@@ -4,11 +4,9 @@ import {Toaster} from "react-hot-toast";
 import 'swiper/css';
 import 'swiper/css/navigation';
 import "./globals.css";
-import UserContext from "@/context/user.context";
 import React from "react";
 import Footer from "@/app/_components/footer";
 import Header from "@/app/_components/header";
-import UiContext from "@/context/ui.context";
 import NavBar from "@/app/_components/navbar";
 import Providers from "@/app/providers";
 

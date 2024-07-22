@@ -1,35 +1,23 @@
 import LocationService from "@/services/location.service";
-import {AddLocationForm} from "@/types/location";
 import {useState} from "react";
-import {useRouter} from "next/navigation";
 import toast from "react-hot-toast";
 import {ValidationErrors} from "@/types/common";
+import {useMutation} from "@tanstack/react-query";
 
 const useAddLocation = () => {
-    const router = useRouter();
-    const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<ValidationErrors>({});
 
-    const addLocation = async (payload: AddLocationForm) => {
-        try {
-            setLoading(true);
-            const { pictures, ...rest } = payload;
-            const { id} = await LocationService.add(rest);
-            if (pictures) {
-                await LocationService.addPictures(id, pictures);
-            }
-            router.push(`/locations/${id}`);
-            toast.success("Location aggiunta con successo");
-        } catch (e: any) {
+    const {isPending, mutateAsync: addLocation} = useMutation({
+        mutationFn: LocationService.add,
+        onError: (e: any) => {
             setErrors(e.cause);
             toast.error(e.message || "Impossibile aggiungere la location");
-        } finally {
-            setLoading(false);
-        }
-    }
+        },
+        throwOnError: true
+    });
 
     return {
-        loading,
+        isPending,
         errors,
         addLocation
     };

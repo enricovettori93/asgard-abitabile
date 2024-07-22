@@ -1,28 +1,18 @@
-import betterFetch from "@/utils/fetch";
-import {LocationWithPictures} from "@/types/location";
-import {useState} from "react";
-import toast from "react-hot-toast";
+import {useQuery} from "@tanstack/react-query";
+import LocationService from "@/services/location.service";
+import {QUERY_CLIENT_KEYS} from "@/utils/constants";
 
 const useMyLocations = () => {
-    const [loading, setLoading] = useState(false);
-    const [locations, setLocations] = useState<LocationWithPictures[]>([]);
-
-    const getMyLocations = async () => {
-        try {
-            setLoading(true);
-            const {data = []} = await betterFetch<LocationWithPictures[]>("users/me/locations");
-            setLocations(data);
-        } catch (e: any) {
-            toast.error(e.message || "Impossibile caricare le location");
-        } finally {
-            setLoading(false);
-        }
-    }
+    const {data: locations, isPending, isError} = useQuery({
+        queryKey: [QUERY_CLIENT_KEYS.MY_LOCATIONS],
+        queryFn: LocationService.getMine,
+        initialData: []
+    });
 
     return {
-        loading,
+        isPending,
         locations,
-        getMyLocations
+        isError
     }
 }
 

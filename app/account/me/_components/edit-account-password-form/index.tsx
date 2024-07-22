@@ -17,10 +17,10 @@ const EditAccountPasswordForm = () => {
         resolver: zodResolver(UpdatePasswordSchema)
     });
 
-    const {loading, editPassword} = useEditPassword();
+    const {isPending, editPassword} = useEditPassword();
 
     const onSubmit: SubmitHandler<EditUserPasswordForm> = async (payload: EditUserPasswordForm) => {
-        await editPassword(payload);
+        editPassword(payload);
     }
 
     return (
@@ -36,7 +36,7 @@ const EditAccountPasswordForm = () => {
                     <Input id="repeatNewPassword" name="repeatNewPassword" label="Ripeti la nuova password" register={{...register("repeatNewPassword")}} touched={touchedFields["repeatNewPassword"]}/>
                 </FieldWrapper>
             </div>
-            <button type="submit" className="button--primary ml-auto" disabled={loading}>Cambia la password</button>
+            <button type="submit" className="button--primary ml-auto" disabled={isPending}>Cambia la password</button>
         </form>
     );
 };

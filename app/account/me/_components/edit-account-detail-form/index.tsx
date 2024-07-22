@@ -3,7 +3,7 @@
 import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {EditAccountSchema} from "@/utils/validators";
-import useEditAccountDetail from "@/app/account/me/_components/edit-account-detail-form/hooks";
+import useEditAccountDetail from "@/app/account/me/_components/edit-account-detail-form/hooks/useEditAccountDetail";
 import {EditUserForm} from "@/types/user";
 import FieldWrapper from "@/components/inputs/field-wrapper";
 import {useContext} from "react";
@@ -24,10 +24,10 @@ const EditAccountDetailForm = () => {
         resolver: zodResolver(EditAccountSchema)
     });
 
-    const {loading, editAccount} = useEditAccountDetail();
+    const {isPending, editAccount} = useEditAccountDetail();
 
     const onSubmit: SubmitHandler<EditUserForm> = async (payload) => {
-        await editAccount(payload);
+        editAccount(payload);
     }
 
     return (
@@ -48,7 +48,7 @@ const EditAccountDetailForm = () => {
                     <Input id="surname" name="surname" label="Cognome" type="text" register={{...register("surname")}} touched={touchedFields["surname"]}/>
                 </FieldWrapper>
             </div>
-            <button type="submit" className="button--primary ml-auto" disabled={loading}>Aggiorna le informazioni</button>
+            <button type="submit" className="button--primary ml-auto" disabled={isPending}>Aggiorna le informazioni</button>
         </form>
     );
 };
