@@ -26,6 +26,9 @@ export const SEARCH_COUNTRY_CODES = ["IT"].join(",");
 export const SEARCH_RADIUS = 0.5;
 export const QUERY_CLIENT_KEYS = {
     MY_RESERVATIONS: "my-reservations",
+    MY_RESERVATIONS_DETAIL: "my-reservations-detail",
     MY_LOCATIONS: "my-locations",
-    TAGS: "tags"
+    TAGS: "tags",
+    LINK_TAG: "link-tag",
+    UNLINK_TAG: "unlink-tag"
 }

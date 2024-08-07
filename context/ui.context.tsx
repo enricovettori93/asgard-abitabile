@@ -32,9 +32,14 @@ const UiContextProvider = ({children}: {children: ReactNode}) => {
         setModal(null);
     }
 
+    const handleSetModal = (modal: ReactNode) => {
+        removeModal();
+        setModal(modal);
+    }
+
     const value = {
         modal,
-        setModal,
+        setModal: handleSetModal,
         removeModal
     }
 

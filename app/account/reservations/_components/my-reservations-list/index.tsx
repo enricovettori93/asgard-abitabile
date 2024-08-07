@@ -35,9 +35,7 @@ const DeleteReservationModal = ({closeModal, handleDeleteReservation}: modalProp
 const MyReservationList = () => {
     const {removeModal, setModal} = useContext(UiContext);
     const {isPending: reservationsLoading, reservations} = useMyReservations();
-    const {isPending: deleteLoading, deleteReservation} = useDeleteMyReservation({
-        handleSuccess: removeModal
-    });
+    const {isPending: deleteLoading, deleteReservation} = useDeleteMyReservation();
 
     if (reservationsLoading) return <ListLoader/>;
 
@@ -48,7 +46,8 @@ const MyReservationList = () => {
     }
 
     const handleDeleteReservation = async (id: Reservation["id"]) => {
-        deleteReservation(id);
+        await deleteReservation(id);
+        removeModal();
     }
 
     const showModalForDeleteReservation = (id: Reservation["id"]) => {

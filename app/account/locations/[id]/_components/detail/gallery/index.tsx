@@ -14,7 +14,9 @@ interface props {
 
 const LocationDetailGallery = ({pictures, onRemoveImage, className = ""}: props) => {
     const classes = classNames({
-        "w-full h-[40rem]": true,
+        "w-full": true,
+        "h-[5rem]": pictures?.length === 0,
+        "h-[40rem]": pictures?.length > 0,
         [className]: true
     });
 

@@ -1,7 +1,7 @@
 "use client"
 
 import useGetLocationDetail from "@/app/account/locations/[id]/_components/detail/hooks/useGetLocationDetail";
-import {memo, useCallback, useContext, useEffect, useRef} from "react";
+import {memo, useContext, useEffect, useState} from "react";
 import {useParams} from "next/navigation";
 import {Location, Picture, Reservation, Tag} from "@prisma/client";
 import useRemoveImage from "@/app/account/locations/[id]/_components/detail/hooks/useRemoveImage";
@@ -22,23 +22,28 @@ import DeleteLocationModal from "@/app/account/locations/[id]/_components/detail
 import useDeleteLocation from "@/app/account/locations/[id]/_components/detail/hooks/useDeleteLocation";
 import useGetTags from "@/app/account/locations/[id]/_components/detail/hooks/useGetTags";
 import LocationTags from "@/app/account/locations/[id]/_components/detail/location-tags";
-import useManageTag from "@/app/account/locations/[id]/_components/detail/hooks/useManageTag";
+import useLinkTag from "@/app/account/locations/[id]/_components/detail/hooks/useLinkTag";
+import useUnlinkTag from "@/app/account/locations/[id]/_components/detail/hooks/useUnlinkTag";
 const ReservationCalendar = memo(dynamic(() => import("@/app/account/locations/[id]/_components/detail/reservations-calendar"), {ssr: false}));
 
 const MyAccountLocationDetail = () => {
+    const [reservationDates, setReservationDates] = useState<{startDate: Date | null, endDate: Date | null}>({
+        startDate: null,
+        endDate: null
+    });
+    const [reservationIdSelected, setReservationIdSelected] = useState<Reservation["id"] | null>(null);
     const {id} = useParams<{id: Location["id"]}>();
     const {isPending: getLocationLoading, location} = useGetLocationDetail(id);
     const {isPending: deleteLocationLoading, deleteLocation} = useDeleteLocation(id);
     const {isPending: confirmLoading, confirmReservation} = useConfirmReservation();
+    const {reservations} = useGetReservations(id, {startDate: reservationDates.startDate, endDate: reservationDates.endDate});
+    const {reservation} = useGetReservationDetail(id, reservationIdSelected);
     const {isPending: tagsLoading, tags, error: errorTags} = useGetTags();
-    const {loading: editLocationLoading, editLocation, errors} = useEditLocation();
-    const {getReservationDetail, reservation} = useGetReservationDetail();
+    const {loading: editLocationLoading, editLocation, errors} = useEditLocation(id);
     const {loading: removeImageLoading, removeImage} = useRemoveImage();
-    const {reservations, getReservations} = useGetReservations();
-    const {loading: manageTagLoading,unlinkTag, linkTag} = useManageTag();
+    const {linkTag} = useLinkTag();
+    const {unlinkTag} = useUnlinkTag();
     const {setModal, removeModal} = useContext(UiContext);
-    const startDateRef = useRef(new Date());
-    const endDateRef = useRef(new Date());
 
     useEffect(() => {
         if (reservation) {
@@ -53,20 +58,17 @@ const MyAccountLocationDetail = () => {
         }
     }, [reservation]);
 
-    const handleChangeDate = useCallback(async (startDate: Date, endDate: Date) => {
-        startDateRef.current = startDate;
-        endDateRef.current = endDate;
-        await getReservations(id,{startDate, endDate});
-    }, [getReservations]);
+    const handleChangeDate = (startDate: Date, endDate: Date) => {
+        setReservationDates({startDate, endDate});
+    };
 
     const handleConfirmReservation = async (reservation: Reservation["id"]) => {
-        await confirmReservation(reservation);
+        await confirmReservation({ locationId: location!.id, reservationId: reservation});
         removeModal();
     }
 
     const handleConfirmDeleteImage = async (pictureId: Picture["id"]) => {
-        await removeImage(location!.id, pictureId);
-        // await getLocationDetail(id);
+        await removeImage({ locationId: location!.id, pictureId });
         removeModal();
     }
 
@@ -76,26 +78,22 @@ const MyAccountLocationDetail = () => {
     }
 
     const handleUpdateLocation = async (payload: EditLocationForm) => {
-        await editLocation(location!.id, payload);
-        // await getLocationDetail(id);
+        await editLocation({ id: location!.id, payload });
     }
 
     const handleLinkTag = async (tagId: Tag["id"]) => {
-        await linkTag(tagId, location!.id);
-        // await getLocationDetail(id);
+        await linkTag({ locationId: location!.id, tagId });
     }
 
     const handleUnlinkTag = async (tagId: Tag["id"]) => {
-        await unlinkTag(tagId, location!.id);
-        // await getLocationDetail(id);
+        await unlinkTag({ locationId: location!.id, tagId });
     }
 
-    const handleReservationClick = useCallback(async (reservationId: Reservation["id"]) => {
-        await getReservationDetail(location!.id, reservationId!);
-    }, [getReservationDetail]);
+    const handleReservationClick = (reservationId: Reservation["id"]) => {
+        setReservationIdSelected(reservationId);
+    };
 
     const handleDeleteImage = async (pictureId: Picture["id"]) => {
-        removeModal();
         setModal(
             <DeleteImageModal
                 loading={removeImageLoading}
@@ -106,7 +104,6 @@ const MyAccountLocationDetail = () => {
     }
 
     const handleDeleteLocation = async () => {
-        removeModal();
         setModal(
             <DeleteLocationModal
                 loading={deleteLocationLoading}

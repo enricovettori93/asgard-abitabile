@@ -1,29 +1,27 @@
-import {useState} from "react";
+import {useEffect} from "react";
 import {Location, Reservation} from "@prisma/client";
 import ReservationService from "@/services/reservation.service";
-import {ReservationWithUser} from "@/types/reservation";
 import toast from "react-hot-toast";
+import {useQuery} from "@tanstack/react-query";
+import {QUERY_CLIENT_KEYS} from "@/utils/constants";
 
-const useGetReservationDetail = () => {
-    const [loading, setLoading] = useState(false);
-    const [reservation, setReservation] = useState<ReservationWithUser | null>(null);
+const useGetReservationDetail = (locationId: Location["id"], reservationId: Reservation["id"] | null) => {
+    const {data: reservation, isPending: loading, error} = useQuery({
+        queryKey: [QUERY_CLIENT_KEYS.MY_RESERVATIONS_DETAIL, locationId, reservationId],
+        enabled: !!reservationId,
+        queryFn: () => ReservationService.getWithUser(locationId, reservationId as Reservation["id"]),
+        initialData: null
+    });
 
-    const getReservationDetail = async (locationId: Location["id"], reservationId: Reservation["id"]) => {
-        try {
-            setLoading(true);
-            const data = await ReservationService.getWithUser(locationId, reservationId);
-            setReservation(data);
-        } catch (e: any) {
-            toast.error(e.message || "Errore durante il recupero della prenotazione");
-        } finally {
-            setLoading(false);
+    useEffect(() => {
+        if (error) {
+            toast.error(error.message || "Errore durante il recupero della prenotazione");
         }
-    }
+    }, [error]);
 
     return {
         loading,
-        reservation,
-        getReservationDetail
+        reservation
     }
 }
 

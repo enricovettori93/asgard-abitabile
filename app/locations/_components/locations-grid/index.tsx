@@ -25,8 +25,8 @@ const LocationsGrid = ({data, totalElements, currentPage}: props) => {
     const {handlePageChange} = useFetchLocations();
     const pageCount = Math.ceil(totalElements / PAGE_SIZE);
 
-    const pageChange = async ({selected}: PageChangeEvent) => {
-        await handlePageChange(selected + 1);
+    const pageChange = ({selected}: PageChangeEvent) => {
+        handlePageChange(selected + 1);
     }
 
     const buildHref = (pageNumber: number) => {

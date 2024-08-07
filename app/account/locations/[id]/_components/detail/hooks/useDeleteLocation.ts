@@ -9,7 +9,7 @@ const useDeleteLocation = (id: Location["id"]) => {
     const router = useRouter();
     const queryClient = useQueryClient();
 
-    const {isPending, mutate: deleteLocation} = useMutation({
+    const {isPending, mutateAsync: deleteLocation} = useMutation({
         mutationFn: LocationService.delete,
         onSuccess: () => {
             toast.success("Location eliminata con successo");

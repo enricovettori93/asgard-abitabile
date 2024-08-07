@@ -10,7 +10,7 @@ interface LocationServiceInterface {
     getDetail(locationId: Location["id"], {startDate, endDate}: {startDate: Date, endDate: Date}): Promise<LocationWithPicturesAndUserAndTags>
     add(payload: AddLocationFormWithoutPictures): Promise<Location>
     getMine(): Promise<LocationWithPictures[]>
-    update(locationId: Location["id"], payload: EditLocationForm): Promise<Location>
+    update(locationId: Location["id"], payload: Omit<EditLocationForm, "pictures">): Promise<Location>
     addPictures(locationId: Location["id"], payload: File[]): Promise<Location>
     delete(locationId: Location["id"]): Promise<void>
     removePicture(locationId: Location["id"], pictureId: Picture["id"]): Promise<void>
@@ -49,7 +49,7 @@ class LocationService implements LocationServiceInterface {
         });
     }
 
-    async update(locationId: Location["id"], payload: EditLocationForm): Promise<Location> {
+    async update(locationId: Location["id"], payload: Omit<EditLocationForm, "pictures">): Promise<Location> {
         return (await betterFetch<Location>(`users/me/locations/${locationId}`, {
             method: "PATCH",
             body: JSON.stringify(payload)

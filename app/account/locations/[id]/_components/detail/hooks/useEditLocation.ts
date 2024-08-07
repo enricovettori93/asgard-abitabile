@@ -4,27 +4,30 @@ import {useState} from "react";
 import {Location} from "@prisma/client";
 import {ValidationErrors} from "@/types/common";
 import toast from "react-hot-toast";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {QUERY_CLIENT_KEYS} from "@/utils/constants";
 
-const useEditLocation = () => {
-    const [loading, setLoading] = useState(false);
+const useEditLocation = (id: Location["id"]) => {
+    const queryClient = useQueryClient();
     const [errors, setErrors] = useState<ValidationErrors>({});
 
-    const editLocation = async (locationId: Location["id"], payload: EditLocationForm) => {
-        try {
-            setLoading(true);
+    const {isPending: loading, mutateAsync: editLocation} = useMutation({
+        mutationFn: async ({id: locationId, payload}: { id: Location["id"]; payload: EditLocationForm }) => {
             const { pictures = [], ...rest } = payload;
             const { id} = await LocationService.update(locationId, rest);
             if (pictures?.length > 0) {
                 await LocationService.addPictures(id, pictures);
             }
-            toast.success("Location aggiornata con successo");
-        } catch (e: any) {
-            setErrors(e.cause);
+        },
+        onError: (e: any) => {
             toast.error(e.message || "Impossibile aggiornare la location");
-        } finally {
-            setLoading(false);
+            setErrors(e.cause);
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: [QUERY_CLIENT_KEYS.MY_LOCATIONS, id]});
+            toast.success("Location aggiornata con successo");
         }
-    }
+    });
 
     return {
         loading,
