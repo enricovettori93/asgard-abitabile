@@ -13,7 +13,7 @@ export default function WhatCanDo() {
                 slidesPerView={slides}
                 spaceBetween={50}
             >
-                <SwiperSlide className="h-auto">
+                <SwiperSlide className="!h-auto">
                     <Card className="w-full h-full">
                         <CardComposition.Title className="flex justify-between">
                             <span>Scopri il piacere di perderti</span>
@@ -27,7 +27,7 @@ export default function WhatCanDo() {
                         </CardComposition.Content>
                     </Card>
                 </SwiperSlide>
-                <SwiperSlide className="h-auto">
+                <SwiperSlide className="!h-auto">
                     <Card className="w-full h-full">
                         <CardComposition.Title className="flex justify-between">
                             <span>Diventa un host</span>
@@ -40,7 +40,7 @@ export default function WhatCanDo() {
                         </CardComposition.Content>
                     </Card>
                 </SwiperSlide>
-                <SwiperSlide className="h-auto">
+                <SwiperSlide className="!h-auto">
                     <Card className="w-full h-full">
                         <CardComposition.Title className="flex justify-between">
                             <span>Ospitalità autentica, ovunque</span>

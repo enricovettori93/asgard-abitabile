@@ -50,29 +50,31 @@ const LocationsGrid = ({data, totalElements, currentPage}: props) => {
     return (
         <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                {data.map(location => {
-                    return (
-                        <Link href={{
-                            pathname: `${ROUTES.LOCATIONS}/${location.id}`,
-                            query: {startDate: params.get("startDate"), endDate: params.get("endDate")}
-                        }} key={location.id}>
-                            <CardLocation location={location}/>
-                        </Link>
-                    )}
+                {data.map(location => (
+                    <Link href={{
+                        pathname: `${ROUTES.LOCATIONS}/${location.id}`,
+                        query: {startDate: params.get("startDate"), endDate: params.get("endDate")}
+                    }} key={location.id}>
+                        <CardLocation location={location}/>
+                    </Link>)
                 )}
             </div>
-            <div className="flex justify-end">
-                <ReactPaginate
-                    forcePage={currentPage - 1}
-                    className={paginationClasses}
-                    pageCount={pageCount}
-                    onPageChange={pageChange}
-                    hrefBuilder={buildHref}
-                    nextLabel=">"
-                    previousLabel="<"
-                    activeClassName="page--active"
-                />
-            </div>
+            {
+                pageCount > 1 && (
+                    <div className="flex justify-end">
+                        <ReactPaginate
+                            forcePage={currentPage - 1}
+                            className={paginationClasses}
+                            pageCount={pageCount}
+                            onPageChange={pageChange}
+                            hrefBuilder={buildHref}
+                            nextLabel=">"
+                            previousLabel="<"
+                            activeClassName="page--active"
+                        />
+                    </div>
+                )
+            }
         </>
     )
 }
