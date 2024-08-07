@@ -128,15 +128,14 @@ const MyAccountLocationDetail = () => {
                 <ReservationCalendar onChangeDate={handleChangeDate} reservations={reservations} onClickReservation={handleReservationClick}/>
             </div>
             <div className="mt-10 flex flex-col gap-5">
-                <h2 className="text-3xl">Gestisci i dettagli della location</h2>
-                <Card>
-                    <Accordion title="Immagini presenti">
-                        <LocationDetailGallery className="pt-10" pictures={location?.pictures} onRemoveImage={handleDeleteImage}/>
-                    </Accordion>
-                </Card>
                 <Card>
                     <Accordion title="Dati della locations">
                         <LocationEditForm location={location} onEditLocation={handleUpdateLocation} loading={editLocationLoading} errors={errors}/>
+                    </Accordion>
+                </Card>
+                <Card>
+                    <Accordion title="Immagini presenti">
+                        <LocationDetailGallery className="pt-10" pictures={location?.pictures} onRemoveImage={handleDeleteImage}/>
                     </Accordion>
                 </Card>
                 {
