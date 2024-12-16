@@ -30,5 +30,6 @@ export const QUERY_CLIENT_KEYS = {
     MY_LOCATIONS: "my-locations",
     TAGS: "tags",
     LINK_TAG: "link-tag",
+    LINK_TAGS: "link-tags",
     UNLINK_TAG: "unlink-tag"
 }

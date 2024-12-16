@@ -5,6 +5,7 @@ import {Location} from "@prisma/client";
 import useSearchCity from "@/components/inputs/search-city-autocomplete/hooks/useSearchCity";
 import {useCallback, useMemo, useState} from "react";
 import debounce from "lodash/debounce";
+import isEmpty from "lodash/isEmpty";
 import classNames from "classnames";
 
 export type AutocompleteCityOption = Pick<Location, "lat" | "lng"> & {
@@ -28,6 +29,7 @@ const SearchCityAutocomplete = ({onCitySelect, initialValue}: props) => {
     } = useSearchCity();
 
     const options: AutocompleteCityOption[] = useMemo(() => {
+        if (isEmpty(cities)) return [];
         return cities.map((city) => ({
             value: city.display_name,
             label: city.display_name,
